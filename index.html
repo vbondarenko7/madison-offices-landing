@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madison Offices — Private Offices for Rent in Sacramento from $500/mo, All-Inclusive</title>
+<meta name="description" content="Move-in-ready private offices on Madison Ave, Sacramento. From $500/month, everything included — internet, utilities, furniture, parking, 24/7 security. First month free. Book a tour.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16211b; --bg:#fbf9f5; --card:#ffffff;
+    --green:#1f5e3e; --green-d:#163f2b; --green-l:#eaf2ec;
+    --amber:#bb6b34; --amber-l:#f6ece2;
+    --muted:#5b655e; --line:#e7e1d6; --line-2:#efeae0;
+    --shadow:0 1px 2px rgba(22,33,27,.04),0 8px 30px rgba(22,33,27,.07);
+    --maxw:1140px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Fraunces',Georgia,'Times New Roman',serif;line-height:1.12;font-weight:600;letter-spacing:-.01em}
+  h2{font-size:clamp(1.8rem,3.6vw,2.7rem);margin-bottom:.6em}
+  h3{font-size:1.22rem;font-weight:600}
+  p{color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .eyebrow{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.9rem}
+  .muted{color:var(--muted)}
+  section{padding:78px 0}
+  @media(max-width:680px){section{padding:52px 0}body{font-size:16px}}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;padding:15px 28px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:transform .12s ease,background .2s,box-shadow .2s;white-space:nowrap}
+  .btn-primary{background:var(--green);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{background:var(--green-d);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+  .btn-lg{padding:17px 34px;font-size:1.06rem}
+
+  /* top bar */
+  header{position:sticky;top:0;z-index:50;background:rgba(251,249,245,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;flex-direction:column;line-height:1.1}
+  .brand b{font-family:'Fraunces',serif;font-size:1.22rem;font-weight:600}
+  .brand span{font-size:.74rem;color:var(--muted);letter-spacing:.02em}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-phone{font-weight:700;font-size:1.02rem}
+  .nav-phone span{color:var(--muted);font-weight:500;font-size:.8rem;display:block;letter-spacing:.06em;text-transform:uppercase}
+  @media(max-width:760px){.nav-phone{display:none}}
+
+  /* hero */
+  .hero{position:relative;min-height:88vh;display:flex;align-items:center;color:#fff;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:url('img/exterior.png') center 38%/cover no-repeat;transform:scale(1.02)}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(13,24,17,.82) 0%,rgba(13,24,17,.62) 46%,rgba(13,24,17,.28) 100%)}
+  .hero .wrap{position:relative;z-index:2;padding-top:60px;padding-bottom:60px}
+  .hero-inner{max-width:680px}
+  .badge{display:inline-flex;align-items:center;gap:.5em;background:var(--amber);color:#fff;font-weight:700;font-size:.82rem;letter-spacing:.04em;padding:7px 14px;border-radius:999px;margin-bottom:20px}
+  .hero h1{font-size:clamp(2.1rem,5.4vw,3.7rem);font-weight:600;color:#fff;margin-bottom:.5em}
+  .hero h1 em{font-style:normal;color:#ffd9b0}
+  .hero .lede{font-size:clamp(1.05rem,1.8vw,1.22rem);color:#eef1ec;max-width:600px;margin-bottom:30px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero .btn-ghost{color:#fff;border-color:rgba(255,255,255,.5)}
+  .hero .btn-ghost:hover{background:rgba(255,255,255,.1);border-color:#fff;color:#fff}
+  .hero-bullets{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:34px;list-style:none}
+  .hero-bullets li{display:flex;align-items:center;gap:9px;font-weight:500;font-size:.98rem}
+  .chk{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--green);display:inline-flex;align-items:center;justify-content:center}
+  .chk svg{width:13px;height:13px}
+
+  /* trust strip */
+  .trust{background:var(--ink);color:#dfe6e0}
+  .trust .wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 38px;padding:18px 22px;font-size:.92rem;font-weight:500}
+  .trust span{display:flex;align-items:center;gap:9px}
+  .trust b{color:#fff}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+
+  /* generic */
+  .center{text-align:center;max-width:760px;margin:0 auto}
+  .grid{display:grid;gap:22px}
+  .lead-line{font-size:1.12rem;color:var(--muted)}
+
+  /* problem */
+  .problem{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .two{grid-template-columns:1fr 1fr}
+  .prob-card{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:28px}
+  .prob-card h3{margin-bottom:.5em}
+  .prob-card ul{list-style:none;margin-top:.4em}
+  .prob-card li{padding-left:26px;position:relative;margin:.5em 0;color:var(--muted)}
+  .prob-card li::before{content:"✕";position:absolute;left:0;color:#b4493b;font-weight:700}
+  .third{text-align:center;margin-top:34px}
+  .third b{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--green)}
+
+  /* steps */
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .step{position:relative;padding:30px 26px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+  .step .n{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:#fff;background:var(--green);width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .step h3{margin-bottom:.35em}
+
+  /* included */
+  .included{background:var(--green-l)}
+  .feat{grid-template-columns:repeat(3,1fr)}
+  .feat .item{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #d8e4db;border-radius:12px;padding:16px 18px;font-weight:600}
+  .feat .ic{flex:0 0 auto;width:40px;height:40px;border-radius:10px;background:var(--green-l);display:flex;align-items:center;justify-content:center}
+  .feat .ic svg{width:21px;height:21px;stroke:var(--green)}
+  @media(max-width:820px){.feat{grid-template-columns:repeat(2,1fr)}}
+
+  /* who */
+  .who-chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:11px 20px;font-weight:600;font-size:.97rem}
+
+  /* comparison */
+  .compare{background:#fff;border-top:1px solid var(--line)}
+  .tbl{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);font-size:.97rem;background:#fff}
+  .tbl th,.tbl td{padding:15px 16px;text-align:left;border-bottom:1px solid var(--line-2);vertical-align:top}
+  .tbl thead th{background:var(--bg);font-weight:600;font-size:.86rem;letter-spacing:.02em}
+  .tbl thead th.us{background:var(--green);color:#fff;font-family:'Fraunces',serif;font-size:1rem}
+  .tbl td.us{background:var(--green-l);font-weight:600}
+  .tbl td:first-child,.tbl th:first-child{color:var(--muted);font-weight:600}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl-wrap{overflow-x:auto}
+  @media(max-width:680px){.tbl{font-size:.85rem}.tbl th,.tbl td{padding:11px 10px}}
+
+  /* value anchor */
+  .anchor{background:var(--ink);color:#eef1ec}
+  .anchor .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  .anchor h2{color:#fff}
+  .price-card{background:#fff;color:var(--ink);border-radius:18px;padding:34px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .price-card .from{color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}
+  .price-card .big{font-family:'Fraunces',serif;font-size:4rem;font-weight:700;line-height:1;color:var(--green);margin:6px 0}
+  .price-card .per{color:var(--muted);font-weight:600}
+  .price-card .inc{margin:16px 0;font-weight:600}
+  .price-card .promo{background:var(--amber-l);color:var(--amber);font-weight:700;border-radius:10px;padding:10px;margin-bottom:18px}
+  .strike{color:var(--muted);text-decoration:line-through;font-size:.95rem}
+  @media(max-width:820px){.anchor .wrap{grid-template-columns:1fr}}
+
+  /* location + availability */
+  .media{grid-template-columns:1fr 1fr;align-items:center;gap:42px}
+  .media img{border-radius:16px;box-shadow:var(--shadow);width:100%}
+  .media .facts{list-style:none}
+  .media .facts li{padding-left:30px;position:relative;margin:.7em 0}
+  .media .facts li::before{content:"";position:absolute;left:2px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--green)}
+  @media(max-width:820px){.media{grid-template-columns:1fr}.media.rev .img{order:-1}}
+
+  /* faq */
+  .faq{background:var(--bg)}
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 22px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .faq summary{list-style:none;cursor:pointer;padding:19px 0;font-weight:600;font-size:1.05rem;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-family:'Fraunces',serif;font-size:1.6rem;color:var(--green);line-height:1}
+  .faq details[open] summary::after{content:"–"}
+  .faq details p{padding:0 0 20px;color:var(--muted)}
+
+  /* form / tour */
+  .tour{background:var(--green);color:#fff}
+  .tour .wrap{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:start}
+  .tour h2{color:#fff}
+  .tour .sub{color:#dbe7df;margin-bottom:18px}
+  .tour .call-big{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:#fff;display:inline-block;margin:6px 0 4px}
+  .tour ul{list-style:none;margin-top:18px}
+  .tour ul li{padding-left:28px;position:relative;margin:.6em 0;color:#eaf2ec}
+  .tour ul li::before{content:"✓";position:absolute;left:0;color:#ffd9b0;font-weight:700}
+  form{background:#fff;border-radius:16px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  form label{display:block;font-size:.84rem;font-weight:600;color:var(--ink);margin:0 0 6px}
+  form .field{margin-bottom:15px}
+  form input,form select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:9px;font-size:1rem;font-family:inherit;color:var(--ink);background:#fff}
+  form input:focus,form select:focus{outline:none;border-color:var(--green)}
+  form .btn-primary{width:100%}
+  form .fine{font-size:.8rem;color:var(--muted);margin-top:12px;text-align:center}
+  @media(max-width:820px){.tour .wrap{grid-template-columns:1fr}}
+
+  /* footer */
+  footer{background:var(--ink);color:#aab3ac;padding:46px 0 110px;font-size:.92rem}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px}
+  footer b{color:#fff;font-family:'Fraunces',serif;font-size:1.1rem}
+  footer a{color:#dfe6e0}
+
+  /* sticky mobile bar */
+  .sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:60;display:none;gap:10px;padding:10px 14px;background:rgba(251,249,245,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+  .sticky-bar .btn{flex:1;padding:14px}
+  @media(max-width:760px){.sticky-bar{display:flex}}
+
+  .section-head{margin-bottom:38px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand"><b>Madison Offices</b><span>5345 Madison Ave, Sacramento</span></a>
+    <div class="nav-right">
+      <a href="tel:+19169144407" class="nav-phone"><span>Call us</span>(916) 914-4407</a>
+      <a href="#tour" class="btn btn-primary">Book a Tour</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="badge">★ First month free on a 1-year lease</span>
+      <h1>Your private office on Madison Ave — <em>from $500/month, everything included.</em></h1>
+      <p class="lede">Move in and start working today. Internet, utilities, furniture, reception, conference room, free parking and 24/7 security — one flat price, no surprise fees.</p>
+      <div class="hero-cta">
+        <a href="#tour" class="btn btn-primary btn-lg">Book a Private Tour</a>
+        <a href="tel:+19169144407" class="btn btn-ghost btn-lg">Call (916) 914-4407</a>
+      </div>
+      <ul class="hero-bullets">
+        <li><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span> From $500/mo, all-inclusive</li>
+        <li><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span> Gated, 24/7 security + free parking</li>
+        <li><span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span> Seconds from I-80</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust">
+  <div class="wrap">
+    <span><span class="dot"></span><b>All-inclusive</b> pricing</span>
+    <span><span class="dot"></span><b>Move-in</b> ready</span>
+    <span><span class="dot"></span><b>24/7</b> secure &amp; gated</span>
+    <span><span class="dot"></span><b>Ample</b> free parking</span>
+    <span><span class="dot"></span>Leasing by <b>USKO Realty</b></span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Why most offices cost more than they should</span>
+      <h2>Right now you have two options — and both cost you.</h2>
+    </div>
+    <div class="grid two">
+      <div class="prob-card">
+        <h3>A traditional lease</h3>
+        <ul>
+          <li>Locked in for 3–10 years</li>
+          <li>Furniture and build-out bill before your first client</li>
+          <li>Utilities and CAM fees stacked on top of rent</li>
+          <li>A personal guarantee on the line</li>
+        </ul>
+      </div>
+      <div class="prob-card">
+        <h3>A coworking desk</h3>
+        <ul>
+          <li>Background noise on every call</li>
+          <li>No privacy when a client walks in</li>
+          <li>Add-on fees for meeting rooms and printing</li>
+          <li>Never quite looks like <em>your</em> business</li>
+        </ul>
+      </div>
+    </div>
+    <p class="third"><b>There’s a third option.</b></p>
+  </div>
+</section>
+
+<!-- SOLUTION / STEPS -->
+<section>
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">How it works</span>
+      <h2>A private, furnished office you can open today.</h2>
+      <p class="lead-line">One flat monthly price. Three simple steps.</p>
+    </div>
+    <div class="grid steps">
+      <div class="step"><div class="n">1</div><h3>Tour the space</h3><p class="muted">See the building and the office that fits you. About 15 minutes.</p></div>
+      <div class="step"><div class="n">2</div><h3>Pick your office</h3><p class="muted">From $500/month — everything included, one flat price.</p></div>
+      <div class="step"><div class="n">3</div><h3>Move in today</h3><p class="muted">Bring your laptop and start working. That’s it.</p></div>
+    </div>
+    <p class="center muted" style="margin-top:34px;font-size:1.05rem">Plus a real Madison Ave address and a staffed reception — so you look as established as you are.</p>
+  </div>
+</section>
+
+<!-- INCLUDED -->
+<section class="included">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">One price covers it all</span>
+      <h2>Everything’s included.</h2>
+    </div>
+    <div class="grid feat">
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M2 8.82a16 16 0 0 1 20 0"/><path d="M8.5 16.43a6 6 0 0 1 7 0"/><circle cx="12" cy="20" r="1"/></svg></span>Wi-Fi &amp; internet</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span>All utilities</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 9V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M2 13h20v6H2z"/><path d="M6 19v2M18 19v2"/></svg></span>Furnished office</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Staffed reception</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 5v14M16 5v14"/></svg></span>Conference room</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg></span>Kitchen</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Cleaning</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>Free parking</div>
+      <div class="item"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>24/7 security &amp; gate</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section>
+  <div class="wrap center">
+    <span class="eyebrow">Who it’s for</span>
+    <h2>Built for client-facing businesses.</h2>
+    <p class="lead-line">Come see if it fits yours.</p>
+    <div class="who-chips">
+      <span class="chip">Realtors</span>
+      <span class="chip">Attorneys</span>
+      <span class="chip">Accountants</span>
+      <span class="chip">Consultants &amp; coaches</span>
+      <span class="chip">Medical &amp; wellness</span>
+      <span class="chip">Beauty professionals</span>
+      <span class="chip">Video &amp; creative studios</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="compare">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Side by side</span>
+      <h2>Why Madison Offices.</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr><th></th><th class="us">Madison Offices</th><th>Traditional lease</th><th>Coworking desk</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monthly cost</td><td class="us">From $500, all-in</td><td>Rent + utilities + CAM + build-out</td><td>Per desk + add-ons</td></tr>
+          <tr><td>Commitment</td><td class="us">Flexible, short term</td><td>3–10 years</td><td>Month-to-month</td></tr>
+          <tr><td>Move-in</td><td class="us">Today, furnished</td><td>After build-out</td><td>Immediate, shared</td></tr>
+          <tr><td>Privacy</td><td class="us">Your own private office</td><td>Yours</td><td>Open floor</td></tr>
+          <tr><td>Surprise fees</td><td class="us">None — one flat price</td><td>CAM, restoration, upgrades</td><td>Meeting rooms, printing</td></tr>
+          <tr><td>Parking</td><td class="us">Free &amp; ample</td><td>Often extra</td><td>Often none</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE ANCHOR -->
+<section class="anchor">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow" style="color:#ffd9b0">Do the math</span>
+      <h2>A fraction of what a Sacramento office really costs.</h2>
+      <p style="color:#dbe7df;margin-bottom:14px">Office space in Sacramento averages about <b style="color:#fff">$26 per sq ft</b> — and that’s <em>before</em> utilities, furniture and build-out. Here it’s one flat price with all of it included.</p>
+      <p style="color:#dbe7df">And office rent is a <b style="color:#fff">100% tax-deductible</b> business expense — unlike a home office. (Ask your accountant.)</p>
+    </div>
+    <div class="price-card">
+      <div class="from">Offices from</div>
+      <div class="big">$500</div>
+      <div class="per">/ month — everything included</div>
+      <div class="inc"><span class="strike">+ utilities + furniture + parking</span><br>all in one price</div>
+      <div class="promo">★ First month FREE on a 1-year lease</div>
+      <a href="#tour" class="btn btn-primary btn-lg" style="width:100%">Book a Private Tour</a>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section>
+  <div class="wrap">
+    <div class="grid media">
+      <div class="img"><img src="img/aerial.png" alt="Aerial view of Madison Offices at 5345 Madison Ave, Sacramento, with large parking lot"></div>
+      <div>
+        <span class="eyebrow">The location</span>
+        <h2>Easy for your clients to reach.</h2>
+        <ul class="facts">
+          <li><b>5345 Madison Ave, Sacramento, CA 95841</b></li>
+          <li>Seconds from I-80, on a street with ~55,000 cars a day</li>
+          <li>Gated lot with plenty of free parking</li>
+          <li>24/7 security and controlled access</li>
+        </ul>
+        <a href="https://maps.google.com/?q=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" class="btn btn-ghost" style="margin-top:18px">View on Google Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVAILABILITY -->
+<section style="background:#fff;border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="grid media rev">
+      <div>
+        <span class="eyebrow">Availability</span>
+        <h2>A limited number of offices left.</h2>
+        <p class="lead-line" style="margin-bottom:18px">See the floor plan, find the office that fits, and reserve yours before it’s gone.</p>
+        <a href="#tour" class="btn btn-primary">Check Availability</a>
+      </div>
+      <div class="img"><img src="img/siteplan.png" alt="Site plan and floor plan of 5345 Madison Avenue offices"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="wrap" style="max-width:820px">
+    <div class="section-head center">
+      <span class="eyebrow">Straight answers</span>
+      <h2>Questions, answered.</h2>
+    </div>
+    <details open><summary>Is $500 really the full price?</summary><p>Yes — one flat monthly rate covers internet, utilities, furniture, reception, conference room, kitchen, cleaning, parking and security. No CAM charges, no surprise add-ons.</p></details>
+    <details><summary>Am I locked into a long lease?</summary><p>No multi-year lock-in. Terms are flexible, and you get your first month free on a 1-year agreement.</p></details>
+    <details><summary>Who handles repairs and maintenance?</summary><p>We do. Utilities, cleaning and building upkeep are on us — you just run your business.</p></details>
+    <details><summary>Will it work for my type of business?</summary><p>Our offices suit client-facing professionals and small practices. Tell us what you do on the tour and we’ll show you the right fit.</p></details>
+    <details><summary>Is there parking for my clients?</summary><p>Yes — a gated lot with ample free parking, right off I-80, so clients can find you and park easily.</p></details>
+    <details><summary>I’m just starting out — can I qualify?</summary><p>New and small businesses are welcome. Let’s talk on the tour and find terms that work for you.</p></details>
+  </div>
+</section>
+
+<!-- TOUR / CTA + FORM -->
+<section class="tour" id="tour">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow" style="color:#ffd9b0">Book your tour</span>
+      <h2>See it for yourself.</h2>
+      <p class="sub">Book a private tour or call us — it takes about 15 minutes, and your first month is free on a 1-year lease.</p>
+      <a href="tel:+19169144407" class="call-big">(916) 914-4407</a>
+      <ul>
+        <li>No-pressure 15-minute walkthrough</li>
+        <li>See real offices and one flat, all-in price</li>
+        <li>First month free on a 1-year lease</li>
+      </ul>
+    </div>
+    <!-- NOTE: connect this form to your email/Formspree. action is a placeholder. -->
+    <form action="#" method="post" onsubmit="this.querySelector('.fine').textContent='Thanks! We’ll call you shortly to set up your tour.';return false;">
+      <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" required placeholder="Jane Smith"></div>
+      <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" required placeholder="(916) 000-0000"></div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@business.com"></div>
+      <div class="field"><label for="type">Type of business</label>
+        <select id="type" name="type">
+          <option value="">Select…</option>
+          <option>Realtor</option><option>Attorney</option><option>Accountant</option>
+          <option>Consultant / coach</option><option>Medical / wellness</option>
+          <option>Beauty</option><option>Video / creative</option><option>Other</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">Book My Private Tour</button>
+      <p class="fine">We’ll never share your details. First month free on a 1-year lease.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>
+      <b>Madison Offices</b>
+      <p style="margin-top:8px">5345 Madison Ave, Sacramento, CA 95841</p>
+      <p>Leasing by USKO Realty</p>
+    </div>
+    <div>
+      <p><a href="tel:+19169144407">(916) 914-4407</a></p>
+      <p><a href="#tour">Book a tour</a></p>
+      <p class="muted" style="margin-top:8px;color:#7e887f">Equal opportunity. All offers subject to availability and lease terms.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- STICKY MOBILE BAR -->
+<div class="sticky-bar">
+  <a href="tel:+19169144407" class="btn btn-ghost">Call</a>
+  <a href="#tour" class="btn btn-primary">Book a Tour</a>
+</div>
+
+</body>
+</html>
