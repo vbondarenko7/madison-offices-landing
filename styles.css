@@ -1,0 +1,192 @@
+@font-face{font-family:Jost;src:url(fonts/jost-cyrillic.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Jost;src:url(fonts/jost-latin.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:Manrope;src:url(fonts/manrope-cyrillic.woff2) format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Manrope;src:url(fonts/manrope-latin.woff2) format("woff2");font-weight:200 800;font-display:swap}
+:root{--wine:#792228;--lime:#d5e8af;--coral:#ff5b4d;--coral-d:#e04a3d;--sky:#c2daf6;--paper:#f0efeb;--pine:#002d2a;--leaf:#5fba82;--cream:#f6f5f3;--m:64px;--bar:64px;--band:338px;--band2:236px;--ease:cubic-bezier(.65,0,.2,1)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{font:400 16px/24px Manrope,Arial,sans-serif;color:var(--wine);background:var(--wine);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+::selection{background:var(--coral);color:var(--pine)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+img{display:block;width:100%;height:auto}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+h1,h2,h3,.ribbon,.logo,.badge b,dt,.addr,.phone{font-family:Jost,Arial,sans-serif;font-weight:500}
+
+/* Угол: звонок всегда на экране */
+.corner{position:fixed;z-index:20;top:0;right:0;display:flex;height:var(--bar)}
+.cta{height:100%;padding:0 40px;background:var(--coral);color:var(--pine);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;display:flex;align-items:center;white-space:nowrap;transition:background .2s}
+.roll{display:block;height:24px;overflow:hidden;white-space:nowrap}
+.roll i{display:block;font-style:normal;line-height:24px;transition:transform .35s var(--ease)}
+.cta:hover{background:var(--coral-d)}
+.cta:hover .roll i,.line:hover .roll i{transform:translateY(-24px)}
+.sq{width:var(--bar);height:100%;background:var(--paper);display:grid;place-items:center;font-weight:600;letter-spacing:1.6px;color:var(--wine);position:relative}
+.sq:hover{background:var(--cream)}
+.lines{display:block;width:32px;height:8px;border-top:1px solid;border-bottom:1px solid}
+details.menu{display:block}
+details.menu summary{list-style:none;height:var(--bar);width:var(--bar);cursor:pointer;display:grid;place-items:center}
+details.menu summary::-webkit-details-marker{display:none}
+.drop{position:absolute;right:0;top:100%;width:280px;background:var(--paper);padding:12px 24px;display:grid;font-weight:600;letter-spacing:0}
+.drop a{padding:12px 0;border-top:1px solid rgba(121,34,40,.25)}
+.drop a:first-child{border-top:0}
+.drop a:hover{color:var(--coral-d)}
+
+/* Сцена: первый экран и исследование макета стоят на месте, пока идёт прокрутка */
+.stage{position:relative;height:220vh;height:220svh}
+.anchor{position:absolute;top:60vh;top:60svh}
+.pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip;background:var(--lime);transition:background .7s var(--ease)}
+.look .pin{background:var(--lime)}
+.look[data-part=north] .pin{background:var(--sky)}
+.look[data-part=south] .pin{background:var(--coral)}
+
+.band{position:absolute;z-index:3;inset:0 0 auto;height:var(--band);background:var(--wine);color:var(--lime);transition:height .8s var(--ease)}
+.logo{position:absolute;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600;transition:opacity .3s}
+h1{position:absolute;left:var(--m);top:var(--bar);font-weight:600;font-size:120px;line-height:1;letter-spacing:-.015em;white-space:nowrap;transition:opacity .3s,transform .8s var(--ease)}
+
+.rig{position:absolute;z-index:2;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .9s var(--ease);touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.rig.pan{transition:none}
+.rig img{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
+.rig canvas{position:absolute;pointer-events:none}
+.rig:focus-visible{outline:none}
+.said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* Пока надписи не подогнаны под экран, видно только бордовое поле, без рывка */
+html:not(.on) .pin{background:var(--wine)}
+html:not(.on) .pin>*{opacity:0;transition:none}
+
+/* Огромная надпись экрана исследования заходит на макет */
+.ribbon{position:absolute;z-index:4;left:var(--m);top:calc(var(--bar) - .1em);font-family:Jost,Arial,sans-serif;font-weight:600;font-size:240px;line-height:1;color:var(--lime);white-space:nowrap;opacity:0;transform:translateX(12vw);pointer-events:none;transition:transform .9s var(--ease),opacity .4s}
+.back{position:absolute;z-index:6;left:0;top:0;height:var(--bar);padding:0 var(--m);color:var(--lime);display:flex;align-items:center;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;transform:translateY(-100%);transition:transform .5s var(--ease)}
+.back:hover{color:var(--cream)}
+
+/* Тёмная карточка */
+.card{position:absolute;z-index:5;left:0;bottom:0;width:560px;background:var(--pine);color:var(--leaf);padding:40px var(--m);transition:transform .7s var(--ease),visibility 0s}
+.card h2{font-size:44px;line-height:48px;margin-bottom:16px;color:var(--lime)}
+.card p{margin-bottom:24px}
+.card-look{transform:translateY(110%);visibility:hidden;transition:transform .7s var(--ease),visibility 0s .7s}
+.acts{display:flex;flex-wrap:wrap;gap:0}
+.btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--pine);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s}
+.btn:hover{background:var(--coral-d)}
+.btn.alt{background:var(--paper);color:var(--wine)}
+.btn.alt:hover{background:var(--cream)}
+.btn.dark{background:var(--pine);color:var(--lime)}
+.btn.dark:hover{background:var(--wine)}
+.line{display:inline-block;padding:8px 0;color:var(--lime);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;border-bottom:1px solid currentColor}
+.card :focus-visible,.sheet :focus-visible,.where :focus-visible,.band :focus-visible{outline-color:var(--lime)}
+
+/* Круг с ценой */
+.badge{position:absolute;right:-76px;top:-92px;width:173px;height:173px;border-radius:50%;background:var(--coral);color:var(--pine);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transform:rotate(12deg);transition:transform .2s,background .2s}
+.badge:hover{transform:rotate(0);background:var(--coral-d)}
+.badge b{font-size:44px;line-height:44px;font-weight:600;white-space:nowrap}
+.badge span{font-weight:700;font-size:13px;line-height:17px;letter-spacing:1px;text-transform:uppercase}
+
+/* Закладки встык в углу */
+.tabs{position:absolute;z-index:6;right:0;bottom:0;display:flex;height:var(--bar);transition:transform .7s var(--ease),visibility 0s}
+.tabs-look{transform:translateY(110%);visibility:hidden;transition:transform .7s var(--ease),visibility 0s .7s}
+.tab{height:100%;padding:0 28px;background:var(--paper);color:var(--wine);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;transition:background .2s}
+.tab:hover{background:var(--cream)}
+.tab[aria-pressed=true],.tab.on{background:var(--coral);color:var(--pine)}
+.tab.on:hover{background:var(--coral-d)}
+
+/* Переход: поле сжимается, надпись въезжает, карточки и закладки меняются */
+.look .band{height:var(--band2)}
+.look h1,.look .logo{opacity:0;pointer-events:none}
+.look h1{transform:translateY(-40px)}
+.look .ribbon{opacity:1;transform:none}
+.look .back{transform:none}
+.look .card-hero,.look .tabs-hero{transform:translateY(110%);visibility:hidden;transition:transform .7s var(--ease),visibility 0s .7s}
+.look .card-look,.look .tabs-look{transform:none;visibility:visible;transition:transform .7s var(--ease),visibility 0s}
+
+/* Лист комнаты */
+.sheet{position:fixed;z-index:15;left:0;right:auto;bottom:0;top:auto;margin:0;width:560px;max-width:100%;border:0;background:var(--pine);color:var(--leaf);padding:40px var(--m);animation:up .35s var(--ease)}
+@keyframes up{from{transform:translateY(100%)}}
+.sheet h2{font-size:64px;line-height:68px;color:var(--lime);margin-bottom:8px;padding-right:40px}
+.sheet p{margin-bottom:8px}
+.sheet .ask{color:var(--lime);margin-bottom:24px}
+.close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--paper);color:var(--wine);display:grid;place-items:center}
+.close:hover{background:var(--cream)}
+
+/* Что важно знать */
+.huge{font-size:clamp(72px,8.4vw,136px);line-height:1;letter-spacing:-.01em}
+.facts{position:relative;background:var(--sky);padding:128px var(--m) 96px;display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.facts .huge{position:sticky;top:96px}
+.facts h3{font-size:24px;line-height:32px;font-weight:400;margin:48px 0 16px}
+.facts h3:first-child{margin-top:0}
+.facts dl>div{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:baseline;padding:16px 0;border-top:1px solid var(--wine)}
+dt{font-size:32px;line-height:36px}
+dd{margin:0}
+
+/* Снимки встык, подписи цветом полей */
+.photos{position:relative;display:grid;grid-template-columns:repeat(12,1fr);background:var(--lime)}
+.intro{grid-column:1/-1;padding:128px var(--m) 64px;color:var(--wine)}
+.intro h2{font-size:clamp(48px,6vw,96px);line-height:1.05;letter-spacing:-.01em;margin-bottom:16px}
+figure{margin:0;display:flex;flex-direction:column}
+figure picture{flex:1;display:block;overflow:hidden}
+figure img{height:100%;object-fit:cover}
+figcaption{padding:16px var(--m);font-weight:600}
+.f7{grid-column:span 7}
+.f5{grid-column:span 5}
+.c-sky figcaption{background:var(--sky)}
+.c-lime figcaption{background:var(--wine);color:var(--lime)}
+.c-coral figcaption{background:var(--coral);color:var(--pine)}
+.c-paper figcaption{background:var(--pine);color:var(--lime)}
+
+/* Как доехать */
+.where{position:relative;display:grid;grid-template-columns:7fr 5fr;grid-template-rows:1fr 1fr;background:var(--pine);color:var(--leaf)}
+.where-text{grid-row:span 2;padding:128px var(--m) 96px}
+.where h2{color:var(--lime);margin-bottom:48px}
+.addr{font-size:40px;line-height:44px;color:var(--lime);margin-bottom:16px}
+.where p:not(.addr){margin-bottom:32px}
+
+/* Контакт */
+.contact{position:relative;background:var(--coral);color:var(--pine);padding:128px var(--m) 96px}
+.contact h2{font-size:clamp(40px,4.4vw,64px);line-height:1.1;margin-bottom:16px}
+.phone{display:block;font-size:14vw;line-height:1;letter-spacing:-.02em;margin-bottom:24px;white-space:nowrap}
+.contact p{margin-bottom:32px;max-width:60ch}
+.contact :focus-visible{outline-color:var(--pine)}
+.foot{padding:24px var(--m);background:var(--wine);color:var(--lime);font-size:12px;line-height:18px}
+
+@media (max-width:899px){
+  :root{--m:16px;--bar:56px}
+  .cta{padding:0 16px;letter-spacing:1px}
+  .wide{display:none}
+  .sq{letter-spacing:1px}
+  .lines{width:24px}
+  .logo{top:14px;font-size:22px}
+  .back{padding:0 16px;letter-spacing:1px}
+  .card{width:100%;padding:16px var(--m) 16px}
+  .card h2{font-size:30px;line-height:32px;margin-bottom:8px}
+  .card p{margin-bottom:12px;font-size:15px;line-height:21px}
+  .card-look h2{font-size:26px;line-height:30px}
+  .btn{height:56px;padding:0 24px;flex:1;justify-content:center;letter-spacing:1.2px}
+  .badge{right:auto;left:12px;top:-124px;width:114px;height:114px}
+  .badge b{font-size:28px;line-height:30px}
+  .badge span{font-size:10px;line-height:12px}
+  .tabs{height:48px}
+  .tabs-look{left:0;bottom:var(--card,180px)}
+  .tabs-look .tab{flex:1;justify-content:center;padding:0 8px;font-size:14px;letter-spacing:1px}
+  .tabs-hero{bottom:var(--card,230px)}
+  .tabs-hero .tab{padding:0 16px;font-size:14px;letter-spacing:1px}
+  .drop{width:240px}
+  .sheet{width:100%;padding:24px var(--m)}
+  .sheet h2{font-size:48px;line-height:52px}
+  .close{width:56px;height:56px}
+  .facts{display:block;padding:96px var(--m) 64px}
+  .facts .huge{position:static;font-size:72px;margin-bottom:48px}
+  .facts dl>div{display:block}
+  dt{font-size:28px;line-height:32px;margin-bottom:4px}
+  .intro{padding:96px var(--m) 32px}
+  .f7,.f5{grid-column:1/-1}
+  .where{display:block}
+  .where-text{padding:96px var(--m) 48px}
+  .where .huge{font-size:72px}
+  .where figure+figure{display:none}
+  .addr{font-size:32px;line-height:36px}
+  .contact{padding:96px var(--m) 64px}
+}
+@media (max-width:899px) and (max-height:720px){.card-look p{display:none}.card-hero p{display:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation-duration:.01s!important}
+}
