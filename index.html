@@ -14,9 +14,7 @@
 <link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js" as="script">
-<link rel="preload" href="img/maket.webp" as="image" fetchpriority="high">
 <link rel="stylesheet" href="styles.css">
-<noscript><style>.pin>*,.corner{opacity:1!important}</style></noscript>
 </head>
 <body>
 <div class="corner">
@@ -36,45 +34,36 @@
   </details>
 </div>
 
-<div class="stage" id="stage">
-  <span class="anchor" id="building"></span>
-  <main class="pin" id="pin">
-    <header class="band">
-      <a class="logo" href="#stage">Madison</a>
-      <h1 id="h1" data-en="Looking for<br>a small office<br>in Sacramento?" data-wide-en="Looking for a small<br>office in Sacramento?" data-wide="Нужен небольшой<br>офис в Сакраменто?">Нужен<br>небольшой<br>офис в<br>Сакраменто?</h1>
-    </header>
-    <a class="back" href="#stage" data-en="Top">Наверх</a>
-    <div class="ribbon" id="ribbon" data-en="Floor plan">План здания</div>
+<a class="logo" href="#top">Madison</a>
+<header class="hero" id="top">
+  <h1 data-en="Small offices in Sacramento from&nbsp;$500 a&nbsp;month">Небольшие офисы в Сакраменто от&nbsp;$500 в&nbsp;месяц</h1>
+  <p class="addr">5345 Madison Ave, Sacramento, CA 95841</p>
+  <p data-en="One-year lease, gated parking, 24/7 access for tenants.">Договор от года, парковка за воротами, у арендаторов доступ круглосуточно.</p>
+  <form class="lead" id="lead" novalidate>
+    <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name">Как вас зовут</span></label>
+    <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad"><span data-en="Phone">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+    <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
+    <div class="acts">
+      <button class="btn" type="submit" data-en="Send request">Оставить заявку</button>
+      <a class="btn call" href="tel:+19169144407"><span data-en="Call">Позвонить</span>&nbsp;916-914-4407</a>
+    </div>
+    <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
+  </form>
+</header>
 
+<section class="plan" id="building">
+  <div class="plan-head">
+    <h2 data-en="Floor plan">План здания</h2>
+    <p data-en="Pick a room to see a photo of an office. Prices and open rooms aren't marked on the plan.">Нажмите на комнату, откроется снимок офиса. Цены и свободные комнаты на плане не отмечены.</p>
+  </div>
+  <div class="plan-stage" id="plan-stage">
     <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
-      <img src="img/maket.webp" width="1920" height="1080" alt="" fetchpriority="high" decoding="sync">
+      <img src="img/maket.webp" width="1920" height="1080" alt="">
       <canvas id="glow"></canvas>
     </div>
-    <p class="said" id="said" aria-live="polite"></p>
-
-    <section class="card card-hero">
-      <a class="badge" href="#prices"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
-      <h2 data-en="Offices for rent at 5345&nbsp;Madison&nbsp;Ave">Сдаём офисы на 5345&nbsp;Madison&nbsp;Ave</h2>
-      <p><span data-en="Madison Business Center's smallest office is $500 a month, with a one-year lease.">Это Madison Business Center. Самый маленький офис стоит $500 в&nbsp;месяц, договор от года.</span> <span class="more" data-en="Gated parking and 24/7 access.">Парковка за воротами, у арендаторов доступ круглосуточный.</span></p>
-      <div class="acts">
-        <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
-        <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
-      </div>
-    </section>
-    <nav class="tabs tabs-hero">
-      <a class="tab" href="#building" data-en="Floor plan">План здания</a>
-    </nav>
-
-    <section class="card card-look">
-      <h2 data-en="The building from above">Так здание выглядит сверху</h2>
-      <p data-en="It's a model with the roof off. Prices and open rooms aren't marked on it yet, so call or message us to find out. The furniture comes from an old plan. Pick a room to see a photo of an office in this building.">Это макет без крыши. Цены и свободные комнаты на нём пока не отмечены, их можно узнать по телефону или в WhatsApp. Мебель на макете со старого плана. Нажмите на комнату, и откроется снимок офиса из этого здания.</p>
-      <div class="links">
-        <a class="line" href="tel:+19169144407" data-en="Call">Позвонить</a>
-        <a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
-      </div>
-    </section>
-  </main>
-</div>
+  </div>
+  <p class="said" id="said" aria-live="polite"></p>
+</section>
 
 <dialog class="sheet" id="sheet">
   <button class="close" type="button" id="close" aria-label="Закрыть" data-en-label="Close"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5"/></svg></button>

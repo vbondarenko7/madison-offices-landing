@@ -1,6 +1,6 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
-const body = document.body, pin = $('#pin'), rig = $('#rig'), glow = $('#glow'), sheet = $('#sheet'), root = document.documentElement;
+const body = document.body, plan = $('#building'), planStage = $('#plan-stage'), rig = $('#rig'), glow = $('#glow'), sheet = $('#sheet'), root = document.documentElement;
 const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // --- Язык: русский текст в разметке, английский в data-en ------------------------------------
@@ -25,7 +25,6 @@ const t = () => TEXT[root.lang];
 $$('[data-en]').forEach((e) => { e.dataset.ru = e.innerHTML; });
 $$('[data-en-label]').forEach((e) => { e.dataset.ruLabel = e.getAttribute('aria-label'); });
 $$('[data-en-alt]').forEach((e) => { e.dataset.ruAlt = e.alt; });
-const h1 = $('#h1');
 
 function setLang(l) {
   root.lang = l;
@@ -38,78 +37,30 @@ function setLang(l) {
   $$('.wa').forEach((a) => { a.href = waLink(a.getAttribute(`data-wa-${l}`) || t().message); });
   try { localStorage.setItem('lang', l); } catch (e) {}
   if (shown) fillSheet(shown);
-  fit();
   place();
 }
 $('#lang').addEventListener('click', () => setLang(root.lang === 'en' ? 'ru' : 'en'));
-
-// --- Огромные надписи подбираются под ширину экрана, чтобы читались целиком ---------------------
-function fitLine(el, maxH) {
-  el.style.fontSize = '100px';
-  const size = Math.min((root.clientWidth - 2 * parseFloat(getComputedStyle(el).left)) / el.scrollWidth * 100, maxH);
-  el.style.fontSize = size + 'px';
-  return size;
-}
-// Узкий экран: всё стоит столбиком. Телефон боком сюда не входит, у него карточка слева, а план справа
-const narrow = () => root.clientWidth < 900 && !(pin.clientHeight < 480 && root.clientWidth > pin.clientHeight);
-function fit() {
-  const phone = narrow(), h = pin.clientHeight;
-  const bar = root.clientWidth < 900 ? 56 : 64;
-  const lines = root.lang === 'en' ? (phone ? h1.dataset.en : h1.dataset.wideEn) : (phone ? h1.dataset.ru : h1.dataset.wide);
-  h1.innerHTML = lines;
-  // Заголовок кончается выше кружка с ценой, кружок на него не наезжает
-  const card = $('.card-hero').offsetHeight;
-  const badge = $('.badge').offsetParent ? parseFloat(getComputedStyle($('.badge')).top) : 0;
-  const free = (h - card + badge - bar - 8) / lines.split('<br>').length;
-  fitLine(h1, Math.max(24, Math.min((phone ? .082 : .2) * h, free)));
-  root.style.setProperty('--band', bar + h1.offsetHeight * .97 + 'px');
-  root.style.setProperty('--band2', bar + parseFloat(getComputedStyle($('#ribbon')).fontSize) * 1.02 + 'px');
-  root.style.setProperty('--card', card + 'px');
-}
 
 // --- Камера над кадром: какая часть кадра на экране и насколько крупно --------------------------
 const BOX = [775, 205, 1515, 1040];
 const view = { k: 1, x: 0, y: 0 };
 const apply = () => { rig.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.k})`; };
+// Телефон стоймя: заголовок сверху, макет крупнее ширины экрана, его можно двигать пальцем вбок
+const tall = () => matchMedia('(max-width:899px) and (orientation:portrait)').matches;
 
 function place() {
-  const w = root.clientWidth, h = pin.clientHeight, phone = narrow();
-  const css = (n) => parseFloat(getComputedStyle(root).getPropertyValue(n));
-  const look = body.classList.contains('look');
-  let k, x, y;
-  if (look) {
-    const [x0, y0, x1, y1] = BOX, top = css('--band2'), bw = x1 - x0, bh = y1 - y0;
-    const bottom = phone ? h - $('.card-look').offsetHeight - 48 : w < 900 ? h - 48 : h;
-    k = Math.min((bottom - top - 16) / bh, (phone ? w - 8 : w * .9) / bw);
-    const cx = phone ? w / 2 : Math.max(.62 * w, Math.min(w - bw * k / 2, 580 + bw * k / 2));
-    x = cx - (x0 + bw / 2) * k;
-    y = top + Math.max(8, (bottom - top - bh * k) / 2) - y0 * k;
-    x = Math.max(x, w - 1920 * k);
-    y = Math.max(Math.min(y, top), bottom - 1080 * k);
-  } else {
-    y = css('--band');
-    k = phone ? .43 : Math.max(1.07 * w, 1920 * .7) / 1920;
-    x = phone ? w / 2 - 1145 * k : Math.min(0, w - 1920 * k + 20);
-  }
-  Object.assign(view, { k, x, y });
+  const w = plan.clientWidth, h = plan.clientHeight, [x0, y0, x1, y1] = BOX, bw = x1 - x0, bh = y1 - y0;
+  const head = tall() ? $('.plan-head').offsetHeight : 0, room = h - head;
+  planStage.style.top = head + 'px';
+  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, w * .66 / bw);
+  const cx = tall() ? w / 2 : w * .68;
+  Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k });
   lifted = 0;
   if (shown) lift(shown); else apply();
 }
-
-function setLook(on) {
-  if (on === body.classList.contains('look')) return;
-  body.classList.toggle('look', on);
-  if (!on) closeSheet(true);
-  place();
-}
-function onScroll() {
-  const h = pin.clientHeight;
-  setLook(scrollY > h * .06);
-  // Страницу двинули дальше: лист уходит сразу, чтобы прокрутка не казалась зависшей
-  if (Math.abs(scrollY - sheetAt) > 40 || scrollY > h * .7) closeSheet(true);
-}
-addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', () => { fit(); place(); onScroll(); });
+// Страницу двинули дальше: лист уходит сразу, чтобы прокрутка не казалась зависшей
+addEventListener('scroll', () => { if (Math.abs(scrollY - sheetAt) > 40) closeSheet(true); }, { passive: true });
+addEventListener('resize', place);
 
 // --- Комнаты: контуры лежат в странице, отклик есть с первого касания ---------------------------
 const SCALE = 1.5;
@@ -213,17 +164,30 @@ function point(e) {
   const b = rig.getBoundingClientRect(), k = b.width / 1920;
   return roomAt((e.clientX - b.left) / k, (e.clientY - b.top) / k, k);
 }
+// Палец двигает крупный макет вбок, короткое нажатие открывает комнату
+let dragX = null, dragged = false;
 rig.addEventListener('pointerdown', (e) => {
-  if (e.pointerType !== 'mouse') setHot(point(e));
+  dragged = false;
+  if (e.pointerType === 'mouse') return;
+  setHot(point(e));
+  dragX = tall() ? e.clientX : null;
+  rig.style.transition = 'none';
 });
-rig.addEventListener('pointermove', (e) => setHot(point(e)));
-['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, () => setHot(null)));
+rig.addEventListener('pointermove', (e) => {
+  setHot(point(e));
+  if (dragX === null) return;
+  const by = e.clientX - dragX;
+  if (Math.abs(by) < 4 && !dragged) return;
+  dragged = true;
+  dragX = e.clientX;
+  view.x = Math.min(8 - BOX[0] * view.k, Math.max(plan.clientWidth - 8 - BOX[2] * view.k, view.x + by));
+  apply();
+});
+['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, () => { setHot(null); dragX = null; rig.style.transition = ''; }));
 rig.addEventListener('click', (e) => {
+  if (dragged) return;
   const r = point(e);
-  if (!r) return;
-  // На первом экране нажатие ведёт к макету, лист открывается уже там
-  if (!body.classList.contains('look')) return $('#building').scrollIntoView();
-  openSheet(r);
+  if (r) openSheet(r);
 });
 
 // Клавиатура: стрелки идут по комнатам, Enter открывает лист
@@ -260,9 +224,9 @@ function fillSheet(r) {
 }
 // Комната не должна оказаться под листом
 function lift(r) {
-  const low = Math.max(...r.floor.filter((_, i) => i % 2)) * view.k + view.y + lifted;
-  const room = pin.clientHeight - sheet.offsetHeight - 12;
-  const by = narrow() && low > room ? low - room : 0;
+  const low = Math.max(...r.floor.filter((_, i) => i % 2)) * view.k + view.y + lifted + planStage.getBoundingClientRect().top;
+  const room = innerHeight - sheet.offsetHeight - 12;
+  const by = tall() && low > room ? low - room : 0;
   view.y += lifted - by;
   lifted = by;
   apply();
@@ -298,6 +262,29 @@ $('#close').addEventListener('click', () => closeSheet());
 addEventListener('popstate', () => closeSheet(true));
 addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
+});
+
+// --- Заявка: подпись поднимается над полем, телефон проверяется. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
+const lead = $('#lead'), leadPhone = $('#lead-phone'), leadBad = $('#lead-bad'), leadOff = $('#lead-off');
+const phoneOk = () => { const n = leadPhone.value.replace(/\D/g, '').length; return n >= 10 && n <= 15; };
+leadPhone.addEventListener('input', () => {
+  const box = leadPhone.parentElement;
+  box.classList.toggle('good', phoneOk());
+  if (phoneOk()) { box.classList.remove('bad'); leadBad.hidden = true; leadPhone.removeAttribute('aria-invalid'); }
+});
+lead.addEventListener('submit', (e) => {
+  e.preventDefault();
+  leadOff.hidden = true;
+  if (!phoneOk()) {
+    leadPhone.parentElement.classList.add('bad');
+    leadBad.hidden = false;
+    leadPhone.setAttribute('aria-invalid', 'true');
+    leadPhone.focus();
+    return;
+  }
+  // ponytail: отправки ещё нет, почта не выбрана (PROJECT_STATE.md). Поэтому заявка не считается принятой: человек видит, что надо позвонить
+  leadOff.hidden = false;
+  leadOff.scrollIntoView({ block: 'nearest' });
 });
 
 // --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
@@ -400,15 +387,12 @@ document.addEventListener('click', (e) => {
   // После tel: окно получает фокус обратно, и браузер рисует рамку; при нажатии мышью или пальцем фокус снимаем
   if (e.detail > 0) { const f = e.target.closest('a,button,summary'); if (f) f.blur(); }
 });
-$$('a[href="#stage"]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(0, 0); }));
 
 // --- Старт ---------------------------------------------------------------------------------
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
 const asked = new URLSearchParams(location.search).get('lang');
 const ru = /^(ru|uk|be)/i.test((navigator.languages || [navigator.language])[0]);
 setLang(asked === 'en' || asked === 'ru' ? asked : saved || (ru ? 'ru' : 'en'));
-onScroll();
-requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('on')));
-if (document.fonts) document.fonts.ready.then(() => { fit(); place(); });
+if (document.fonts) document.fonts.ready.then(place);
 // Тяжёлый свет грузится после первого экрана
 addEventListener('load', () => setTimeout(() => { lit.src = 'img/maket-svet.webp'; }, 300));
