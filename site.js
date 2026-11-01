@@ -300,16 +300,11 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Страница ниже плана: движение как в оригинале, числа сняты с его кода и кадров, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
-const looks = $$('[data-look]'), growing = $$('.grow'), drifting = $$('.drift'), runLine = $('#prices h2');
+// --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
+const growing = $$('.grow');
 
-// Цвет поля и текста один на всю страницу. Он меняется целиком, когда верх следующего блока доходит до середины экрана
+// Большой снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
 function flowFrame() {
-  let now = looks[0];
-  looks.forEach((s) => { if (s.getBoundingClientRect().top <= innerHeight / 2) now = s; });
-  body.dataset.look = now.dataset.look;
-  if (still) return;
-  // Большой снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
   growing.forEach((f) => {
     const height = f.offsetHeight, centre = f.parentElement.getBoundingClientRect().top + height / 2;
     if (centre < -height || centre > innerHeight + height * 1.5) return;
@@ -317,42 +312,17 @@ function flowFrame() {
     const grown = Math.min(1, Math.max(0, (from - centre) / (from - to)));
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
   });
-  drifting.forEach((f) => {
-    const b = f.parentElement.getBoundingClientRect();
-    if (b.bottom > -innerHeight && b.top < innerHeight * 2) f.style.transform = `translate3d(0,${((b.top + b.height / 2 - innerHeight / 2) * .045).toFixed(1)}px,0)`;
-  });
-  runLineFrame();
 }
-// Огромный заголовок едет вбок вместе с прокруткой и наклоняется от её скорости, потом выпрямляется. На телефоне он стоит на месте, как в оригинале
-let runShift = 0, runSkew = 0, lastY = scrollY, lastT = performance.now(), runFading = false;
-const runPaint = () => { runLine.style.transform = `translate3d(${runShift.toFixed(1)}px,0,0) skewX(${runSkew.toFixed(2)}deg)`; };
-function runFade() {
-  runSkew = Math.abs(runSkew) > .1 ? runSkew * .8 : 0;
-  runPaint();
-  runFading = runSkew !== 0;
-  if (runFading) requestAnimationFrame(runFade);
+if (!still) {
+  let flowQueued = false;
+  addEventListener('scroll', () => {
+    if (flowQueued) return;
+    flowQueued = true;
+    requestAnimationFrame(() => { flowQueued = false; flowFrame(); });
+  }, { passive: true });
+  addEventListener('resize', flowFrame);
+  flowFrame();
 }
-function runLineFrame() {
-  const now = performance.now(), speed = (scrollY - lastY) / Math.max(1, now - lastT) * 1000;
-  lastY = scrollY; lastT = now;
-  if (innerWidth < 900) { runLine.style.transform = ''; return; }
-  const start = innerHeight, end = innerHeight * .3 - runLine.offsetHeight, top = runLine.getBoundingClientRect().top;
-  if (top > innerHeight * 2 || top < -innerHeight) return;
-  const road = Math.max(0, runLine.offsetWidth + 2 * runLine.offsetLeft - runLine.parentElement.clientWidth);
-  runShift = -road * Math.min(1, Math.max(0, (start - top) / (start - end)));
-  if (speed && top < innerHeight && top > -runLine.offsetHeight) runSkew = Math.max(-15, Math.min(15, speed / 20));
-  runPaint();
-  if (runSkew && !runFading) { runFading = true; requestAnimationFrame(runFade); }
-}
-let flowQueued = false;
-addEventListener('scroll', () => {
-  if (flowQueued) return;
-  flowQueued = true;
-  requestAnimationFrame(() => { flowQueued = false; flowFrame(); });
-}, { passive: true });
-if (!still) $('#prices').classList.add('running');
-addEventListener('resize', flowFrame);
-flowFrame();
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
 function splitLines(e) {
@@ -369,13 +339,12 @@ function splitLines(e) {
 const EASE = 'cubic-bezier(.165,.84,.44,1)';
 function riseUp(block) {
   block.classList.remove('wait');
-  if (block.matches('.line')) return;
   if (block.matches('.acts')) {
     block.animate([{ transform: 'translateY(30px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 1200, easing: EASE });
     return;
   }
   let n = 0;
-  (block.matches('.rent, .talk li') ? [...block.children] : [block]).forEach((e) => {
+  (block.matches('.rent') ? [...block.children] : [block]).forEach((e) => {
     const { whole, lines } = splitLines(e);
     const moves = lines.map((l) => l.animate(
       [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }],
@@ -390,7 +359,7 @@ if (!still && 'IntersectionObserver' in window) {
     rising.unobserve(s.target);
     riseUp(s.target);
   }), { rootMargin: '0px 0px -10% 0px' });
-  $$('.rise, .flow .line').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
+  $$('.rise').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
 }
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));

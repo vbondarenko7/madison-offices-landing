@@ -10,14 +10,14 @@
 @media (max-width:899px){:root{--m:16px;--bar:56px}}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
-body{font:400 16px/24px var(--text);color:var(--wine);background:var(--lime);transition:background-color .75s,color .75s;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{font:400 16px/24px var(--text);color:var(--wine);background:var(--paper);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 ::selection{background:var(--coral);color:var(--pine)}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 img{display:block;width:100%;height:auto}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--wine);outline-offset:2px}
-h1,h2,h3,.ribbon,.logo,.badge b,.phone,.sum,.rows,.talk span{font-family:var(--head);font-weight:500}
+h1,h2,h3,.ribbon,.logo,.badge b,.phone,.sum{font-family:var(--head);font-weight:500}
 
 /* Угол: звонок всегда на экране */
 .corner{position:fixed;z-index:20;top:0;right:0;display:flex;height:var(--bar)}
@@ -109,104 +109,38 @@ html:not(.on) .pin>*,html:not(.on) .corner{opacity:0;transition:none}
 .close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--paper);color:var(--wine);display:grid;place-items:center}
 .close:hover{background:var(--cream)}
 
-/* Страница ниже плана. Цвет поля и текста один на всю страницу и меняется целиком, поэтому у блоков своего фона нет */
-body[data-look=wine]{background:var(--wine);color:var(--lime)}
-body[data-look=sky]{background:var(--sky);color:var(--wine)}
-body[data-look=paper]{background:var(--paper);color:var(--wine)}
-body[data-look=pine]{background:var(--pine);color:var(--lime)}
-body[data-look=coral]{background:var(--coral);color:var(--pine)}
-body[data-look=coral] .cta{background:var(--wine);color:var(--lime)}
-.flow{position:relative;padding:192px var(--m) 128px;overflow-x:clip}
-.flow :focus-visible{outline-color:currentColor}
-.flow h2{font-size:clamp(40px,6.67vw,96px);line-height:1.05;font-weight:600;max-width:14em;text-wrap:balance}
-.flow h3,.rows,.talk span{font-size:clamp(28px,3.33vw,48px);line-height:1.1;font-weight:500;text-wrap:balance}
-.flow p{font-size:clamp(18px,1.67vw,24px);line-height:1.5;max-width:27em}
-.right{margin-left:calc(46.7vw - var(--m));max-width:40rem}
-.after{margin-top:128px}
-.after p+p,.after h3+p{margin-top:24px}
-.flow .acts{margin-top:48px}
-.flow .line{color:inherit;border:0;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size 2s cubic-bezier(.3,.7,.3,1),opacity .2s}
-.flow .line:hover{opacity:.65}
-.flow .line.wait{background-size:0 1px}
+/* Страница ниже плана: одно поле, один цвет текста, один акцент на кнопках, один столбец. На блоке заголовок, снимок и пара строк */
+.flow{width:min(73.3vw,1017px);margin:auto;padding:128px 0}
+.flow h2{font-size:clamp(36px,5vw,72px);line-height:1.1;font-weight:600;text-wrap:balance}
+.flow p{margin-top:32px;font-size:clamp(18px,1.67vw,24px);line-height:1.5;max-width:40rem}
+.flow .acts{margin-top:40px;gap:8px}
 .ln{display:block}
 .rise.wait{opacity:0}
 figure{margin:0;display:flex;flex-direction:column}
 figure picture{flex:1;display:block;overflow:hidden}
 figure img{height:100%;object-fit:cover}
 figcaption{padding:16px var(--m);font-weight:600}
-.big{position:relative;width:min(73.3vw,1017px);margin:128px auto 0}
+.big{margin-top:64px}
 .big figure{aspect-ratio:4/3;transform-origin:50% 50%}
 .big picture{height:100%}
-
-/* Цены */
-.running h2{font-size:clamp(150px,16.7vw,240px);line-height:1.1;white-space:nowrap;max-width:none;width:max-content;transform-origin:50% 100%}
-.prices .big figure{aspect-ratio:1056/934}
-.flow .sum{font-size:clamp(48px,8.9vw,128px);line-height:1;font-weight:600;max-width:none}
-.rent h3{font-size:clamp(24px,2.78vw,40px);line-height:1.15;margin-top:8px}
-.r-small{position:absolute;z-index:1;top:30%;right:-14.5%;width:36%}
-.prices-end{display:grid;grid-template-columns:calc(46.7vw - var(--m)) minmax(0,1fr);margin-top:128px}
-.r-bigger{grid-row:1/3}
-.r-entrance{margin-top:256px}
-.prices-end>:not(.r-bigger){grid-column:2;max-width:40rem}
-.deal{margin-top:128px}
-
-/* Радиостанции: снимки как следы, рисунок в два цвета */
-.mic{position:absolute;right:var(--m);top:64px;width:min(19.5vw,280px);height:auto;pointer-events:none}
-.radio h2{max-width:9.2em}
-.pair{display:grid;grid-template-columns:calc(46.7vw - var(--m)) minmax(0,1fr);margin-top:128px}
-.r-doors{width:min(36.5vw,526px);aspect-ratio:526/700}
-.r-doors picture{height:100%}
-.side{align-self:center;max-width:40rem}
-.side p{margin-top:24px}
-.side .note{margin-top:64px}
-.r-air{width:min(36.5vw,526px);margin:128px 0 0 calc(46.7vw - var(--m))}
-
-/* Ворота */
-.rows{list-style:none;padding:0}
-.rows li{padding:24px 0 32px;background:linear-gradient(currentColor,currentColor) 0 0/100% 1px no-repeat;transition:background-size 2s cubic-bezier(.3,.7,.3,1)}
-.rows li.wait{background-size:0 1px}
-
-/* Помощник: три реплики большими фразами, без полос */
-.talk{list-style:none;margin:128px 0 0;padding:0}
-.talk li{max-width:40rem}
-.talk .right{margin-top:96px;margin-bottom:96px}
-.talk b{display:block;margin-bottom:12px;font-size:14px;line-height:21px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}
-.talk span{display:block}
-
-/* Приехать посмотреть: огромный номер, снизу строка с адресом */
-.contact h3{margin-top:48px}
-.contact .line{margin-top:16px}
-.phone{display:block;margin:128px 0 64px;font-size:min(14vw,calc((100vw - 2*var(--m))/6.5));line-height:1;letter-spacing:-.02em;font-weight:600;white-space:nowrap}
+.rents{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px}
+.flow .rent p{margin-top:8px}
+.flow .rent .sum{margin-top:0;font-size:clamp(40px,5vw,72px);line-height:1.1;font-weight:600}
+.phone{display:block;margin-top:48px;font-size:min(8.6vw,120px);line-height:1;font-weight:600;white-space:nowrap}
+.map{text-decoration:underline;text-underline-offset:4px;white-space:nowrap}
+.map:hover{color:var(--coral-d)}
 .nb{white-space:nowrap}
-.foot{margin-top:128px;font-size:12px;line-height:18px}
 
 @media (max-width:899px){
-  .flow{padding:96px var(--m) 64px}
-  .flow h2{font-size:min(40px,10.6vw);line-height:1.05}
-  .flow h3,.rows,.talk span{font-size:28px;line-height:32px}
-  .flow p{font-size:18px;line-height:27px}
-  .right{margin-left:0}
-  .after{margin-top:96px}
+  .flow{width:auto;margin:0;padding:80px var(--m)}
+  .flow h2{font-size:min(36px,9.6vw)}
+  .flow p{margin-top:24px;font-size:18px;line-height:27px}
+  .flow .acts{margin-top:32px}
   .flow .btn{flex:1 1 100%}
-  .big{width:100%;margin-top:96px}
-  .big figure{width:100%}
-  .prices h2,.running h2{font-size:min(56px,14.3vw);white-space:normal;width:auto}
-  .flow .sum{font-size:min(72px,18.4vw)}
-  .prices .big figure{aspect-ratio:294/485;width:min(75.4%,48svh,480px);margin:auto}
-  .rent h3{font-size:24px;line-height:28px}
-  .r-small{position:static;width:auto;margin-top:64px;text-align:right}
-  .prices-end{display:block;margin-top:128px}
-  .r-entrance{margin-top:128px;text-align:right}
-  .deal{margin-top:128px}
-  .mic{position:static;display:block;width:60%;margin:48px 0 0 auto}
-  .pair{display:block;margin-top:64px}
-  .r-doors{width:75.4%}
-  .side{margin-top:64px}
-  .r-air{width:75.4%;margin:96px 0 0 auto}
-  .talk{margin-top:96px}
-  .talk .right{margin-top:64px;margin-bottom:64px}
-  .phone{margin:96px 0 48px}
-  .foot{margin-top:96px}
+  .big{margin-top:40px}
+  .rents{grid-template-columns:1fr;gap:24px;margin-top:40px}
+  .flow .rent .sum{font-size:min(48px,12.8vw)}
+  .phone{margin-top:32px;font-size:calc((100vw - 2*var(--m))/6.9)}
   .cta{padding:0 16px;letter-spacing:1px}
   .wide{display:none}
   .sq{letter-spacing:1px}
