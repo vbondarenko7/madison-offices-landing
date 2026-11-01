@@ -124,7 +124,6 @@ figcaption{padding:16px var(--m);font-weight:600}
 /* Рисунок в цвет текста лежит на поле справа от заголовка */
 .deco{float:right;height:auto;margin:0 -8vw 48px 48px}
 .deco-mic{width:min(22vw,320px)}
-.deco-gate{width:min(30vw,432px)}
 .deco-phone{width:min(23.5vw,340px)}
 .big figure{aspect-ratio:4/3;transform-origin:50% 50%}
 .big picture{height:100%}
@@ -136,6 +135,17 @@ figcaption{padding:16px var(--m);font-weight:600}
 .map:hover{color:var(--coral-d)}
 .nb{white-space:nowrap}
 
+/* Сцена с воротами: поле переходит в небо и асфальт без краёв. Экран стоит, пока идёт прокрутка: сцена приближается, ворота откатываются */
+.scene-top{padding-bottom:0}
+.scene-end{padding-top:32px}
+.scene-end p{margin-top:0}
+.scene-room{height:230vh;height:230svh}
+.scene{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip}
+.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 62%;transform-origin:52% 62%;will-change:transform}
+.scene::before,.scene::after{content:"";position:absolute;z-index:1;left:0;right:0;pointer-events:none}
+.scene::before{top:0;height:46%;background:linear-gradient(var(--paper) 8%,rgba(240,239,235,.85) 30%,rgba(240,239,235,0))}
+.scene::after{bottom:0;height:20%;background:linear-gradient(rgba(240,239,235,0),var(--paper) 92%)}
+
 @media (max-width:899px){
   .flow{width:auto;margin:0;padding:80px var(--m)}
   .flow h2{font-size:min(36px,9.6vw)}
@@ -143,9 +153,10 @@ figcaption{padding:16px var(--m);font-weight:600}
   .flow .acts{margin-top:32px}
   .flow .btn{flex:1 1 100%}
   .big{margin-top:40px}
+  .scene-room{height:190vh;height:190svh}
+  .scene{top:14vh;top:14svh;height:72vh;height:72svh}
   .deco{float:none;margin:0 0 40px auto}
   .deco-mic{width:50%}
-  .deco-gate{width:80%}
   .deco-phone{width:55%}
   .rents{grid-template-columns:1fr;gap:24px;margin-top:40px}
   .flow .rent .sum{font-size:min(48px,12.8vw)}
@@ -205,5 +216,7 @@ figcaption{padding:16px var(--m);font-weight:600}
 @media (max-width:899px) and (max-height:720px){.card-look h2,.card-hero .more{display:none}}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
+  .scene-room{height:auto}
+  .scene{position:relative;top:0}
   *,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation-duration:.01s!important}
 }

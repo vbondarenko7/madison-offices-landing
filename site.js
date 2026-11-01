@@ -313,15 +313,30 @@ function flowFrame() {
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
   });
 }
+// Ворота: сцена приближается слоями, ближний план быстрее дальнего, панель откатывается вправо и обратно вместе с прокруткой
+const room = $('.scene-room'), stage = $('.scene');
+const [far, mid, gateLayer, post, near] = ['.far', '.mid', '.gt', '.post', '.near'].map((c) => stage.querySelector(c));
+function sceneFrame() {
+  const box = room.getBoundingClientRect();
+  if (box.bottom < -innerHeight || box.top > innerHeight * 2) return;
+  const p = Math.min(1, Math.max(0, -box.top / Math.max(1, box.height - stage.offsetHeight)));
+  const open = Math.min(1, Math.max(0, (p - .12) / .7)), wide = Math.max(stage.offsetWidth, stage.offsetHeight * 4 / 3);
+  const s = 1 + .07 * p, x = open * open * (3 - 2 * open) * .43 * wide * s;
+  far.style.transform = `translate3d(0,${(p * -14).toFixed(1)}px,0) scale(${(1 + .02 * p).toFixed(4)})`;
+  mid.style.transform = post.style.transform = `scale(${s.toFixed(4)})`;
+  gateLayer.style.transform = `translate3d(${x.toFixed(1)}px,0,0) scale(${s.toFixed(4)})`;
+  near.style.transform = `scale(${(1 + .16 * p).toFixed(4)})`;
+}
 if (!still) {
   let flowQueued = false;
   addEventListener('scroll', () => {
     if (flowQueued) return;
     flowQueued = true;
-    requestAnimationFrame(() => { flowQueued = false; flowFrame(); });
+    requestAnimationFrame(() => { flowQueued = false; flowFrame(); sceneFrame(); });
   }, { passive: true });
-  addEventListener('resize', flowFrame);
+  addEventListener('resize', () => { flowFrame(); sceneFrame(); });
   flowFrame();
+  sceneFrame();
 }
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
