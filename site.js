@@ -5,16 +5,20 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // --- Язык: русский текст в разметке, английский в data-en ------------------------------------
 const TEXT = {
-  ru: { room: 'Комната', onPlan: (n, p) => `Это комната ${n} на нашем плане, ${p} часть здания.`, n: 'северная', s: 'южная',
-    sms: 'Здравствуйте! Интересует офис на 5345 Madison Ave. Что сейчас свободно?',
-    smsRoom: (n, p) => `Здравствуйте! Смотрю на сайте комнату ${n} на плане, ${p} часть здания. Подскажите цену, размер и свободна ли она?`,
+  ru: { position: (n, total) => `Комната ${n} из ${total}`,
+    office: { caption: 'Один из офисов в этом здании. Снимка именно этой комнаты пока нет.', title: 'Цену, размер и что свободно, можно узнать по телефону.' },
+    meeting: { caption: 'Переговорная в этом здании.', title: 'Ею могут пользоваться все арендаторы', note: 'Цену офиса, размер и что свободно, можно узнать по телефону.' },
+    alt: { 'office-window': 'Пустой офис с большим окном', 'office-corner': 'Пустой угловой офис с матовыми окнами и тёмным ковром', 'office-blinds': 'Пустой угловой офис с жалюзи на окнах', 'office-narrow': 'Пустой офис с жёлтой и коричневой стенами и жалюзи', 'office-glass': 'Пустой офис за стеклянной стеной, за окном деревья', 'meeting-room': 'Переговорная с длинным столом и креслами' },
+    message: 'Здравствуйте! Интересует офис на 5345 Madison Ave. Подскажите цену, размер и что сейчас свободно?',
     title: 'Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center', other: 'English', sw: 'EN' },
-  en: { room: 'Room', onPlan: (n, p) => `This is room ${n} on our plan, in the ${p} part of the building.`, n: 'north', s: 'south',
-    sms: "Hi! I'm interested in an office at 5345 Madison Ave. What's available now?",
-    smsRoom: (n, p) => `Hi! I'm looking at room ${n} on the plan on your site, ${p} part of the building. Can you tell me its price, size and whether it's open?`,
+  en: { position: (n, total) => `Room ${n} of ${total}`,
+    office: { caption: "One of the offices in this building. We don't have a photo of this exact room yet.", title: "You can get the price, the size and what's available by phone." },
+    meeting: { caption: 'The conference room in this building.', title: 'Any tenant can use it', note: "You can get the price of an office, the size and what's available by phone." },
+    alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with frosted windows and a dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with yellow and brown walls and blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside', 'meeting-room': 'Conference room with a long table and chairs' },
+    message: "Hi! I'm interested in an office at 5345 Madison Ave. Can you tell me the price, the size and what's available now?",
     title: 'Offices for rent in Sacramento from $500 a month | Madison Business Center', other: 'Русский', sw: 'RU' },
 };
-const smsLink = (text) => `sms:+19169144407?&body=${encodeURIComponent(text)}`;
+const waLink = (text) => `https://wa.me/19169144407?text=${encodeURIComponent(text)}`;
 const t = () => TEXT[root.lang];
 $$('[data-en]').forEach((e) => { e.dataset.ru = e.innerHTML; });
 $$('[data-en-label]').forEach((e) => { e.dataset.ruLabel = e.getAttribute('aria-label'); });
@@ -29,7 +33,7 @@ function setLang(l) {
   $('#lang').textContent = t().sw;
   $('#lang').setAttribute('aria-label', t().other);
   document.title = t().title;
-  $$('.sms').forEach((a) => { a.href = smsLink(t().sms); });
+  $$('.wa').forEach((a) => { a.href = waLink(t().message); });
   try { localStorage.setItem('lang', l); } catch (e) {}
   if (shown) fillSheet(shown);
   fit();
@@ -49,39 +53,34 @@ function fit() {
   const bar = phone ? 56 : 64;
   const lines = root.lang === 'en' ? (phone ? h1.dataset.en : h1.dataset.wideEn) : (phone ? h1.dataset.ru : h1.dataset.wide);
   h1.innerHTML = lines;
-  const size = fitLine(h1, (phone ? .082 : .2) * h);
+  // Заголовок кончается выше кружка с ценой, кружок на него не наезжает
+  const card = $('.card-hero').offsetHeight;
+  const free = (h - card + parseFloat(getComputedStyle($('.badge')).top) - bar - 8) / lines.split('<br>').length;
+  fitLine(h1, Math.min((phone ? .082 : .2) * h, free));
   root.style.setProperty('--band', bar + h1.offsetHeight * .97 + 'px');
-  const big = fitLine($('#ribbon'), (phone ? .2 : .34) * h);
-  root.style.setProperty('--band2', bar + big * .76 + 'px');
-  root.style.setProperty('--card', (body.classList.contains('look') ? $('.card-look') : $('.card-hero')).offsetHeight + 'px');
-  return size;
+  root.style.setProperty('--band2', bar + parseFloat(getComputedStyle($('#ribbon')).fontSize) * .92 + 'px');
+  root.style.setProperty('--card', card + 'px');
 }
 
 // --- Камера над кадром: какая часть кадра на экране и насколько крупно --------------------------
-const BOX = { all: [775, 205, 1515, 1040], north: [775, 205, 1515, 600], south: [805, 555, 1450, 1040] };
-const view = { k: 1, x: 0, y: 0, min: 0, max: 0 };
-let part = 'all';
+const BOX = [775, 205, 1515, 1040];
+const view = { k: 1, x: 0, y: 0 };
 const apply = () => { rig.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.k})`; };
 
 function place() {
   const w = root.clientWidth, h = pin.clientHeight, phone = w < 900;
   const css = (n) => parseFloat(getComputedStyle(root).getPropertyValue(n));
   const look = body.classList.contains('look');
-  root.style.setProperty('--card', (look ? $('.card-look') : $('.card-hero')).offsetHeight + 'px');
   let k, x, y;
-  view.min = view.max = 0;
   if (look) {
-    const [x0, y0, x1, y1] = BOX[part], top = css('--band2'), bw = x1 - x0, bh = y1 - y0;
+    const [x0, y0, x1, y1] = BOX, top = css('--band2'), bw = x1 - x0, bh = y1 - y0;
     const bottom = phone ? h - $('.card-look').offsetHeight - 48 : h;
-    if (part === 'all') k = Math.min((bottom - top - 16) / bh, (phone ? w - 8 : w * .9) / bw);
-    else k = Math.min((bottom - top - 16) / bh, phone ? .85 : 1.35 * Math.max(1, w / 1920));
+    k = Math.min((bottom - top - 16) / bh, (phone ? w - 8 : w * .9) / bw);
     const cx = phone ? w / 2 : Math.max(.62 * w, Math.min(w - bw * k / 2, 580 + bw * k / 2));
     x = cx - (x0 + bw / 2) * k;
     y = top + Math.max(8, (bottom - top - bh * k) / 2) - y0 * k;
     x = Math.max(x, w - 1920 * k);
     y = Math.max(Math.min(y, top), bottom - 1080 * k);
-    // Часть здания шире экрана телефона: палец вбок сдвигает её
-    if (phone && bw * k > w) { view.min = w - 8 - x1 * k; view.max = 8 - x0 * k; x = (view.min + view.max) / 2; }
   } else {
     y = css('--band');
     k = phone ? .43 : Math.max(1.07 * w, 1920 * .7) / 1920;
@@ -98,17 +97,10 @@ function setLook(on) {
   if (!on) closeSheet();
   place();
 }
-function setPart(p) {
-  part = p;
-  body.dataset.part = p;
-  $$('.tabs-look .tab').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.part === p)));
-  place();
-}
-$$('.tabs-look .tab').forEach((b) => b.addEventListener('click', () => setPart(b.dataset.part)));
 function onScroll() {
   const h = pin.clientHeight;
   setLook(scrollY > h * .22);
-  if (scrollY > h * 1.25) closeSheet();
+  if (scrollY > h * .95) closeSheet();
 }
 addEventListener('scroll', onScroll, { passive: true });
 addEventListener('resize', () => { fit(); place(); onScroll(); });
@@ -129,10 +121,10 @@ function poly(flat) {
   p.closePath();
   return p;
 }
-const rooms = ROOMS.map(([id, side, top, floor]) => {
+const rooms = ROOMS.map(([id, top, floor]) => {
   const all = poly(top);
   all.addPath(poly(floor));
-  return { id, side, top, floor, line: poly(top), all, a: 0, on: false };
+  return { id, top, floor, line: poly(top), all, a: 0, on: false };
 });
 const byId = new Map(rooms.map((r) => [r.id, r]));
 
@@ -215,21 +207,11 @@ function point(e) {
   const b = rig.getBoundingClientRect(), k = b.width / 1920;
   return roomAt((e.clientX - b.left) / k, (e.clientY - b.top) / k, k);
 }
-let px = null;
 rig.addEventListener('pointerdown', (e) => {
-  if (e.pointerType !== 'mouse') { px = e.clientX; setHot(point(e)); }
+  if (e.pointerType !== 'mouse') setHot(point(e));
 });
-rig.addEventListener('pointermove', (e) => {
-  if (e.pointerType !== 'mouse' && px !== null && view.max > view.min) {
-    view.x = Math.max(view.min, Math.min(view.max, view.x - (e.clientX - px) * (view.max - view.min) / root.clientWidth));
-    px = e.clientX;
-    rig.classList.add('pan');
-    apply();
-  }
-  setHot(point(e));
-});
-const leave = () => { px = null; rig.classList.remove('pan'); setHot(null); };
-['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, leave));
+rig.addEventListener('pointermove', (e) => setHot(point(e)));
+['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, () => setHot(null)));
 rig.addEventListener('click', (e) => {
   const r = point(e);
   if (!r) return;
@@ -245,18 +227,30 @@ rig.addEventListener('keydown', (e) => {
     e.preventDefault();
     kbd = (kbd + (e.key === 'ArrowRight' ? 1 : rooms.length - 1) + (kbd < 0 && e.key === 'ArrowLeft' ? 1 : 0)) % rooms.length;
     setHot(rooms[kbd]);
-    $('#said').textContent = `${t().room} ${rooms[kbd].id}`;
+    $('#said').textContent = t().position(kbd + 1, rooms.length);
   } else if (e.key === 'Enter' && hot) openSheet(hot);
 });
 rig.addEventListener('focus', () => { if (rig.matches(':focus-visible')) setHot(rooms[Math.max(kbd, 0)]); });
 rig.addEventListener('blur', () => setHot(null));
 
 // --- Лист комнаты --------------------------------------------------------------------------
+// Настоящие снимки офисов этого здания. Пока своего снимка у комнаты нет, номер комнаты выбирает один из них
+const OFFICES = ['office-window', 'office-corner', 'office-blinds', 'office-narrow', 'office-glass'];
+// Что известно про отдельную комнату. Цена и размер появятся в листе сами: 26: { price: '$700', size: '200 sq ft' }.
+// Свой снимок: photo с именем файла из site/img и words со своей подписью, слова для неё добавить в TEXT, как у переговорной
+const KNOWN = { 31: { photo: 'meeting-room', words: 'meeting' } };
+
 function fillSheet(r) {
-  const side = t()[r.side];
-  $('#room-title').textContent = `${t().room} ${r.id}`;
-  $('#room-where').textContent = t().onPlan(r.id, side);
-  $('#room-sms').href = smsLink(t().smsRoom(r.id, side));
+  const info = KNOWN[r.id] || {}, words = t()[info.words || 'office'], photo = info.photo || OFFICES[r.id % OFFICES.length];
+  const img = $('#room-img'), facts = $('#room-facts'), note = $('#room-note');
+  img.src = `img/${photo}-800.webp`; // снимок грузится только здесь, при открытии листа
+  img.alt = t().alt[photo];
+  $('#room-caption').textContent = words.caption;
+  $('#room-title').textContent = words.title;
+  facts.textContent = [info.price, info.size].filter(Boolean).join(', ');
+  facts.hidden = !facts.textContent;
+  note.textContent = words.note || '';
+  note.hidden = !words.note;
 }
 function openSheet(r) {
   if (shown && shown !== r) shown.on = false;
@@ -293,13 +287,12 @@ addEventListener('keydown', (e) => {
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));
 document.addEventListener('click', (e) => {
   if (!e.target.closest('#menu')) $('#menu').open = false;
-  // После tel: и sms: окно получает фокус обратно, и браузер рисует рамку; при нажатии мышью или пальцем фокус снимаем
+  // После tel: окно получает фокус обратно, и браузер рисует рамку; при нажатии мышью или пальцем фокус снимаем
   if (e.detail > 0) { const f = e.target.closest('a,button,summary'); if (f) f.blur(); }
 });
 $$('a[href="#stage"]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(0, 0); }));
 
 // --- Старт ---------------------------------------------------------------------------------
-setPart('all');
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
 const asked = new URLSearchParams(location.search).get('lang');
 const ru = (navigator.languages || [navigator.language]).some((l) => /^(ru|uk|be)/i.test(l));

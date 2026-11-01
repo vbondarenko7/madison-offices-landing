@@ -25,11 +25,11 @@
   <details class="menu sq" id="menu">
     <summary aria-label="Меню" data-en-label="Menu"><span class="lines"></span></summary>
     <nav class="drop">
-      <a href="#building" data-en="See the building">Посмотреть здание</a>
-      <a href="#facts" data-en="What to know">Что важно знать</a>
+      <a href="#building" data-en="Floor plan">План здания</a>
+      <a href="#facts" data-en="Prices and terms">Цена и условия</a>
       <a href="#photos" data-en="Photos">Снимки</a>
       <a href="#where" data-en="How to get here">Как доехать</a>
-      <a href="#contact" data-en="Call or text">Позвонить или написать</a>
+      <a href="#contact" data-en="Call or message">Позвонить или написать</a>
     </nav>
   </details>
 </div>
@@ -41,8 +41,8 @@
       <a class="logo" href="#stage">Madison</a>
       <h1 id="h1" data-fit data-en="Looking for<br>a small office<br>in Sacramento?" data-wide-en="Looking for a small<br>office in Sacramento?" data-wide="Нужен небольшой<br>офис в Сакраменто?">Нужен<br>небольшой<br>офис в<br>Сакраменто?</h1>
     </header>
-    <a class="back" href="#stage" data-en="Back">Назад</a>
-    <div class="ribbon" id="ribbon" aria-hidden="true" data-en="One floor">Один этаж</div>
+    <a class="back" href="#stage" data-en="Top">Наверх</a>
+    <div class="ribbon" id="ribbon" data-en="Floor plan">План здания</div>
 
     <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
       <img src="img/maket.webp" width="1920" height="1080" alt="" fetchpriority="high" decoding="sync">
@@ -51,64 +51,71 @@
     <p class="said" id="said" aria-live="polite"></p>
 
     <section class="card card-hero">
-      <a class="badge" href="tel:+19169144407"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
-      <h2 data-en="We rent offices at 5345&nbsp;Madison&nbsp;Ave">Сдаём офисы на 5345&nbsp;Madison&nbsp;Ave</h2>
-      <p data-en="The smallest one is $500 a month. It's a one-story building with parking behind the gate, and you can get in 24/7.">Самый маленький стоит $500 в&nbsp;месяц. Здание одноэтажное, парковка за воротами, заходить можно круглосуточно.</p>
+      <a class="badge" href="#facts"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
+      <h2 data-en="Offices for rent at 5345&nbsp;Madison&nbsp;Ave">Сдаём офисы на 5345&nbsp;Madison&nbsp;Ave</h2>
+      <p><span data-en="This is Madison Business Center. The smallest office is $500 a month, with a one-year lease.">Это Madison Business Center. Самый маленький офис стоит $500 в&nbsp;месяц, договор от года.</span> <span class="more" data-en="Parking is behind the gate, and you can get in 24/7.">Парковка за воротами, заходить можно круглосуточно.</span></p>
       <div class="acts">
         <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
-        <a class="btn alt sms" href="sms:+19169144407" data-en="Text">Написать</a>
+        <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
       </div>
     </section>
     <nav class="tabs tabs-hero">
-      <a class="tab on" href="#building" data-en="See the building">Посмотреть здание</a>
+      <a class="tab" href="#building" data-en="Floor plan">План здания</a>
     </nav>
 
     <section class="card card-look">
-      <h2 data-en="The whole floor at once">Весь этаж виден сразу</h2>
-      <p data-en="Run your finger or mouse over the rooms. Tap a room to ask about it.">Ведите по комнатам пальцем или мышью. Нажмите на комнату, чтобы спросить о ней.</p>
-      <a class="line" href="tel:+19169144407"><span class="roll"><i data-en="Ask Michael">Спросить Майкла</i><i>916-914-4407</i></span></a>
+      <h2 data-en="The building from above">Так здание выглядит сверху</h2>
+      <p data-en="It's a model with the roof off. Prices and available rooms aren't marked on it yet. You can get them by phone. Pick a room to see a photo of an office in this building.">Это макет без крыши. Цены и свободные комнаты на нём пока не отмечены, их можно узнать по телефону. Нажмите на комнату, и откроется снимок офиса из этого здания.</p>
+      <div class="links">
+        <a class="line" href="tel:+19169144407" data-en="Call">Позвонить</a>
+        <a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
+      </div>
     </section>
-    <nav class="tabs tabs-look" aria-label="Часть здания" data-en-label="Part of the building">
-      <button class="tab" type="button" data-part="all" data-en="All">Всё</button>
-      <button class="tab" type="button" data-part="north" data-en="North">Север</button>
-      <button class="tab" type="button" data-part="south" data-en="South">Юг</button>
+    <nav class="tabs tabs-look">
+      <a class="tab" href="#facts" data-en="Next: prices and terms">Дальше: цена и условия</a>
     </nav>
   </main>
 </div>
 
 <dialog class="sheet" id="sheet">
   <button class="close" type="button" id="close" aria-label="Закрыть" data-en-label="Close"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5"/></svg></button>
-  <h2 id="room-title"></h2>
-  <p id="room-where"></p>
-  <p class="ask" data-en="Michael can tell you its price, size and whether it's open.">Цену, размер и свободна ли она, скажет Майкл.</p>
-  <div class="acts">
-    <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
-    <a class="btn alt" id="room-sms" href="sms:+19169144407" data-en="Text">Написать</a>
+  <figure class="shot"><img id="room-img" width="800" height="600" alt=""><figcaption id="room-caption"></figcaption></figure>
+  <div class="sheet-text">
+    <h2 id="room-title"></h2>
+    <p id="room-facts" hidden></p>
+    <p id="room-note" hidden></p>
+    <div class="acts">
+      <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+      <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
+    </div>
   </div>
 </dialog>
 
 <section class="facts" id="facts">
-  <h2 class="huge" data-en="What to know">Что важно знать</h2>
+  <h2 class="huge" data-en="Prices and terms">Цена и условия</h2>
   <div class="list">
     <h3 data-en="First, the money.">Сначала про деньги.</h3>
     <dl>
       <div><dt>$500 <span data-en="a month">в месяц</span></dt><dd data-en="That's the smallest office.">Столько стоит самый маленький офис.</dd></div>
+      <div><dt data-en="Size, what's included, what's available">Размер, что входит и что свободно</dt><dd><span data-en="You can get all of this by phone:">Всё это можно узнать по телефону:</span> <a class="under" href="tel:+19169144407">916-914-4407</a></dd></div>
       <div><dt data-en="One-year lease">Договор на год</dt><dd data-en="A year is the minimum.">Это минимальный срок.</dd></div>
       <div><dt data-en="Deposit: one month's rent">Залог как месяц аренды</dt><dd data-en="For the smallest office, that's $500.">За самый маленький офис это $500.</dd></div>
     </dl>
     <h3 data-en="Now, the building.">Теперь про здание.</h3>
     <dl>
-      <div><dt data-en="One floor">Один этаж</dt><dd data-en="The whole building is one story.">Всё здание одноэтажное.</dd></div>
+      <div><dt data-en="One story">Один этаж</dt><dd data-en="No elevator needed.">Лифт не нужен.</dd></div>
       <div><dt data-en="Fence and gate">Забор и ворота</dt><dd data-en="The property is fenced, you drive in through the gate.">Территория закрыта, въезд через ворота.</dd></div>
       <div><dt data-en="Open 24/7">Круглосуточно</dt><dd data-en="You can get in at any hour.">Заходить можно в любое время.</dd></div>
       <div><dt data-en="Parking behind the gate">Парковка за воротами</dt><dd data-en="It's for tenants.">Она для арендаторов.</dd></div>
       <div><dt data-en="Cameras">Камеры</dt><dd data-en="The property has video surveillance.">На территории есть видеонаблюдение.</dd></div>
       <div><dt data-en="Conference room">Переговорная</dt><dd data-en="Any tenant can use it.">Ею могут пользоваться все арендаторы.</dd></div>
     </dl>
-    <h3 data-en="And one more thing.">И ещё одно.</h3>
-    <dl>
-      <div><dt data-en="We speak Russian too">Можно по-русски</dt><dd data-en="Michael answers calls and texts in English and Russian.">С Майклом можно говорить по-русски и по-английски.</dd></div>
-    </dl>
+    <div class="only-ru">
+      <h3>И ещё одно.</h3>
+      <dl>
+        <div><dt>Можно по-русски</dt><dd>По телефону можно говорить по-русски и по-английски.</dd></div>
+      </dl>
+    </div>
   </div>
 </section>
 
@@ -138,7 +145,7 @@
 <section class="where" id="where">
   <div class="where-text">
     <h2 class="huge" data-en="How do I get there?">Как доехать?</h2>
-    <p class="addr">5345 Madison Ave<br>Sacramento, CA 95841</p>
+    <p class="addr">5345 Madison Ave<small>Sacramento, CA 95841</small></p>
     <p data-en="It's near Auburn Blvd, close to I-80. You drive in through the gate.">Это возле Auburn Blvd, рядом с I-80. Въезд через ворота.</p>
     <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" data-en="Open in Maps">Открыть на карте</a>
   </div>
@@ -153,10 +160,10 @@
 <section class="contact" id="contact">
   <h2 data-en="Want to see an office?">Хотите посмотреть офис?</h2>
   <a class="phone" href="tel:+19169144407">916-914-4407</a>
-  <p data-en="Call or text Michael and he'll set up a time. Russian is fine too.">Позвоните или напишите Майклу, он назначит время. Можно по-русски.</p>
+  <p data-en="Call or message us on WhatsApp and we'll set up a time.">Позвоните или напишите в WhatsApp, и мы назначим время. Можно по-русски.</p>
   <div class="acts">
     <a class="btn dark" href="tel:+19169144407" data-en="Call">Позвонить</a>
-    <a class="btn alt sms" href="sms:+19169144407" data-en="Text">Написать</a>
+    <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
   </div>
 </section>
 
