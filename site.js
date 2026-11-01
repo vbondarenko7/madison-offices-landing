@@ -300,23 +300,30 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Цены: движение как в оригинале, числа сняты с его кода и кадров, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
-const prices = $('#prices'), bigPhoto = $('.big figure'), runLine = $('#prices h2');
+// --- Страница ниже плана: движение как в оригинале, числа сняты с его кода и кадров, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
+const looks = $$('[data-look]'), growing = $$('.grow'), drifting = $$('.drift'), runLine = $('#prices h2');
 
-// Цвет поля и текста меняется целиком: на свой, когда верх блока прошёл середину экрана, и на цвет следующего блока, когда тот показался. Шва между ними нет
-function pricesFrame() {
-  const box = prices.getBoundingClientRect();
-  prices.classList.toggle('above', box.top > innerHeight / 2);
-  prices.classList.toggle('below', box.bottom < innerHeight * .9);
-  if (still || box.bottom < -innerHeight || box.top > innerHeight * 2) return;
-  // Снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
-  const height = bigPhoto.offsetHeight, centre = bigPhoto.parentElement.getBoundingClientRect().top + height / 2;
-  const from = innerHeight + height * .33, to = innerHeight * .45, small = innerWidth < 900 ? .88 : .66;
-  const grown = Math.min(1, Math.max(0, (from - centre) / (from - to)));
+// Цвет поля и текста один на всю страницу. Он меняется целиком, когда верх следующего блока доходит до середины экрана
+function flowFrame() {
+  let now = looks[0];
+  looks.forEach((s) => { if (s.getBoundingClientRect().top <= innerHeight / 2) now = s; });
+  body.dataset.look = now.dataset.look;
+  if (still) return;
+  // Большой снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
+  growing.forEach((f) => {
+    const height = f.offsetHeight, centre = f.parentElement.getBoundingClientRect().top + height / 2;
+    if (centre < -height || centre > innerHeight + height * 1.5) return;
+    const from = innerHeight + height * .33, to = innerHeight * .45, small = innerWidth < 900 ? .88 : .66;
+    const grown = Math.min(1, Math.max(0, (from - centre) / (from - to)));
+    f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
+  });
+  drifting.forEach((f) => {
+    const b = f.parentElement.getBoundingClientRect();
+    if (b.bottom > -innerHeight && b.top < innerHeight * 2) f.style.transform = `translate3d(0,${((b.top + b.height / 2 - innerHeight / 2) * .045).toFixed(1)}px,0)`;
+  });
   runLineFrame();
-  bigPhoto.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
 }
-// Огромный вопрос едет вбок вместе с прокруткой и наклоняется от её скорости, потом выпрямляется. На телефоне он стоит на месте, как в оригинале
+// Огромный заголовок едет вбок вместе с прокруткой и наклоняется от её скорости, потом выпрямляется. На телефоне он стоит на месте, как в оригинале
 let runShift = 0, runSkew = 0, lastY = scrollY, lastT = performance.now(), runFading = false;
 const runPaint = () => { runLine.style.transform = `translate3d(${runShift.toFixed(1)}px,0,0) skewX(${runSkew.toFixed(2)}deg)`; };
 function runFade() {
@@ -330,21 +337,22 @@ function runLineFrame() {
   lastY = scrollY; lastT = now;
   if (innerWidth < 900) { runLine.style.transform = ''; return; }
   const start = innerHeight, end = innerHeight * .3 - runLine.offsetHeight, top = runLine.getBoundingClientRect().top;
-  const road = Math.max(0, runLine.offsetWidth + 2 * runLine.offsetLeft - prices.clientWidth);
+  if (top > innerHeight * 2 || top < -innerHeight) return;
+  const road = Math.max(0, runLine.offsetWidth + 2 * runLine.offsetLeft - runLine.parentElement.clientWidth);
   runShift = -road * Math.min(1, Math.max(0, (start - top) / (start - end)));
   if (speed && top < innerHeight && top > -runLine.offsetHeight) runSkew = Math.max(-15, Math.min(15, speed / 20));
   runPaint();
   if (runSkew && !runFading) { runFading = true; requestAnimationFrame(runFade); }
 }
-let pricesQueued = false;
+let flowQueued = false;
 addEventListener('scroll', () => {
-  if (pricesQueued) return;
-  pricesQueued = true;
-  requestAnimationFrame(() => { pricesQueued = false; pricesFrame(); });
+  if (flowQueued) return;
+  flowQueued = true;
+  requestAnimationFrame(() => { flowQueued = false; flowFrame(); });
 }, { passive: true });
-if (!still) prices.classList.add('running');
-addEventListener('resize', pricesFrame);
-pricesFrame();
+if (!still) $('#prices').classList.add('running');
+addEventListener('resize', flowFrame);
+flowFrame();
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
 function splitLines(e) {
@@ -358,15 +366,20 @@ function splitLines(e) {
   e.innerHTML = rows.map((r) => `<span class="ln">${r.words.join(' ')}</span>`).join(' ');
   return { whole, lines: [...e.children] };
 }
+const EASE = 'cubic-bezier(.165,.84,.44,1)';
 function riseUp(block) {
   block.classList.remove('wait');
-  if (block.matches('.links')) return;
+  if (block.matches('.line')) return;
+  if (block.matches('.acts')) {
+    block.animate([{ transform: 'translateY(30px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 1200, easing: EASE });
+    return;
+  }
   let n = 0;
-  (block.matches('.rent') ? [...block.children] : [block]).forEach((e) => {
+  (block.matches('.rent, .talk li') ? [...block.children] : [block]).forEach((e) => {
     const { whole, lines } = splitLines(e);
     const moves = lines.map((l) => l.animate(
       [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }],
-      { duration: 800, delay: 100 * n++, easing: 'cubic-bezier(.165,.84,.44,1)', fill: 'backwards' },
+      { duration: 800, delay: 100 * n++, easing: EASE, fill: 'backwards' },
     ));
     moves.at(-1).finished.then(() => { if (e.querySelector('.ln')) e.innerHTML = whole; }).catch(() => {});
   });
@@ -377,7 +390,7 @@ if (!still && 'IntersectionObserver' in window) {
     rising.unobserve(s.target);
     riseUp(s.target);
   }), { rootMargin: '0px 0px -10% 0px' });
-  $$('#prices h2, #prices .rent, #prices .deal, #prices .links').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
+  $$('.rise, .flow .line').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
 }
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));
@@ -387,28 +400,6 @@ document.addEventListener('click', (e) => {
   if (e.detail > 0) { const f = e.target.closest('a,button,summary'); if (f) f.blur(); }
 });
 $$('a[href="#stage"]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(0, 0); }));
-
-// --- Табличка IN USE загорается, когда заголовок показался. При «меньше движения» она просто горит ---
-if (!still && 'IntersectionObserver' in window) {
-  const sign = $('#past-title');
-  sign.classList.add('off');
-  new IntersectionObserver(([e], seen) => {
-    if (e.isIntersecting) { sign.classList.replace('off', 'flick'); seen.disconnect(); }
-  }, { threshold: .8 }).observe(sign);
-  // Разговор с помощником появляется по репликам, по мере прокрутки
-  const lines = $$('.say');
-  const said = new IntersectionObserver((seen) => seen.forEach((e) => {
-    if (!e.isIntersecting && e.boundingClientRect.top > 0) return;
-    lines.slice(0, lines.indexOf(e.target) + 1).forEach((s) => { s.classList.remove('wait'); said.unobserve(s); });
-  }), { rootMargin: '0px 0px -10% 0px' });
-  lines.forEach((s) => { s.classList.add('wait'); said.observe(s); });
-}
-
-// --- Лента дороги: стрелки сдвигают её на один кадр. На телефоне кадры стоят столбиком -------------
-const strip = $('#strip');
-const stepBy = (dir) => strip.scrollBy({ left: dir * strip.firstElementChild.offsetWidth, behavior: still ? 'auto' : 'smooth' });
-$('#road-back').addEventListener('click', () => stepBy(-1));
-$('#road-on').addEventListener('click', () => stepBy(1));
 
 // --- Старт ---------------------------------------------------------------------------------
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
