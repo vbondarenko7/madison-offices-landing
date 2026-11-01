@@ -1,8 +1,12 @@
-@font-face{font-family:Jost;src:url(fonts/jost-cyrillic.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:Jost;src:url(fonts/jost-latin.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-cyrillic-400.woff2) format("woff2");font-weight:400;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-latin-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-cyrillic-500.woff2) format("woff2");font-weight:500;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-latin-500.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-cyrillic-600.woff2) format("woff2");font-weight:600;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-latin-600.woff2) format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:Manrope;src:url(fonts/manrope-cyrillic.woff2) format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:Manrope;src:url(fonts/manrope-latin.woff2) format("woff2");font-weight:200 800;font-display:swap}
-:root{--wine:#792228;--lime:#d5e8af;--coral:#ff5b4d;--coral-d:#e04a3d;--sky:#c2daf6;--paper:#f0efeb;--pine:#002d2a;--leaf:#5fba82;--cream:#f6f5f3;--m:64px;--bar:64px;--band:338px;--band2:236px;--ease:cubic-bezier(.65,0,.2,1);--text:Manrope,Arial,sans-serif;--head:Jost,Arial,sans-serif}
+:root{--wine:#792228;--lime:#d5e8af;--coral:#ff5b4d;--coral-d:#e04a3d;--sky:#c2daf6;--paper:#f0efeb;--pine:#002d2a;--leaf:#5fba82;--cream:#f6f5f3;--m:64px;--bar:64px;--band:338px;--band2:236px;--ease:cubic-bezier(.65,0,.2,1);--text:Manrope,Arial,sans-serif;--head:"Montserrat Alternates",Arial,sans-serif}
 @media (max-width:899px){:root{--m:16px;--bar:56px}}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
@@ -101,7 +105,7 @@ html:not(.on) .pin>*{opacity:0;transition:none}
 /* Лист комнаты */
 .sheet{position:fixed;z-index:15;left:0;right:auto;bottom:0;top:auto;margin:0;width:560px;max-width:100%;border:0;background:var(--pine);color:var(--leaf);padding:40px var(--m);animation:up .35s var(--ease)}
 @keyframes up{from{transform:translateY(100%)}}
-.sheet h2{font-size:64px;line-height:68px;color:var(--lime);margin-bottom:8px;padding-right:40px}
+.sheet h2{font-size:56px;line-height:60px;color:var(--lime);margin-bottom:8px;padding-right:40px}
 .sheet p{margin-bottom:8px}
 .sheet .ask{color:var(--lime);margin-bottom:24px}
 .close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--paper);color:var(--wine);display:grid;place-items:center}
@@ -142,7 +146,7 @@ figcaption{padding:16px var(--m);font-weight:600}
 /* Контакт */
 .contact{position:relative;background:var(--coral);color:var(--pine);padding:128px var(--m) 96px}
 .contact h2{font-size:clamp(40px,4.4vw,64px);line-height:1.1;margin-bottom:16px}
-.phone{display:block;font-size:14vw;line-height:1;letter-spacing:-.02em;margin-bottom:24px;white-space:nowrap}
+.phone{display:block;font-size:min(14vw,calc((100vw - 2*var(--m))/6.5));line-height:1;letter-spacing:-.02em;margin-bottom:24px;white-space:nowrap}
 .contact p{margin-bottom:32px;max-width:60ch}
 .contact :focus-visible{outline-color:var(--pine)}
 .foot{padding:24px var(--m);background:var(--wine);color:var(--lime);font-size:12px;line-height:18px}
@@ -169,7 +173,7 @@ figcaption{padding:16px var(--m);font-weight:600}
   .tabs-hero .tab{padding:0 16px;font-size:14px;letter-spacing:1px}
   .drop{width:240px}
   .sheet{width:100%;padding:24px var(--m)}
-  .sheet h2{font-size:48px;line-height:52px}
+  .sheet h2{font-size:min(44px,11.5vw);line-height:1.1}
   .close{width:56px;height:56px}
   .facts{display:block;padding:96px var(--m) 64px}
   .facts .huge{position:static;font-size:72px;margin-bottom:48px}
@@ -179,10 +183,11 @@ figcaption{padding:16px var(--m);font-weight:600}
   .f7,.f5{grid-column:1/-1}
   .where{display:block}
   .where-text{padding:96px var(--m) 48px}
-  .where .huge{font-size:72px}
+  .where .huge{font-size:min(72px,17vw)}
   .where figure+figure{display:none}
   .addr{font-size:32px;line-height:36px}
   .contact{padding:96px var(--m) 64px}
+  .contact h2{font-size:min(40px,12vw)}
 }
 @media (max-width:899px) and (max-height:720px){.card-look p{display:none}.card-hero p{display:none}}
 @media (prefers-reduced-motion:reduce){
