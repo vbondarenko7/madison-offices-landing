@@ -16,7 +16,7 @@
 <link rel="preload" href="site.js" as="script">
 <link rel="preload" href="img/maket.webp" as="image" fetchpriority="high">
 <link rel="stylesheet" href="styles.css">
-<noscript><style>.pin>*{opacity:1!important}</style></noscript>
+<noscript><style>.pin>*,.corner{opacity:1!important}</style></noscript>
 </head>
 <body>
 <div class="corner">
@@ -28,8 +28,9 @@
       <a href="#building" data-en="Floor plan">План здания</a>
       <a href="#past" data-en="What used to be here">Что здесь было раньше</a>
       <a href="#prices" data-en="Prices">Цены</a>
-      <a href="#photos" data-en="Photos">Снимки</a>
-      <a href="#where" data-en="How to get here">Как доехать</a>
+      <a href="#fit" data-en="For your business">Для вашего дела</a>
+      <a href="#voice" data-en="Voice assistant bonus">Голосовой помощник</a>
+      <a href="#road" data-en="How to get here">Как приехать</a>
       <a href="#contact" data-en="Call or message">Позвонить или написать</a>
     </nav>
   </details>
@@ -40,7 +41,7 @@
   <main class="pin" id="pin">
     <header class="band">
       <a class="logo" href="#stage">Madison</a>
-      <h1 id="h1" data-fit data-en="Looking for<br>a small office<br>in Sacramento?" data-wide-en="Looking for a small<br>office in Sacramento?" data-wide="Нужен небольшой<br>офис в Сакраменто?">Нужен<br>небольшой<br>офис в<br>Сакраменто?</h1>
+      <h1 id="h1" data-en="Looking for<br>a small office<br>in Sacramento?" data-wide-en="Looking for a small<br>office in Sacramento?" data-wide="Нужен небольшой<br>офис в Сакраменто?">Нужен<br>небольшой<br>офис в<br>Сакраменто?</h1>
     </header>
     <a class="back" href="#stage" data-en="Top">Наверх</a>
     <div class="ribbon" id="ribbon" data-en="Floor plan">План здания</div>
@@ -54,7 +55,7 @@
     <section class="card card-hero">
       <a class="badge" href="#prices"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
       <h2 data-en="Offices for rent at 5345&nbsp;Madison&nbsp;Ave">Сдаём офисы на 5345&nbsp;Madison&nbsp;Ave</h2>
-      <p><span data-en="This is Madison Business Center. The smallest office is $500 a month, with a one-year lease.">Это Madison Business Center. Самый маленький офис стоит $500 в&nbsp;месяц, договор от года.</span> <span class="more" data-en="Parking is behind the gate, and you can get in 24/7.">Парковка за воротами, заходить можно круглосуточно.</span></p>
+      <p><span data-en="Madison Business Center's smallest office is $500 a month, with a one-year lease.">Это Madison Business Center. Самый маленький офис стоит $500 в&nbsp;месяц, договор от года.</span> <span class="more" data-en="Gated parking and 24/7 access.">Парковка за воротами, у арендаторов доступ круглосуточный.</span></p>
       <div class="acts">
         <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
         <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
@@ -66,7 +67,7 @@
 
     <section class="card card-look">
       <h2 data-en="The building from above">Так здание выглядит сверху</h2>
-      <p data-en="It's a model with the roof off. Prices and available rooms aren't marked on it yet. You can get them by phone. Pick a room to see a photo of an office in this building.">Это макет без крыши. Цены и свободные комнаты на нём пока не отмечены, их можно узнать по телефону. Нажмите на комнату, и откроется снимок офиса из этого здания.</p>
+      <p data-en="It's a model with the roof off. Prices and open rooms aren't marked on it yet, so call or message us to find out. The furniture comes from an old plan. Pick a room to see a photo of an office in this building.">Это макет без крыши. Цены и свободные комнаты на нём пока не отмечены, их можно узнать по телефону или в WhatsApp. Мебель на макете со старого плана. Нажмите на комнату, и откроется снимок офиса из этого здания.</p>
       <div class="links">
         <a class="line" href="tel:+19169144407" data-en="Call">Позвонить</a>
         <a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
@@ -94,7 +95,7 @@
 
 <section class="past" id="past">
   <figure class="past-doors">
-    <picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture>
+    <picture><source media="(min-width:800px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture>
     <figcaption data-en="Two doors in a corner of the hallway, each with its own sign.">Две двери в углу коридора, над каждой своя табличка.</figcaption>
   </figure>
   <div class="past-text">
@@ -117,13 +118,13 @@
       <h3 data-en="a month. The smallest office.">в месяц. Самый маленький офис.</h3>
     </div>
     <figure>
-      <picture><source media="(min-width:900px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="1200" height="900" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture>
+      <picture><source media="(min-width:800px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="1200" height="900" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture>
       <figcaption data-en="One of the offices in this building. The window takes up almost the whole wall, with trees outside.">Один из офисов в этом здании. Окно почти во всю стену, за ним деревья.</figcaption>
     </figure>
   </div>
   <div class="rent r-bigger">
     <figure>
-      <picture><source media="(min-width:900px)" srcset="img/office-glass.webp"><img src="img/office-glass-800.webp" width="1400" height="1050" loading="lazy" alt="Пустой офис за стеклянной стеной, за окном деревья" data-en-alt="Empty office behind a glass wall, with trees outside"></picture>
+      <picture><source media="(min-width:800px)" srcset="img/office-glass.webp"><img src="img/office-glass-800.webp" width="1400" height="1050" loading="lazy" alt="Пустой офис за стеклянной стеной, за окном деревья" data-en-alt="Empty office behind a glass wall, with trees outside"></picture>
       <figcaption data-en="Another office. The wall facing the hallway is glass, and out the window there's greenery and a palm tree.">Ещё один офис. Стена в коридор стеклянная, за окном зелень и пальма.</figcaption>
     </figure>
     <div class="rent-text">
@@ -145,77 +146,142 @@
   <div class="terms">
     <p class="terms-big" data-en="The lease is one year minimum. The deposit is one month's rent, so $500 for the $500 office.">Договор минимум на год. Залог как месяц аренды: у офиса за $500 это $500.</p>
     <div>
-      <p data-en="Call to find out the size, what's included in the rent and what's available now.">Размер, что входит в аренду и что свободно сейчас, можно узнать по телефону.</p>
+      <p data-en="Call or message us to find out the size, what's included in the rent and what's available now.">Размер, что входит в аренду и что свободно сейчас, можно узнать по телефону или в WhatsApp.</p>
       <div class="acts">
         <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
         <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
       </div>
     </div>
-    <nav class="next"><a class="tab" href="#facts" data-en="Next: about the building">Дальше: про здание</a></nav>
+    <nav class="next"><a class="tab" href="#fit" data-en="Next: will this work for your business">Дальше: подойдёт ли это вашему делу</a></nav>
   </div>
 </section>
 
-<section class="facts" id="facts">
-  <h2 class="huge" data-en="Now, the building.">Теперь про здание.</h2>
-  <div class="list">
-    <dl>
-      <div><dt data-en="One story">Один этаж</dt><dd data-en="No elevator needed.">Лифт не нужен.</dd></div>
-      <div><dt data-en="Fence and gate">Забор и ворота</dt><dd data-en="The property is fenced, you drive in through the gate.">Территория закрыта, въезд через ворота.</dd></div>
-      <div><dt data-en="Open 24/7">Круглосуточно</dt><dd data-en="You can get in at any hour.">Заходить можно в любое время.</dd></div>
-      <div><dt data-en="Parking behind the gate">Парковка за воротами</dt><dd data-en="It's for tenants.">Она для арендаторов.</dd></div>
-      <div><dt data-en="Cameras">Камеры</dt><dd data-en="The property has video surveillance.">На территории есть видеонаблюдение.</dd></div>
-      <div><dt data-en="Conference room">Переговорная</dt><dd data-en="Any tenant can use it.">Ею могут пользоваться все арендаторы.</dd></div>
-    </dl>
-    <div class="only-ru">
-      <h3>И ещё одно.</h3>
-      <dl>
-        <div><dt>Можно по-русски</dt><dd>По телефону можно говорить по-русски и по-английски.</dd></div>
-      </dl>
+<section class="fit" id="fit">
+  <div class="fit-head">
+    <h2 data-en="Will this work for your business?">Подойдёт ли это вашему делу?</h2>
+    <p data-en="Find yours. The link in each row opens WhatsApp with the question already written.">Найдите своё. Ссылка в строке откроет WhatsApp с готовым вопросом.</p>
+  </div>
+  <article class="job">
+    <h3 data-en="Regular office">Обычный офис</h3>
+    <div><p data-en="Accountant, insurance, dispatcher, consulting. A room with a door, gated parking, and 24/7 access for tenants.">Бухгалтер, страховка, диспетчер, консультации. Комната с дверью, парковка за воротами, арендаторы могут заходить круглосуточно.</p><a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Ищу небольшой офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm looking for a small office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+  </article>
+  <article class="job">
+    <h3 data-en="Lawyer or realtor">Юрист или риелтор</h3>
+    <div><p data-en="Quiet helps when you're talking with a client, and you can check it for yourself when you visit. If your room is small, you can meet clients in the conference room, which any tenant can use. Want an office without a glass wall? Just tell us up front.">Тишина пригодится в разговоре с клиентом, проверить её можно на просмотре. Если комната маленькая, клиентов можно принимать в переговорной: ею могут пользоваться все арендаторы. Нужен офис без стеклянной стены, скажите сразу.</p><a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Смотрю офис на 5345 Madison Ave для юриста или риелтора. Есть ли свободный офис без стеклянной стены? И как занимают переговорную?" data-wa-en="Hi! I'm looking at an office at 5345 Madison Ave for a lawyer or realtor. Do you have one without a glass wall? And how does booking the conference room work?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+  </article>
+  <article class="job job-pic">
+    <figure><picture><source media="(min-width:800px)" srcset="img/office-corner.webp"><img src="img/office-corner-800.webp" width="1200" height="900" loading="lazy" alt="Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр" data-en-alt="Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet"></picture></figure>
+    <div class="job-text"><h3 data-en="Beauty salon">Салон красоты</h3><p data-en="In this office the lower windows are frosted, the upper ones are clear, and there's plenty of light. Ask about water and ventilation, since that's the first question for a salon.">В этом офисе низ окон матовый, верх прозрачный, и света много. Про воду и вытяжку спросите, для салона это первый вопрос.</p><a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Смотрю офис на 5345 Madison Ave под салон красоты. В каких офисах есть вода и вытяжка?" data-wa-en="Hi! I'm looking at an office at 5345 Madison Ave for a beauty salon. Which offices have water and ventilation?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+  </article>
+  <article class="job job-pic job-door">
+    <figure><img src="img/entrance.webp" width="680" height="340" loading="lazy" alt="Вход в кирпичное здание: ступеньки, пологий подход с перилами, живая изгородь" data-en-alt="Entrance to the brick building: steps, a gentle walkway with handrails, and a hedge"></figure>
+    <div class="job-text"><h3 data-en="Medical office">Медицинский офис</h3><p data-en="The building is all on one floor. This entrance has steps and a gentle walkway with handrails. It's best to come see whether it works for your patients. Ask about water right away.">Здание в один этаж. У этого входа ступеньки и пологий подход с перилами. Подходит ли это вашим пациентам, лучше посмотреть на месте. Про воду спросите сразу.</p><a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Смотрю офис на 5345 Madison Ave под медицинский офис. В каких офисах есть вода?" data-wa-en="Hi! I'm looking at an office at 5345 Madison Ave for a medical practice. Which offices have water?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+  </article>
+  <article class="job job-video">
+    <figure><picture><source media="(min-width:800px)" srcset="img/lights.webp"><img src="img/lights-800.webp" width="1024" height="768" loading="lazy" alt="Пустая комната: синяя стена, деревянный потолок, две линии прожекторов, солнце полосами на ковре" data-en-alt="Empty room with a blue wall, a wood ceiling, two rows of spotlights, and stripes of sun on the carpet"></picture></figure>
+    <div class="job-text">
+      <h3 data-en="Video production">Видеосъёмка</h3>
+      <p data-en="The photos show a room with spotlights on the ceiling and a room with a wall in green light. Ask whether they're available now and whether the lights work.">На снимках комната с прожекторами под потолком и комната со стеной в зелёной подсветке. Сдаются ли они сейчас и работает ли свет, спросите.</p>
+      <a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Ищу комнату для видеосъёмки на 5345 Madison Ave. Сдаётся ли комната с прожекторами и работает ли свет?" data-wa-en="Hi! I'm looking for a room for video shoots at 5345 Madison Ave. Is the room with the spotlights available, and do the lights work?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
+      <img class="green" src="img/green-room.webp" width="480" height="360" loading="lazy" alt="Тёмная комната, задняя стена в зелёной подсветке" data-en-alt="A dark room with its back wall lit green">
+    </div>
+  </article>
+  <article class="job">
+    <h3 data-en="Music school">Музыкальная школа</h3>
+    <div><p data-en="You can even practice drums here, the rooms are good for that. Ask which ones.">Заниматься можно даже на барабанах, комнаты для этого подходят. Какие именно, спросите.</p><a class="line wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Ищу комнату для музыкальных занятий на 5345 Madison Ave. Какие комнаты можно посмотреть?" data-wa-en="Hi! I'm looking for a room for music lessons at 5345 Madison Ave. Which rooms can I see?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+  </article>
+  <article class="job job-other">
+    <h3 data-en="Something else?">Другое дело?</h3>
+    <div><p data-en="Call and tell us what you have in mind.">Позвоните и расскажите, что задумали.</p><a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a></div>
+  </article>
+  <nav class="next"><a class="tab" href="#voice" data-en="Next: a bonus for tenants">Дальше: бонус для арендаторов</a></nav>
+</section>
+
+<section class="voice" id="voice">
+  <div class="voice-top">
+    <h2 data-en="You're with a client and the phone rings. Who answers?">Вы с клиентом, а телефон звонит. Кто ответит?</h2>
+    <p data-en="You can't pick up. The caller listens to it ring, then calls the next business on the list. Later you see a missed call and have no idea who it was or what they wanted.">Трубку вы взять не можете. Человек слушает гудки и звонит следующему. А вы потом видите пропущенный вызов и даже не знаете, кто это был и что ему было нужно.</p>
+  </div>
+  <div class="voice-top voice-fix">
+    <h3 data-en="That's what a voice assistant is for. It picks up when you can't.">На такой случай есть голосовой помощник. Он берёт трубку, когда вы не можете.</h3>
+    <div>
+      <p data-en="It's an AI program that talks in a normal voice. It answers questions from what you've told it, takes the caller's name and number, and sends you a short message after the call.">Это программа с искусственным интеллектом, она разговаривает обычным голосом. Отвечает на вопросы по тому, что вы ей рассказали, записывает имя и номер, а после звонка присылает вам короткое сообщение.</p>
+      <p data-en="It speaks English, Russian and Spanish. If it doesn't know something, it won't make it up, it says it'll pass the question to you. Ask if it's a person, and it says it's an AI.">Говорит по-английски, по-русски и по-испански. Чего не знает, не выдумывает, а обещает передать вам. Если спросят, человек ли это, скажет, что это ИИ.</p>
     </div>
   </div>
+  <p class="talk-note" data-en="Example conversation">Пример разговора</p>
+  <ol class="talk">
+    <li class="say ring"><p data-en="You're with a client. The phone rings, you don't pick up, and the call goes to the assistant.">Вы с клиентом. Телефон звонит, вы не берёте трубку, и звонок переходит к помощнику.</p></li>
+    <li class="say bot"><b data-en="Assistant">Помощник</b><p data-en="Hi, this is Anna's assistant. She's busy right now, but I'll pass everything on to her. How can I help?">Здравствуйте! Это помощник Анны. Она сейчас занята, я всё ей передам. Чем могу помочь?</p></li>
+    <li class="say man"><b data-en="Caller">Звонящий</b><p data-en="I need help with taxes for my small business. Is that something you do?">Мне нужна помощь с налогами для небольшого бизнеса. Вы таким занимаетесь?</p></li>
+    <li class="say bot"><b data-en="Assistant">Помощник</b><p data-en="Of course! What's your name, and what's the best number to call you back?">Конечно! Как вас зовут и на какой номер вам перезвонить?</p></li>
+    <li class="say man"><b data-en="Caller">Звонящий</b><p data-en="It's David. This number is fine.">Дэвид. Можно на этот.</p></li>
+    <li class="say bot"><b data-en="Assistant">Помощник</b><p data-en="Great, David, the number ending in 0142. And where did you hear about us?">Отлично, Дэвид, номер заканчивается на 0142. Подскажите, откуда вы о нас узнали?</p></li>
+    <li class="say man"><b data-en="Caller">Звонящий</b><p data-en="From a Facebook group.">Из группы в Facebook.</p></li>
+    <li class="say bot"><b data-en="Assistant">Помощник</b><p data-en="Thanks! I'll let Anna know you need help with your taxes, and she'll call you back.">Спасибо! Передам Анне, что вам нужна помощь с налогами. Она вам перезвонит.</p></li>
+    <li class="say msg"><b data-en="What you get">Что приходит вам</b><p data-en="David called from 916-555-0142. Needs help with taxes for a small business. Heard about you in a Facebook group. Wants a call back.">Звонил Дэвид, 916-555-0142. Нужна помощь с налогами для небольшого бизнеса. Узнал о вас из группы в Facebook. Просит перезвонить.</p></li>
+  </ol>
+  <div class="voice-deal">
+    <p class="terms-big" data-en="It's a bonus for anyone who rents an office here: we'll help you set it up for free.">Это бонус для тех, кто арендует у нас офис: поможем подключить бесплатно.</p>
+    <div>
+      <p data-en="We'll talk through what it costs after that by phone.">Сколько помощник стоит дальше, обсудим по телефону.</p>
+      <div class="acts">
+        <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+        <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave и бонус с голосовым помощником. Как это работает и сколько стоит дальше?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave and the voice assistant bonus. How does it work, and what does it cost after setup?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
+      </div>
+    </div>
+    <nav class="next"><a class="tab" href="#road" data-en="Next: what it's like when you come to see it">Дальше: как это будет, когда приедете смотреть</a></nav>
+  </div>
 </section>
 
-<section class="photos" id="photos">
-  <div class="intro">
-    <h2 data-en="What does it look like in real life?">Как это выглядит вживую?</h2>
-    <p data-en="The model shows the layout. These are real photos of the building.">Макет показывает планировку. А это настоящие снимки здания.</p>
+<section class="road" id="road">
+  <div class="road-head">
+    <h2 data-en="What will it be like when you come to see it?">Как это будет, когда приедете смотреть?</h2>
+    <div>
+      <p class="addr">5345 Madison Ave<small>Sacramento, CA 95841</small></p>
+      <p data-en="It's near Auburn Blvd, close to I-80.">Это возле Auburn Blvd, рядом с I-80.</p>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" data-en="Open in Maps">Открыть на карте</a>
+    </div>
   </div>
-  <figure class="f7 c-sky">
-    <picture><source media="(min-width:900px)" srcset="img/parking-facade.webp"><img src="img/parking-facade-800.webp" width="800" height="600" loading="lazy" alt="Кирпичный фасад здания и парковка" data-en-alt="Brick front of the building and the parking lot"></picture>
-    <figcaption data-en="The building from the parking lot.">Здание со стороны парковки.</figcaption>
-  </figure>
-  <figure class="f5 c-coral">
-    <picture><source media="(min-width:900px)" srcset="img/meeting-room.webp"><img src="img/meeting-room-800.webp" width="800" height="600" loading="lazy" alt="Переговорная с длинным столом и креслами" data-en-alt="Conference room with a long table and chairs"></picture>
-    <figcaption data-en="The conference room.">Переговорная.</figcaption>
-  </figure>
-  <figure class="f12 c-paper">
-    <picture><source media="(min-width:900px)" srcset="img/lobby.webp"><img src="img/lobby-800.webp" width="800" height="600" loading="lazy" alt="Большая комната со стойкой и деревянным полом" data-en-alt="Large room with a counter and a wood-look floor"></picture>
-    <figcaption data-en="A large room inside the building.">Большая комната внутри здания.</figcaption>
-  </figure>
-</section>
-
-<section class="where" id="where">
-  <div class="where-text">
-    <h2 class="huge" data-en="How do I get there?">Как доехать?</h2>
-    <p class="addr">5345 Madison Ave<small>Sacramento, CA 95841</small></p>
-    <p data-en="It's near Auburn Blvd, close to I-80. You drive in through the gate.">Это возле Auburn Blvd, рядом с I-80. Въезд через ворота.</p>
-    <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" data-en="Open in Maps">Открыть на карте</a>
+  <div class="road-nav">
+    <button class="sq" type="button" id="road-back" aria-label="Назад по дороге" data-en-label="Back along the way"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <button class="sq" type="button" id="road-on" aria-label="Дальше по дороге" data-en-label="On along the way"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
   </div>
-  <figure>
-    <picture><source media="(min-width:900px)" srcset="img/sign-5345.webp"><img src="img/sign-5345-800.webp" width="800" height="600" loading="lazy" alt="Табличка 5345 на газоне у забора" data-en-alt="The 5345 sign on the lawn by the fence"></picture>
-  </figure>
-  <figure>
-    <picture><source media="(min-width:900px)" srcset="img/gate.webp"><img src="img/gate-800.webp" width="800" height="600" loading="lazy" alt="Ворота и проезд к зданию" data-en-alt="The gate and the driveway to the building"></picture>
-  </figure>
+  <ol class="strip" id="strip" tabindex="0">
+    <li class="step"><figure>
+      <picture><source media="(min-width:800px)" srcset="img/sign-5345.webp"><img src="img/sign-5345-800.webp" width="840" height="630" loading="lazy" alt="Цифры 5345 на кирпичной стенке за газоном, большое дерево, кованый забор" data-en-alt="The numbers 5345 on a brick wall behind the lawn, a big tree and an iron fence"></picture>
+      <figcaption><b>1</b><span data-en="Look for the numbers 5345 on the brick wall behind the lawn, under the big tree.">Ищите цифры 5345 на кирпичной стенке за газоном, под большим деревом.</span></figcaption>
+    </figure></li>
+    <li class="step"><figure>
+      <picture><source media="(min-width:800px)" srcset="img/gate.webp"><img src="img/gate-800.webp" width="1024" height="768" loading="lazy" alt="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-alt="A sliding gate with the parking lot behind it and the brick building on the left"></picture>
+      <figcaption><b>2</b><span data-en="Next is the gate, with tenant parking behind it. Tenants have 24/7 access. If you're just coming to look, we'll tell you how to get in when we set up a time.">Дальше ворота, за ними парковка для арендаторов. У арендаторов доступ круглосуточный. Как проехать, если вы приехали только посмотреть, скажем, когда договоримся о времени.</span></figcaption>
+    </figure></li>
+    <li class="step"><figure>
+      <picture><source media="(min-width:800px)" srcset="img/parking-facade.webp"><img src="img/parking-facade-800.webp" width="1024" height="768" loading="lazy" alt="Длинное кирпичное здание в один этаж, живая изгородь и парковка с номерами мест" data-en-alt="A long one-story brick building, a hedge, and a parking lot with numbered spaces"></picture>
+      <figcaption><b>3</b><span data-en="The building is brick, long and all on one floor, so there's no elevator to wait for. The parking spaces are numbered.">Здание кирпичное, длинное, в один этаж, лифт не нужен. Места на парковке с номерами.</span></figcaption>
+    </figure></li>
+    <li class="step"><figure>
+      <picture><source media="(min-width:800px)" srcset="img/corridor.webp"><img src="img/corridor-800.webp" width="1200" height="900" loading="lazy" alt="Коридор: тёмные двери, стеклянная стена, ковёр в полоску, купол камеры на потолке" data-en-alt="A hallway with dark doors, a glass wall, striped carpet and a camera dome on the ceiling"></picture>
+      <figcaption><b>4</b><span data-en="Inside there's a hallway with a glass wall and dark doors. The little dome on the ceiling is a camera.">Внутри коридор со стеклянной стеной и тёмными дверями. Маленький купол на потолке это камера.</span></figcaption>
+    </figure></li>
+    <li class="step"><figure>
+      <picture><source media="(min-width:800px)" srcset="img/office-blinds.webp"><img src="img/office-blinds-800.webp" width="1200" height="900" loading="lazy" alt="Светлый угловой офис: окна на две стены, вертикальные жалюзи, ковёр с узором" data-en-alt="A bright corner office with windows on two walls, vertical blinds and patterned carpet"></picture>
+      <figcaption><b>5</b><span data-en="And the office. This is one of them: windows on two walls, blinds, carpet. We'll agree on which one to see by phone.">И офис. На снимке один из них: окна на две стены, жалюзи, ковёр. Какой будем смотреть, договоримся по телефону.</span></figcaption>
+    </figure></li>
+  </ol>
 </section>
 
 <section class="contact" id="contact">
   <h2 data-en="Want to see an office?">Хотите посмотреть офис?</h2>
   <a class="phone" href="tel:+19169144407">916-914-4407</a>
-  <p data-en="Call or message us on WhatsApp and we'll set up a time.">Позвоните или напишите в WhatsApp, и мы назначим время. Можно по-русски.</p>
+  <p data-en="Call or message us on WhatsApp and we'll set up a time.">Позвоните или напишите в WhatsApp, и мы назначим время. Можно <span class=nb>по-русски</span>.</p>
   <div class="acts">
     <a class="btn dark" href="tel:+19169144407" data-en="Call">Позвонить</a>
-    <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
+    <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
+  </div>
+  <div class="tips">
+    <p data-en="Not sure where to start? Ask what size the office is, what's included in the rent and what's available now.">Не знаете, с чего начать? Спросите, какого размера офис, что входит в аренду и что свободно сейчас.</p>
+    <p data-en="And when you visit, you can step into a room, close the door and check how quiet it is.">А на просмотре можно зайти в комнату, закрыть дверь и проверить, насколько там тихо.</p>
   </div>
 </section>
 

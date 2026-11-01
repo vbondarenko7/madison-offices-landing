@@ -17,7 +17,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 img{display:block;width:100%;height:auto}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--wine);outline-offset:2px}
-h1,h2,h3,.ribbon,.logo,.badge b,dt,.addr,.phone,.sum,.whole p,.terms-big{font-family:var(--head);font-weight:500}
+h1,h2,h3,.ribbon,.logo,.badge b,.addr,.phone,.sum,.whole p,.terms-big,.say p,.step b{font-family:var(--head);font-weight:500}
 
 /* Угол: звонок всегда на экране */
 .corner{position:fixed;z-index:20;top:0;right:0;display:flex;height:var(--bar)}
@@ -38,7 +38,7 @@ details.menu summary::-webkit-details-marker{display:none}
 .drop a:hover{color:var(--coral-d)}
 
 /* Сцена: первый экран и исследование макета стоят на месте, пока идёт прокрутка */
-.stage{position:relative;height:170vh;height:170svh}
+.stage{position:relative;height:170vh;height:170svh;background:var(--pine)}
 .anchor{position:absolute;top:35vh;top:35svh}
 .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip;background:var(--lime);transition:background .7s var(--ease)}
 
@@ -46,7 +46,7 @@ details.menu summary::-webkit-details-marker{display:none}
 .logo{position:absolute;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600;transition:opacity .3s}
 h1{position:absolute;left:var(--m);top:var(--bar);font-weight:600;font-size:120px;line-height:1;letter-spacing:-.015em;white-space:nowrap;transition:opacity .3s,transform .8s var(--ease)}
 
-.rig{position:absolute;z-index:2;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .9s var(--ease);touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.rig{position:absolute;z-index:2;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .9s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .rig img{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
 .rig canvas{position:absolute;pointer-events:none}
 .rig:focus-visible{outline:none}
@@ -54,7 +54,7 @@ h1{position:absolute;left:var(--m);top:var(--bar);font-weight:600;font-size:120p
 
 /* Пока надписи не подогнаны под экран, видно только бордовое поле, без рывка */
 html:not(.on) .pin{background:var(--wine)}
-html:not(.on) .pin>*{opacity:0;transition:none}
+html:not(.on) .pin>*,html:not(.on) .corner{opacity:0;transition:none}
 
 /* Надпись экрана здания. Большая часть места отдана макету */
 .ribbon{position:absolute;z-index:4;left:var(--m);top:calc(var(--bar) - .1em);font-weight:600;font-size:clamp(40px,9vh,88px);line-height:1;color:var(--lime);white-space:nowrap;opacity:0;transform:translateX(12vw);pointer-events:none;transition:transform .9s var(--ease),opacity .4s}
@@ -75,7 +75,7 @@ html:not(.on) .pin>*{opacity:0;transition:none}
 .btn.dark:hover{background:var(--wine)}
 .links{display:flex;gap:32px}
 .line{display:inline-block;padding:8px 0;color:var(--lime);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;border-bottom:1px solid currentColor}
-.card :focus-visible,.sheet :focus-visible,.where :focus-visible,.back:focus-visible,.band :focus-visible{outline-color:var(--lime)}
+.card :focus-visible,.sheet :focus-visible,.back:focus-visible,.band :focus-visible{outline-color:var(--lime)}
 
 /* Круг с ценой */
 .badge{position:absolute;right:-76px;top:-92px;width:173px;height:173px;border-radius:50%;background:var(--coral);color:var(--pine);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transform:rotate(12deg);transition:transform .2s,background .2s}
@@ -117,10 +117,10 @@ html:not(.on) .pin>*{opacity:0;transition:none}
 .past-doors img{position:absolute;inset:0}
 .past figcaption{font-weight:600;color:var(--lime)}
 .past-text{padding:112px var(--m) 40px}
-.past h2,.prices h2{font-size:clamp(40px,4.4vw,72px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
+.past h2,.prices h2,.fit h2,.voice h2,.road h2{font-size:clamp(40px,4.4vw,72px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
 .past h2{color:var(--lime);margin-bottom:32px}
 .past p{max-width:34em}
-.lead{font-size:clamp(20px,1.7vw,24px);line-height:1.5;color:var(--lime);margin-bottom:24px}
+.past .lead{font-size:clamp(20px,1.7vw,24px);line-height:1.5;color:var(--lime);margin-bottom:24px}
 .past-air{grid-column:2;flex-direction:row-reverse;align-items:flex-end;margin-bottom:var(--bar)}
 .past-air img{flex:0 0 min(320px,50%);width:min(320px,50%);height:auto}
 .past-air figcaption{flex:1;padding:16px 24px 0 var(--m);text-align:right}
@@ -150,7 +150,8 @@ html:not(.on) .pin>*{opacity:0;transition:none}
 .r-bigger{grid-template-columns:minmax(0,min(40vw,1200px)) minmax(0,1fr);background:var(--lime);color:var(--wine)}
 .r-bigger figcaption{background:var(--wine);color:var(--lime)}
 .r-entrance{grid-template-columns:1fr;background:var(--sky);color:var(--wine)}
-.r-entrance .sum{font-size:calc((100vw - 2*var(--m))/3.28);margin-left:-.03em}
+.r-entrance .rent-text{display:flex;align-items:flex-end;gap:48px}
+.r-entrance h3{margin:0 0 .6em}
 .whole{display:flex;align-items:center;background:var(--paper);color:var(--wine)}
 .whole img{flex:0 0 clamp(120px,22vw,360px);width:clamp(120px,22vw,360px);height:144px;object-fit:cover}
 .whole p{padding:16px var(--m);font-size:clamp(20px,2.2vw,32px);line-height:1.2;text-wrap:balance}
@@ -159,48 +160,80 @@ html:not(.on) .pin>*{opacity:0;transition:none}
 .terms p:not(.terms-big){margin-bottom:24px;font-size:20px;line-height:30px}
 .past :focus-visible,.terms :focus-visible{outline-color:var(--lime)}
 
-/* Про здание */
-.huge{font-size:clamp(48px,5vw,80px);line-height:1;letter-spacing:-.01em}
-.facts{position:relative;background:var(--paper);padding:96px var(--m);display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
-.facts .huge{position:sticky;top:96px}
-.facts h3{font-size:24px;line-height:32px;font-weight:400;margin:48px 0 16px}
-.facts h3:first-child{margin-top:0}
-.facts dl>div{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:baseline;padding:16px 0;border-top:1px solid var(--wine)}
-dt{font-size:32px;line-height:36px}
-dd{margin:0}
-.under{border-bottom:1px solid currentColor;white-space:nowrap}
-.only-ru{margin-top:48px}
-html[lang=en] .only-ru{display:none}
-
-/* Снимки встык, подписи цветом полей */
-.photos{position:relative;display:grid;grid-template-columns:repeat(12,1fr);background:var(--lime)}
-.intro{grid-column:1/-1;padding:96px var(--m) 48px;color:var(--wine)}
-.intro h2{font-size:clamp(32px,4.4vw,72px);line-height:1.05;letter-spacing:-.01em;margin-bottom:16px}
 figure{margin:0;display:flex;flex-direction:column}
 figure picture{flex:1;display:block;overflow:hidden}
 figure img{height:100%;object-fit:cover}
 figcaption{padding:16px var(--m);font-weight:600}
-.f7{grid-column:span 7}
-.f5{grid-column:span 5}
-.f12{grid-column:1/-1}
-.c-sky figcaption{background:var(--sky)}
-.c-lime figcaption{background:var(--wine);color:var(--lime)}
-.c-coral figcaption{background:var(--coral);color:var(--pine)}
-.c-paper figcaption{background:var(--pine);color:var(--lime)}
 
-/* Как доехать */
-.where{position:relative;display:grid;grid-template-columns:7fr 5fr;grid-template-rows:1fr 1fr;background:var(--pine);color:var(--leaf)}
-.where-text{grid-row:span 2;padding:96px var(--m)}
-.where h2{color:var(--lime);font-size:clamp(32px,3.2vw,48px);margin-bottom:24px}
-.addr{font-size:clamp(48px,4.8vw,72px);line-height:1.1;color:var(--lime);margin-bottom:24px}
-.addr small{display:block;font-size:.5em}
-.where p:not(.addr){margin-bottom:32px}
+/* Подойдёт ли вашему делу: крупные строки, снимок только там, где он что-то доказывает */
+.fit{position:relative;background:var(--paper);color:var(--wine)}
+.fit-head{display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:end;padding:96px var(--m) 48px}
+.job{display:grid;grid-template-columns:7fr 5fr;gap:0 64px;padding:32px var(--m) 40px;border-top:1px solid}
+.job h3{font-size:clamp(36px,4.6vw,72px);line-height:1.08;letter-spacing:-.01em}
+.job p{margin-bottom:12px;font-size:18px;line-height:27px}
+.fit .line{color:inherit}
+.job-pic{grid-template-columns:minmax(0,1fr) minmax(0,min(40vw,1024px));gap:0;padding:0}
+.job-pic figure{order:2}
+.job-text{padding:32px var(--m) 40px;min-width:0}
+.job-text h3{margin-bottom:16px}
+.job-door{grid-template-columns:minmax(0,1fr) minmax(0,min(40vw,680px))}
+.job-video{grid-template-columns:minmax(0,min(56vw,1024px)) minmax(0,1fr);padding:0;border:0;background:var(--pine);color:var(--lime);position:relative}
+.job-video .job-text{display:flex;flex-direction:column;align-items:flex-start}
+.job-video .line{margin-bottom:32px}
+.green{width:min(280px,70%);margin:auto calc(-1*var(--m)) -40px auto}
+.job-video :focus-visible{outline-color:var(--lime)}
+.job-other{padding-bottom:calc(40px + var(--bar))}
+.job-other p{margin-bottom:24px}
+
+/* Голосовой помощник: сначала жизнь, потом разговор полосами встык */
+.voice{position:relative;background:var(--leaf);color:var(--pine)}
+.voice-top{display:grid;grid-template-columns:7fr 5fr;gap:64px;padding:96px var(--m) 64px}
+.voice-top p{font-size:clamp(18px,1.7vw,24px);line-height:1.5}
+.voice-top p+p{margin-top:16px;font-size:18px;line-height:27px}
+.voice-fix{padding-top:0}
+.voice-fix h3{font-size:clamp(28px,3.2vw,48px);line-height:1.15;text-wrap:balance}
+.talk-note{padding:0 var(--m) 12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase}
+.talk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;overflow-x:clip}
+.say{width:min(72%,1200px);padding:20px var(--m) 24px;transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
+.say b{display:block;margin-bottom:4px;font-size:13px;line-height:18px;letter-spacing:1.4px;text-transform:uppercase}
+.say p{font-size:clamp(20px,2.4vw,36px);line-height:1.25;font-weight:500}
+.bot{background:var(--pine);color:var(--lime)}
+.man{align-self:flex-end;background:var(--paper);color:var(--wine)}
+.ring{width:100%;padding-top:0}
+.msg{width:100%;background:var(--coral);color:var(--pine);padding-top:32px;padding-bottom:40px}
+.say.wait{opacity:0;transform:translateX(-32px)}
+.man.wait{transform:translateX(32px)}
+.ring.wait,.msg.wait{transform:translateY(16px)}
+.voice-deal{position:relative;display:grid;grid-template-columns:7fr 5fr;gap:64px;padding:96px var(--m) calc(48px + var(--bar));background:var(--pine);color:var(--lime)}
+.voice-deal p:not(.terms-big){margin-bottom:24px;font-size:20px;line-height:30px}
+.voice-deal :focus-visible{outline-color:var(--lime)}
+
+/* Дорога от улицы до офиса: лента вбок, кадр не шире настоящего снимка */
+.road{--frame:min(52vw,78vh,840px);background:var(--lime);color:var(--wine)}
+.road-head{display:grid;grid-template-columns:7fr 5fr;gap:64px;padding:96px var(--m) 32px}
+.addr{font-size:clamp(28px,3vw,44px);line-height:1.15}
+.addr small{display:block;font-size:.55em;margin-top:4px}
+.road-head p:not(.addr){margin:12px 0 24px}
+.road-nav{display:flex;justify-content:flex-end;height:var(--bar)}
+.road-nav .sq{height:100%}
+.road-nav svg{display:block}
+.strip{list-style:none;margin:0;padding:0;display:flex;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-color:var(--wine) transparent;scrollbar-width:thin}
+.strip:focus-visible{outline-offset:-2px}
+.step{flex:0 0 var(--frame);scroll-snap-align:start}
+.step figure{height:100%}
+.step picture{flex:none;aspect-ratio:4/3}
+.step figcaption{display:grid;grid-template-columns:52px 1fr;gap:16px;padding:16px 24px 32px;font-weight:500;font-size:16px;line-height:24px}
+.step b{font-size:72px;line-height:64px;font-weight:600}
+.step:first-child figcaption{padding-left:var(--m)}
 
 /* Контакт */
 .contact{position:relative;background:var(--coral);color:var(--pine);padding:96px var(--m)}
 .contact h2{font-size:clamp(40px,4.4vw,64px);line-height:1.1;margin-bottom:16px}
 .phone{display:block;font-size:min(14vw,calc((100vw - 2*var(--m))/6.5));line-height:1;letter-spacing:-.02em;margin-bottom:24px;white-space:nowrap}
-.contact p{margin-bottom:32px;max-width:60ch}
+.contact p{margin-bottom:32px;font-size:20px;line-height:30px}
+.nb{white-space:nowrap}
+.tips{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;padding-top:24px;border-top:1px solid}
+.tips p{margin:0;font-size:20px;line-height:30px}
 .contact :focus-visible{outline-color:var(--pine)}
 .foot{padding:24px var(--m);background:var(--wine);color:var(--lime);font-size:12px;line-height:18px}
 
@@ -236,9 +269,9 @@ figcaption{padding:16px var(--m);font-weight:600}
   .past-doors{max-height:none}
   .past-doors img{position:static;height:auto}
   .past-text{padding:32px var(--m) 32px}
-  .past h2,.prices h2{font-size:min(40px,10.6vw)}
+  .past h2,.prices h2,.fit h2,.voice h2,.road h2{font-size:min(40px,10.6vw)}
   .past h2{margin-bottom:20px}
-  .lead{font-size:18px;line-height:27px;margin-bottom:16px}
+  .past .lead{font-size:18px;line-height:27px;margin-bottom:16px}
   .past-air{margin:0}
   .past-air img{flex-basis:52%;width:52%}
   .past-air figcaption{padding:0 16px 8px var(--m);font-size:14px;line-height:20px}
@@ -257,15 +290,45 @@ figcaption{padding:16px var(--m);font-weight:600}
   .terms-big{margin-bottom:24px}
   .terms p:not(.terms-big){font-size:16px;line-height:24px}
   .terms .next{position:static;margin:32px calc(-1*var(--m)) -40px}
-  .facts{display:block;padding:64px var(--m)}
-  .facts .huge{position:static;font-size:min(40px,9.8vw);margin-bottom:24px}
-  .facts dl>div{display:block}
-  dt{font-size:28px;line-height:32px;margin-bottom:4px}
-  .intro{padding:64px var(--m) 24px}
-  .f7,.f5{grid-column:1/-1}
-  .where{display:block}
-  .where-text{padding:64px var(--m) 48px}
-  .addr{font-size:min(44px,9.4vw)}
+  .r-entrance .rent-text{display:block}
+  .r-entrance .sum{font-size:calc((100vw - 2*var(--m))/3.28);margin-left:0}
+  .r-entrance h3{margin:12px 0 0}
+  .fit-head,.job,.voice-top,.voice-deal,.road-head,.tips{display:block}
+  .fit-head{padding:48px var(--m) 24px}
+  .fit-head p{margin-top:12px}
+  .job{padding:24px var(--m) 28px}
+  .job h3{font-size:min(36px,9.6vw);margin-bottom:10px}
+  .job p{font-size:16px;line-height:24px}
+  .job-pic,.job-video{padding:0}
+  .job-pic figure{order:0}
+  .job-text{padding:20px var(--m) 28px}
+  .job-video{display:block}
+  .green{width:60%;margin:24px calc(-1*var(--m)) -28px auto}
+  .job-other .btn{width:100%}
+  .job-other{padding-bottom:28px}
+  .fit>.next{position:static}
+  .voice-top{padding:48px var(--m) 32px}
+  .voice-fix{padding-top:0}
+  .voice-top h2,.voice-top h3{margin-bottom:16px}
+  .talk-note{font-size:14px;letter-spacing:1px}
+  .say{width:88%;padding:14px var(--m) 16px}
+  .ring,.msg{width:100%}
+  .say b{font-size:12px;line-height:16px}
+  .say p{font-size:19px;line-height:25px}
+  .voice-deal{padding:40px var(--m)}
+  .voice-deal .terms-big{margin-bottom:20px}
+  .voice-deal p:not(.terms-big){font-size:16px;line-height:24px}
+  .voice-deal .next{position:static;margin:32px calc(-1*var(--m)) -40px}
+  .road-head{padding:48px var(--m) 28px}
+  .road-head h2{margin-bottom:20px}
+  .road-nav{display:none}
+  .strip{display:block;overflow:visible}
+  .step figcaption{padding:12px var(--m) 28px}
+  .step figcaption{grid-template-columns:40px 1fr;gap:12px}
+  .step b{font-size:56px;line-height:52px}
+  .tips p+p{margin-top:16px}
+  .contact p,.tips p{font-size:16px;line-height:24px}
+  .step:first-child figcaption{padding-left:var(--m)}
   .contact{padding:64px var(--m)}
   .contact h2{font-size:min(40px,12vw)}
 }
@@ -276,7 +339,29 @@ figcaption{padding:16px var(--m);font-weight:600}
   .lines{width:20px}
 }
 /* Невысокий ноутбук: кружок садится ниже, заголовок не теряет размер */
-@media (min-width:900px) and (max-height:760px){.badge{top:-56px;right:-96px}.past-text{padding-top:88px}.past-air img{flex-basis:240px;width:240px}}
+@media (min-width:900px) and (max-height:760px){.badge{top:-56px;right:-96px}.past-text{padding-top:88px}.past-air img{flex-basis:240px;width:240px}.shot img{max-height:30vh;max-height:30svh}}
+/* Короткий телефон: снимок в листе ниже, макет остаётся виден */
+@media (max-height:639px){.shot img{max-height:28vh;max-height:28svh}}
+/* Самые маленькие экраны и большое увеличение: логотип не заходит под номер, кружок не отнимает место у вопроса */
+@media (max-width:340px){.logo{font-size:17px}.card-hero h2{font-size:24px;line-height:28px}}
+@media (max-height:520px) and (orientation:portrait){.badge,.card-hero .more,.tabs-hero{display:none}}
+/* Телефон боком: заголовок в две строки, карточка слева, план справа */
+@media (max-height:479px) and (orientation:landscape){
+  .badge,.card-hero .more,.card-look h2{display:none}
+  .card{width:min(50vw,420px);padding:10px var(--m)}
+  .card h2{font-size:20px;line-height:24px;margin-bottom:4px}
+  .card p{font-size:13px;line-height:18px;margin-bottom:8px}
+  .btn{height:44px;padding:0 16px}
+  .card .btn{flex:0 1 auto}
+  .card-look{bottom:48px;max-height:calc(100% - 48px - var(--band2));overflow:hidden}
+  .tabs{height:48px}
+  .tabs-hero{bottom:0}
+  .tabs-look{left:0}
+  .tabs-look .tab{flex:1;justify-content:center}
+  .sheet{width:min(56vw,480px)}
+  .sheet-text{padding:8px var(--m)}
+  .sheet h2{font-size:18px;line-height:22px;margin-bottom:8px}
+}
 @media (max-width:899px) and (max-height:720px){.card-look h2,.card-hero .more{display:none}}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}

@@ -6,15 +6,17 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 // --- Язык: русский текст в разметке, английский в data-en ------------------------------------
 const TEXT = {
   ru: { position: (n, total) => `Комната ${n} из ${total}`,
-    office: { caption: 'Один из офисов в этом здании. Снимка именно этой комнаты пока нет.', title: 'Цену, размер и что свободно, можно узнать по телефону.' },
-    meeting: { caption: 'Переговорная в этом здании.', title: 'Ею могут пользоваться все арендаторы', note: 'Цену офиса, размер и что свободно, можно узнать по телефону.' },
-    alt: { 'office-window': 'Пустой офис с большим окном', 'office-corner': 'Пустой угловой офис с матовыми окнами и тёмным ковром', 'office-blinds': 'Пустой угловой офис с жалюзи на окнах', 'office-narrow': 'Пустой офис с жёлтой и коричневой стенами и жалюзи', 'office-glass': 'Пустой офис за стеклянной стеной, за окном деревья', 'meeting-room': 'Переговорная с длинным столом и креслами' },
+    office: { caption: 'Один из офисов в этом здании. Снимка именно этой комнаты пока нет.', title: 'Цену, размер и что свободно, можно узнать по телефону или в WhatsApp.' },
+    meeting: { caption: 'Переговорная в этом здании. Где она на макете, подскажем по телефону.', title: 'Ею могут пользоваться все арендаторы', note: 'Цену офиса, размер и что свободно, можно узнать по телефону или в WhatsApp.' },
+    any: 'Офис в этом здании', known: 'Что свободно, можно узнать по телефону или в WhatsApp.',
+    alt: { 'office-window': 'Пустой офис с большим окном', 'office-corner': 'Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр', 'office-blinds': 'Пустой угловой офис с жалюзи на окнах', 'office-narrow': 'Пустой офис с жёлтой и коричневой стенами и жалюзи', 'office-glass': 'Пустой офис за стеклянной стеной, за окном деревья', 'meeting-room': 'Переговорная с длинным столом и креслами' },
     message: 'Здравствуйте! Интересует офис на 5345 Madison Ave. Подскажите цену, размер и что сейчас свободно?',
     title: 'Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center', other: 'English', sw: 'EN' },
   en: { position: (n, total) => `Room ${n} of ${total}`,
-    office: { caption: "One of the offices in this building. We don't have a photo of this exact room yet.", title: "You can get the price, the size and what's available by phone." },
-    meeting: { caption: 'The conference room in this building.', title: 'Any tenant can use it', note: "You can get the price of an office, the size and what's available by phone." },
-    alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with frosted windows and a dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with yellow and brown walls and blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside', 'meeting-room': 'Conference room with a long table and chairs' },
+    office: { caption: "One of the offices in this building. We don't have a photo of this exact room yet.", title: 'Call or message us for the price, size and availability.' },
+    meeting: { caption: 'The conference room in this building. We can show you where it is on the model.', title: 'Any tenant can use it', note: 'Call or message us for office prices, sizes and availability.' },
+    any: 'An office in this building', known: "Call or message us to find out what's available.",
+    alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with yellow and brown walls and blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside', 'meeting-room': 'Conference room with a long table and chairs' },
     message: "Hi! I'm interested in an office at 5345 Madison Ave. Can you tell me the price, the size and what's available now?",
     title: 'Offices for rent in Sacramento from $500 a month | Madison Business Center', other: 'Русский', sw: 'RU' },
 };
@@ -48,17 +50,20 @@ function fitLine(el, maxH) {
   el.style.fontSize = size + 'px';
   return size;
 }
+// Узкий экран: всё стоит столбиком. Телефон боком сюда не входит, у него карточка слева, а план справа
+const narrow = () => root.clientWidth < 900 && !(pin.clientHeight < 480 && root.clientWidth > pin.clientHeight);
 function fit() {
-  const phone = root.clientWidth < 900, h = pin.clientHeight;
-  const bar = phone ? 56 : 64;
+  const phone = narrow(), h = pin.clientHeight;
+  const bar = root.clientWidth < 900 ? 56 : 64;
   const lines = root.lang === 'en' ? (phone ? h1.dataset.en : h1.dataset.wideEn) : (phone ? h1.dataset.ru : h1.dataset.wide);
   h1.innerHTML = lines;
   // Заголовок кончается выше кружка с ценой, кружок на него не наезжает
   const card = $('.card-hero').offsetHeight;
-  const free = (h - card + parseFloat(getComputedStyle($('.badge')).top) - bar - 8) / lines.split('<br>').length;
-  fitLine(h1, Math.min((phone ? .082 : .2) * h, free));
+  const badge = $('.badge').offsetParent ? parseFloat(getComputedStyle($('.badge')).top) : 0;
+  const free = (h - card + badge - bar - 8) / lines.split('<br>').length;
+  fitLine(h1, Math.max(24, Math.min((phone ? .082 : .2) * h, free)));
   root.style.setProperty('--band', bar + h1.offsetHeight * .97 + 'px');
-  root.style.setProperty('--band2', bar + parseFloat(getComputedStyle($('#ribbon')).fontSize) * .92 + 'px');
+  root.style.setProperty('--band2', bar + parseFloat(getComputedStyle($('#ribbon')).fontSize) * 1.02 + 'px');
   root.style.setProperty('--card', card + 'px');
 }
 
@@ -68,13 +73,13 @@ const view = { k: 1, x: 0, y: 0 };
 const apply = () => { rig.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.k})`; };
 
 function place() {
-  const w = root.clientWidth, h = pin.clientHeight, phone = w < 900;
+  const w = root.clientWidth, h = pin.clientHeight, phone = narrow();
   const css = (n) => parseFloat(getComputedStyle(root).getPropertyValue(n));
   const look = body.classList.contains('look');
   let k, x, y;
   if (look) {
     const [x0, y0, x1, y1] = BOX, top = css('--band2'), bw = x1 - x0, bh = y1 - y0;
-    const bottom = phone ? h - $('.card-look').offsetHeight - 48 : h;
+    const bottom = phone ? h - $('.card-look').offsetHeight - 48 : w < 900 ? h - 48 : h;
     k = Math.min((bottom - top - 16) / bh, (phone ? w - 8 : w * .9) / bw);
     const cx = phone ? w / 2 : Math.max(.62 * w, Math.min(w - bw * k / 2, 580 + bw * k / 2));
     x = cx - (x0 + bw / 2) * k;
@@ -88,19 +93,20 @@ function place() {
   }
   Object.assign(view, { k, x, y });
   lifted = 0;
-  apply();
+  if (shown) lift(shown); else apply();
 }
 
 function setLook(on) {
   if (on === body.classList.contains('look')) return;
   body.classList.toggle('look', on);
-  if (!on) closeSheet();
+  if (!on) closeSheet(true);
   place();
 }
 function onScroll() {
   const h = pin.clientHeight;
-  setLook(scrollY > h * .22);
-  if (scrollY > h * .95) closeSheet();
+  setLook(scrollY > h * .06);
+  // Страницу двинули дальше: лист уходит сразу, чтобы прокрутка не казалась зависшей
+  if (Math.abs(scrollY - sheetAt) > 40 || scrollY > h * .7) closeSheet(true);
 }
 addEventListener('scroll', onScroll, { passive: true });
 addEventListener('resize', () => { fit(); place(); onScroll(); });
@@ -193,7 +199,7 @@ function wake() {
   if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
 }
 
-let hot = null, shown = null, lifted = 0;
+let hot = null, shown = null, lifted = 0, sheetAt = Infinity;
 function setHot(r) {
   if (r === hot) return;
   if (hot && hot !== shown) hot.on = false;
@@ -236,7 +242,7 @@ rig.addEventListener('blur', () => setHot(null));
 // --- Лист комнаты --------------------------------------------------------------------------
 // Настоящие снимки офисов этого здания. Пока своего снимка у комнаты нет, номер комнаты выбирает один из них
 const OFFICES = ['office-window', 'office-corner', 'office-blinds', 'office-narrow', 'office-glass'];
-// Что известно про отдельную комнату. Цена и размер появятся в листе сами: 26: { price: '$700', size: '200 sq ft' }.
+// Что известно про отдельную комнату. Цена и размер появятся в листе сами, как записать, в README.
 // Свой снимок: photo с именем файла из site/img и words со своей подписью, слова для неё добавить в TEXT, как у переговорной
 const KNOWN = { 31: { photo: 'meeting-room', words: 'meeting' } };
 
@@ -244,41 +250,52 @@ function fillSheet(r) {
   const info = KNOWN[r.id] || {}, words = t()[info.words || 'office'], photo = info.photo || OFFICES[r.id % OFFICES.length];
   const img = $('#room-img'), facts = $('#room-facts'), note = $('#room-note');
   img.src = `img/${photo}-800.webp`; // снимок грузится только здесь, при открытии листа
-  img.alt = t().alt[photo];
+  img.alt = t().alt[photo] || t().any;
   $('#room-caption').textContent = words.caption;
-  $('#room-title').textContent = words.title;
+  $('#room-title').textContent = info.price && !info.words ? t().known : words.title;
   facts.textContent = [info.price, info.size].filter(Boolean).join(', ');
   facts.hidden = !facts.textContent;
   note.textContent = words.note || '';
   note.hidden = !words.note;
+}
+// Комната не должна оказаться под листом
+function lift(r) {
+  const low = Math.max(...r.floor.filter((_, i) => i % 2)) * view.k + view.y + lifted;
+  const room = pin.clientHeight - sheet.offsetHeight - 12;
+  const by = narrow() && low > room ? low - room : 0;
+  view.y += lifted - by;
+  lifted = by;
+  apply();
 }
 function openSheet(r) {
   if (shown && shown !== r) shown.on = false;
   shown = r;
   r.on = true;
   fillSheet(r);
-  if (!sheet.open) sheet.show();
-  // Комната не должна оказаться под листом
-  const low = Math.max(...r.floor.filter((_, i) => i % 2)) * view.k + view.y + lifted;
-  const room = pin.clientHeight - sheet.offsetHeight - 12;
-  const by = root.clientWidth < 900 && low > room ? low - room : 0;
-  view.y += lifted - by;
-  lifted = by;
-  apply();
+  if (!sheet.open) {
+    sheet.show();
+    sheetAt = scrollY;
+    history.pushState({ sheet: 1 }, ''); // кнопка «Назад» на телефоне закрывает лист, а не уводит с сайта
+  }
+  lift(r);
   wake();
 }
-function closeSheet() {
+// keep: лист закрыла прокрутка или сам «Назад», возвращаться по истории не надо, страница прыгнула бы
+function closeSheet(keep) {
   if (!shown) return;
   shown.on = shown === hot;
   shown = null;
+  sheetAt = Infinity;
   if (sheet.open) sheet.close();
   view.y += lifted;
   lifted = 0;
   apply();
-  if (kbd >= 0) rig.focus({ preventScroll: true });
+  if (kbd >= 0) rig.focus({ preventScroll: true }); else rig.blur();
+  if (!keep && history.state?.sheet) history.back();
   wake();
 }
-$('#close').addEventListener('click', closeSheet);
+$('#close').addEventListener('click', () => closeSheet());
+addEventListener('popstate', () => closeSheet(true));
 addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
@@ -299,12 +316,25 @@ if (!still && 'IntersectionObserver' in window) {
   new IntersectionObserver(([e], seen) => {
     if (e.isIntersecting) { sign.classList.replace('off', 'flick'); seen.disconnect(); }
   }, { threshold: .8 }).observe(sign);
+  // Разговор с помощником появляется по репликам, по мере прокрутки
+  const lines = $$('.say');
+  const said = new IntersectionObserver((seen) => seen.forEach((e) => {
+    if (!e.isIntersecting && e.boundingClientRect.top > 0) return;
+    lines.slice(0, lines.indexOf(e.target) + 1).forEach((s) => { s.classList.remove('wait'); said.unobserve(s); });
+  }), { rootMargin: '0px 0px -10% 0px' });
+  lines.forEach((s) => { s.classList.add('wait'); said.observe(s); });
 }
+
+// --- Лента дороги: стрелки сдвигают её на один кадр. На телефоне кадры стоят столбиком -------------
+const strip = $('#strip');
+const stepBy = (dir) => strip.scrollBy({ left: dir * strip.firstElementChild.offsetWidth, behavior: still ? 'auto' : 'smooth' });
+$('#road-back').addEventListener('click', () => stepBy(-1));
+$('#road-on').addEventListener('click', () => stepBy(1));
 
 // --- Старт ---------------------------------------------------------------------------------
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
 const asked = new URLSearchParams(location.search).get('lang');
-const ru = (navigator.languages || [navigator.language]).some((l) => /^(ru|uk|be)/i.test(l));
+const ru = /^(ru|uk|be)/i.test((navigator.languages || [navigator.language])[0]);
 setLang(asked === 'en' || asked === 'ru' ? asked : saved || (ru ? 'ru' : 'en'));
 onScroll();
 requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('on')));
