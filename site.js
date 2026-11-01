@@ -52,10 +52,8 @@ function place() {
   const w = plan.clientWidth, h = plan.clientHeight, [x0, y0, x1, y1] = BOX, bw = x1 - x0, bh = y1 - y0;
   const head = tall() ? $('.plan-head').offsetHeight : 0, room = h - head;
   planStage.style.top = head + 'px';
-  // Сбоку от макета остаётся место для заголовка: левый край стола на его высоте примерно на 480 в кадре
-  const free = $('.plan-head').offsetLeft + $('.plan-head').offsetWidth + 16;
-  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, (w - free) / (x1 - 480));
-  const cx = tall() ? w / 2 : Math.max(w * .68, free + (x0 + bw / 2 - 480) * k);
+  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, w * .66 / bw);
+  const cx = tall() ? w / 2 : w * .68;
   Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k });
   lifted = 0;
   if (shown) lift(shown); else apply();
@@ -266,16 +264,19 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Заявка: проверка телефона. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
+// --- Заявка: подпись поднимается над полем, телефон проверяется. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
 const lead = $('#lead'), leadPhone = $('#lead-phone'), leadBad = $('#lead-bad'), leadOff = $('#lead-off');
 const phoneOk = () => { const n = leadPhone.value.replace(/\D/g, '').length; return n >= 10 && n <= 15; };
 leadPhone.addEventListener('input', () => {
-  if (phoneOk()) { leadBad.hidden = true; leadPhone.removeAttribute('aria-invalid'); }
+  const box = leadPhone.parentElement;
+  box.classList.toggle('good', phoneOk());
+  if (phoneOk()) { box.classList.remove('bad'); leadBad.hidden = true; leadPhone.removeAttribute('aria-invalid'); }
 });
 lead.addEventListener('submit', (e) => {
   e.preventDefault();
   leadOff.hidden = true;
   if (!phoneOk()) {
+    leadPhone.parentElement.classList.add('bad');
     leadBad.hidden = false;
     leadPhone.setAttribute('aria-invalid', 'true');
     leadPhone.focus();
@@ -344,7 +345,7 @@ if (!still) {
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
 function splitLines(e) {
-  const words = e.textContent.trim().split(' ');
+  const whole = e.innerHTML, words = e.textContent.trim().split(' ');
   e.innerHTML = words.map((w) => `<span>${w}</span>`).join(' ');
   const rows = [];
   [...e.children].forEach((w, i) => {
@@ -352,7 +353,7 @@ function splitLines(e) {
     rows.at(-1).words.push(words[i]);
   });
   e.innerHTML = rows.map((r) => `<span class="ln">${r.words.join(' ')}</span>`).join(' ');
-  return { lines: [...e.children] };
+  return { whole, lines: [...e.children] };
 }
 const EASE = 'cubic-bezier(.165,.84,.44,1)';
 function riseUp(block) {
@@ -363,15 +364,12 @@ function riseUp(block) {
   }
   let n = 0;
   (block.matches('.rent') ? [...block.children] : [block]).forEach((e) => {
-    // Текст со ссылкой внутри не разбивается, он просто появляется
-    if (e.children.length) { e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 800, easing: EASE }); return; }
-    e.dataset.keep = e.innerHTML;
-    const { lines } = splitLines(e);
+    const { whole, lines } = splitLines(e);
     const moves = lines.map((l) => l.animate(
       [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }],
       { duration: 800, delay: 100 * n++, easing: EASE, fill: 'backwards' },
     ));
-    moves.at(-1).finished.then(() => { if (e.querySelector('.ln')) e.innerHTML = e.dataset.keep; }).catch(() => {});
+    moves.at(-1).finished.then(() => { if (e.querySelector('.ln')) e.innerHTML = whole; }).catch(() => {});
   });
 }
 if (!still && 'IntersectionObserver' in window) {
@@ -382,111 +380,6 @@ if (!still && 'IntersectionObserver' in window) {
   }), { rootMargin: '0px 0px -10% 0px' });
   $$('.rise').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
 }
-// --- Живой макет: кадр лежит на карте высоты из Blender (blender/effect.py), деревья шевелятся, объём едет за мышью, на телефоне сам -----
-const LIVE_VERTEX = 'attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}';
-const LIVE_FRAGMENT = `#ifdef GL_FRAGMENT_PRECISION_HIGH
-  precision highp float;
-  #else
-  precision mediump float;
-  #endif
-  uniform sampler2D img, map;
-  uniform vec2 shift;
-  uniform float t;
-  varying vec2 v;
-  void main() {
-    float h = texture2D(map, v).r;
-    h = texture2D(map, v - shift * (h - .22)).r;
-    vec2 q = v - shift * (h - .22);
-    float wind = texture2D(map, q).g;
-    q += wind * vec2(.0024 * sin(t * 1.3 + q.y * 70. + q.x * 31.) + .0012 * sin(t * 2.7 + q.x * 90.), .004 * cos(t * 1.1 + q.x * 60. + q.y * 20.));
-    gl_FragColor = texture2D(img, q);
-  }`;
-function makeLive(host) {
-  const canvas = document.createElement('canvas');
-  canvas.className = 'alive';
-  const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false });
-  if (!gl) return null;
-  const program = gl.createProgram();
-  [[gl.VERTEX_SHADER, LIVE_VERTEX], [gl.FRAGMENT_SHADER, LIVE_FRAGMENT]].forEach(([type, src]) => {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    gl.attachShader(program, s);
-  });
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
-  gl.useProgram(program);
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0);
-  gl.bindAttribLocation(program, 0, 'a');
-  gl.linkProgram(program);
-  gl.useProgram(program);
-  gl.vertexAttribPointer(gl.getAttribLocation(program, 'a'), 2, gl.FLOAT, false, 0, 0);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-  const uShift = gl.getUniformLocation(program, 'shift'), uT = gl.getUniformLocation(program, 't');
-  const live = { seen: false, ready: false };
-  // Телефон может отобрать видеопамять: тогда снова обычный снимок
-  canvas.addEventListener('webglcontextlost', () => { live.ready = false; canvas.remove(); host.querySelector('img').style.visibility = ''; });
-  const load = (src, unit, name) => new Promise((done, fail) => {
-    const pic = new Image();
-    pic.onload = () => {
-      gl.activeTexture(gl.TEXTURE0 + unit);
-      gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pic);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.uniform1i(gl.getUniformLocation(program, name), unit);
-      done();
-    };
-    pic.onerror = fail;
-    pic.src = src;
-  });
-  live.size = () => {
-    const box = host.getBoundingClientRect(), most = matchMedia('(hover:none)').matches ? 1280 : 1920;
-    const w = Math.min(most, Math.round(Math.max(box.width, box.height * 16 / 9) * Math.min(devicePixelRatio, 2)));
-    if (canvas.width !== w) {
-      canvas.width = w;
-      canvas.height = Math.round(w * 9 / 16);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    }
-  };
-  live.draw = (t, sx, sy) => {
-    live.size();
-    gl.uniform2f(uShift, sx, sy * 16 / 9);
-    gl.uniform1f(uT, t);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  };
-  Promise.all([load('img/maket.webp', 0, 'img'), load('img/maket-depth.webp', 1, 'map')]).then(() => {
-    host.insertBefore(canvas, host.querySelector('#glow'));
-    live.ready = true;
-    live.draw(0, 0, 0);
-    host.querySelector('img').style.visibility = 'hidden';
-  }).catch(() => {});
-  new IntersectionObserver(([e]) => { live.seen = e.isIntersecting; }).observe(host);
-  return live;
-}
-if (!still) addEventListener('load', () => {
-  const lives = $$('.live').map(makeLive).filter(Boolean);
-  if (!lives.length) return;
-  const sway = matchMedia('(hover:none)').matches;
-  let aimX = 0, aimY = 0, x = 0, y = 0, before = 0;
-  if (!sway) addEventListener('pointermove', (e) => { aimX = (e.clientX / innerWidth - .5) * -.014; aimY = (e.clientY / innerHeight - .5) * .014; }, { passive: true });
-  const tick = (now) => {
-    requestAnimationFrame(tick);
-    if (now - before < 30 || document.hidden || !lives.some((l) => l.seen)) return;
-    before = now;
-    const t = (now / 1000) % 3600;
-    if (sway) { aimX = Math.sin(t * .7) * .007; aimY = Math.cos(t * .5) * .005; }
-    x += (aimX - x) * .08;
-    y += (aimY - y) * .08;
-    lives.forEach((l) => { if (l.seen && l.ready) l.draw(t, x, y); });
-  };
-  requestAnimationFrame(tick);
-});
-
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));
 document.addEventListener('click', (e) => {
