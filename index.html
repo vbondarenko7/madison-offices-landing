@@ -26,7 +26,8 @@
     <summary aria-label="Меню" data-en-label="Menu"><span class="lines"></span></summary>
     <nav class="drop">
       <a href="#building" data-en="Floor plan">План здания</a>
-      <a href="#facts" data-en="Prices and terms">Цена и условия</a>
+      <a href="#past" data-en="What used to be here">Что здесь было раньше</a>
+      <a href="#prices" data-en="Prices">Цены</a>
       <a href="#photos" data-en="Photos">Снимки</a>
       <a href="#where" data-en="How to get here">Как доехать</a>
       <a href="#contact" data-en="Call or message">Позвонить или написать</a>
@@ -51,7 +52,7 @@
     <p class="said" id="said" aria-live="polite"></p>
 
     <section class="card card-hero">
-      <a class="badge" href="#facts"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
+      <a class="badge" href="#prices"><span data-en="from">от</span><b>$500</b><span data-en="a month">в месяц</span></a>
       <h2 data-en="Offices for rent at 5345&nbsp;Madison&nbsp;Ave">Сдаём офисы на 5345&nbsp;Madison&nbsp;Ave</h2>
       <p><span data-en="This is Madison Business Center. The smallest office is $500 a month, with a one-year lease.">Это Madison Business Center. Самый маленький офис стоит $500 в&nbsp;месяц, договор от года.</span> <span class="more" data-en="Parking is behind the gate, and you can get in 24/7.">Парковка за воротами, заходить можно круглосуточно.</span></p>
       <div class="acts">
@@ -72,7 +73,7 @@
       </div>
     </section>
     <nav class="tabs tabs-look">
-      <a class="tab" href="#facts" data-en="Next: prices and terms">Дальше: цена и условия</a>
+      <a class="tab" href="#past" data-en="Next: what used to be here">Дальше: что здесь было раньше</a>
     </nav>
   </main>
 </div>
@@ -91,17 +92,72 @@
   </div>
 </dialog>
 
+<section class="past" id="past">
+  <figure class="past-doors">
+    <picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture>
+    <figcaption data-en="Two doors in a corner of the hallway, each with its own sign.">Две двери в углу коридора, над каждой своя табличка.</figcaption>
+  </figure>
+  <div class="past-text">
+    <h2 id="past-title" data-en="Why are there <b class=sign>IN USE</b> signs over these doors?">Почему над этими дверями таблички <b class=sign>IN USE</b>?</h2>
+    <p class="lead" data-en="A sign like that usually means someone's recording, so don't walk in. Radio stations used to operate in this building, and that's why the rooms here are soundproofed.">Обычно такая табличка значит, что идёт запись и заходить нельзя. А раньше в этом здании работали радиостанции. Поэтому и комнаты здесь с шумоизоляцией.</p>
+    <p data-en="You can check how quiet a particular office is when you come see it. Step inside, close the door and listen.">Насколько тихо в конкретном офисе, можно проверить на просмотре: зайдите, закройте дверь и послушайте.</p>
+  </div>
+  <figure class="past-air">
+    <img src="img/on-air.webp" width="800" height="600" loading="lazy" alt="Светящаяся вывеска ON AIR в окне рядом с дверью, всё в синем свете" data-en-alt="A glowing ON AIR sign in a window next to a door, the hallway lit blue">
+    <figcaption data-en="And here's an ON&nbsp;AIR sign, in the window next to a door.">А здесь, в окне рядом с дверью, вывеска ON&nbsp;AIR.</figcaption>
+  </figure>
+  <nav class="next"><a class="tab" href="#prices" data-en="Next: what you can rent and for how much">Дальше: что можно снять и за сколько</a></nav>
+</section>
+
+<section class="prices" id="prices">
+  <div class="rent r-small">
+    <div class="rent-text">
+      <h2 data-en="What can you rent, and for how much?">Что можно снять и за сколько?</h2>
+      <p class="sum">$500</p>
+      <h3 data-en="a month. The smallest office.">в месяц. Самый маленький офис.</h3>
+    </div>
+    <figure>
+      <picture><source media="(min-width:900px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="1200" height="900" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture>
+      <figcaption data-en="One of the offices in this building. The window takes up almost the whole wall, with trees outside.">Один из офисов в этом здании. Окно почти во всю стену, за ним деревья.</figcaption>
+    </figure>
+  </div>
+  <div class="rent r-bigger">
+    <figure>
+      <picture><source media="(min-width:900px)" srcset="img/office-glass.webp"><img src="img/office-glass-800.webp" width="1400" height="1050" loading="lazy" alt="Пустой офис за стеклянной стеной, за окном деревья" data-en-alt="Empty office behind a glass wall, with trees outside"></picture>
+      <figcaption data-en="Another office. The wall facing the hallway is glass, and out the window there's greenery and a palm tree.">Ещё один офис. Стена в коридор стеклянная, за окном зелень и пальма.</figcaption>
+    </figure>
+    <div class="rent-text">
+      <p class="sum">$800</p>
+      <h3 data-en="a month. A bigger office.">в месяц. Офис побольше.</h3>
+      <p data-en="Call and we'll tell you which office is which price.">Какой офис сколько стоит, скажем по телефону.</p>
+    </div>
+  </div>
+  <div class="rent r-entrance">
+    <div class="rent-text">
+      <p class="sum">$2,500</p>
+      <h3 data-en="a month. A unit with its own entrance.">в месяц. Помещение с отдельным входом.</h3>
+    </div>
+  </div>
+  <div class="whole">
+    <img src="img/hall-small.webp" width="720" height="540" loading="lazy" alt="Большой открытый зал с деревянным потолком и подвесными лампами" data-en-alt="A large open room with a wood ceiling and hanging lights">
+    <p data-en="Need the whole building? We can talk about that by phone too.">Нужно всё здание? Это тоже можно обсудить по телефону.</p>
+  </div>
+  <div class="terms">
+    <p class="terms-big" data-en="The lease is one year minimum. The deposit is one month's rent, so $500 for the $500 office.">Договор минимум на год. Залог как месяц аренды: у офиса за $500 это $500.</p>
+    <div>
+      <p data-en="Call to find out the size, what's included in the rent and what's available now.">Размер, что входит в аренду и что свободно сейчас, можно узнать по телефону.</p>
+      <div class="acts">
+        <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+        <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
+      </div>
+    </div>
+    <nav class="next"><a class="tab" href="#facts" data-en="Next: about the building">Дальше: про здание</a></nav>
+  </div>
+</section>
+
 <section class="facts" id="facts">
-  <h2 class="huge" data-en="Prices and terms">Цена и условия</h2>
+  <h2 class="huge" data-en="Now, the building.">Теперь про здание.</h2>
   <div class="list">
-    <h3 data-en="First, the money.">Сначала про деньги.</h3>
-    <dl>
-      <div><dt>$500 <span data-en="a month">в месяц</span></dt><dd data-en="That's the smallest office.">Столько стоит самый маленький офис.</dd></div>
-      <div><dt data-en="Size, what's included, what's available">Размер, что входит и что свободно</dt><dd><span data-en="You can get all of this by phone:">Всё это можно узнать по телефону:</span> <a class="under" href="tel:+19169144407">916-914-4407</a></dd></div>
-      <div><dt data-en="One-year lease">Договор на год</dt><dd data-en="A year is the minimum.">Это минимальный срок.</dd></div>
-      <div><dt data-en="Deposit: one month's rent">Залог как месяц аренды</dt><dd data-en="For the smallest office, that's $500.">За самый маленький офис это $500.</dd></div>
-    </dl>
-    <h3 data-en="Now, the building.">Теперь про здание.</h3>
     <dl>
       <div><dt data-en="One story">Один этаж</dt><dd data-en="No elevator needed.">Лифт не нужен.</dd></div>
       <div><dt data-en="Fence and gate">Забор и ворота</dt><dd data-en="The property is fenced, you drive in through the gate.">Территория закрыта, въезд через ворота.</dd></div>
@@ -128,15 +184,11 @@
     <picture><source media="(min-width:900px)" srcset="img/parking-facade.webp"><img src="img/parking-facade-800.webp" width="800" height="600" loading="lazy" alt="Кирпичный фасад здания и парковка" data-en-alt="Brick front of the building and the parking lot"></picture>
     <figcaption data-en="The building from the parking lot.">Здание со стороны парковки.</figcaption>
   </figure>
-  <figure class="f5 c-lime">
-    <picture><source media="(min-width:900px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="800" height="600" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture>
-    <figcaption data-en="One of the offices.">Один из офисов.</figcaption>
-  </figure>
   <figure class="f5 c-coral">
     <picture><source media="(min-width:900px)" srcset="img/meeting-room.webp"><img src="img/meeting-room-800.webp" width="800" height="600" loading="lazy" alt="Переговорная с длинным столом и креслами" data-en-alt="Conference room with a long table and chairs"></picture>
     <figcaption data-en="The conference room.">Переговорная.</figcaption>
   </figure>
-  <figure class="f7 c-paper">
+  <figure class="f12 c-paper">
     <picture><source media="(min-width:900px)" srcset="img/lobby.webp"><img src="img/lobby-800.webp" width="800" height="600" loading="lazy" alt="Большая комната со стойкой и деревянным полом" data-en-alt="Large room with a counter and a wood-look floor"></picture>
     <figcaption data-en="A large room inside the building.">Большая комната внутри здания.</figcaption>
   </figure>

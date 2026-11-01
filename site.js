@@ -33,7 +33,7 @@ function setLang(l) {
   $('#lang').textContent = t().sw;
   $('#lang').setAttribute('aria-label', t().other);
   document.title = t().title;
-  $$('.wa').forEach((a) => { a.href = waLink(t().message); });
+  $$('.wa').forEach((a) => { a.href = waLink(a.getAttribute(`data-wa-${l}`) || t().message); });
   try { localStorage.setItem('lang', l); } catch (e) {}
   if (shown) fillSheet(shown);
   fit();
@@ -291,6 +291,15 @@ document.addEventListener('click', (e) => {
   if (e.detail > 0) { const f = e.target.closest('a,button,summary'); if (f) f.blur(); }
 });
 $$('a[href="#stage"]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(0, 0); }));
+
+// --- Табличка IN USE загорается, когда заголовок показался. При «меньше движения» она просто горит ---
+if (!still && 'IntersectionObserver' in window) {
+  const sign = $('#past-title');
+  sign.classList.add('off');
+  new IntersectionObserver(([e], seen) => {
+    if (e.isIntersecting) { sign.classList.replace('off', 'flick'); seen.disconnect(); }
+  }, { threshold: .8 }).observe(sign);
+}
 
 // --- Старт ---------------------------------------------------------------------------------
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
