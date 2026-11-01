@@ -135,16 +135,18 @@ figcaption{padding:16px var(--m);font-weight:600}
 .map:hover{color:var(--coral-d)}
 .nb{white-space:nowrap}
 
-/* Сцена с воротами: поле переходит в небо и асфальт без краёв. Экран стоит, пока идёт прокрутка: сцена приближается, ворота откатываются */
+/* Сцена с воротами: рисунок цветом текста прямо на поле страницы. Экран стоит, пока идёт прокрутка: полосы съезжаются в здание, ворота цвета кнопок откатываются */
 .scene-top{padding-bottom:0}
 .scene-end{padding-top:32px}
 .scene-end p{margin-top:0}
-.scene-room{height:230vh;height:230svh}
-.scene{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip}
-.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 62%;transform-origin:52% 62%;will-change:transform}
-.scene::before,.scene::after{content:"";position:absolute;z-index:1;left:0;right:0;pointer-events:none}
-.scene::before{top:0;height:46%;background:linear-gradient(var(--paper) 8%,rgba(240,239,235,.85) 30%,rgba(240,239,235,0))}
-.scene::after{bottom:0;height:20%;background:linear-gradient(rgba(240,239,235,0),var(--paper) 92%)}
+.scene-room{--h:100vh;--h:100svh;height:300vh;height:300svh}
+.scene{--w:max(100vw,calc(var(--h)*4/3));position:sticky;top:0;height:var(--h);overflow:hidden;overflow:clip}
+.set{position:absolute;left:calc((100vw - var(--w))*.52);top:calc((var(--h) - var(--w)*.75)*.62);width:var(--w);height:calc(var(--w)*.75);transform-origin:52% 62%}
+.set img{position:absolute;inset:0;width:100%;height:100%}
+.cut .whole{visibility:hidden}
+.cut b{position:absolute;top:0;height:100%;background:url(img/scene-print.webp) no-repeat;will-change:transform}
+.gt{will-change:transform}
+.sun{position:absolute;left:50%;top:24%;width:22%;aspect-ratio:1;border-radius:50%;background:var(--coral);will-change:transform}
 
 @media (max-width:899px){
   .flow{width:auto;margin:0;padding:80px var(--m)}
@@ -153,8 +155,8 @@ figcaption{padding:16px var(--m);font-weight:600}
   .flow .acts{margin-top:32px}
   .flow .btn{flex:1 1 100%}
   .big{margin-top:40px}
-  .scene-room{height:190vh;height:190svh}
-  .scene{top:14vh;top:14svh;height:72vh;height:72svh}
+  .scene-room{--h:72vh;--h:72svh;height:260vh;height:260svh}
+  .scene{top:14vh;top:14svh}
   .deco{float:none;margin:0 0 40px auto}
   .deco-mic{width:50%}
   .deco-phone{width:55%}
@@ -218,5 +220,6 @@ figcaption{padding:16px var(--m);font-weight:600}
   html{scroll-behavior:auto}
   .scene-room{height:auto}
   .scene{position:relative;top:0}
+  .gt{display:none}
   *,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation-duration:.01s!important}
 }

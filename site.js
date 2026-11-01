@@ -313,19 +313,36 @@ function flowFrame() {
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
   });
 }
-// Ворота: сцена приближается слоями, ближний план быстрее дальнего, панель откатывается вправо и обратно вместе с прокруткой
-const room = $('.scene-room'), stage = $('.scene');
-const [far, mid, gateLayer, post, near] = ['.far', '.mid', '.gt', '.post', '.near'].map((c) => stage.querySelector(c));
+// Ворота: рисунок разрезан на полосы, как фигуры в оригинале. Полосы разъехались вверх и вниз и съезжаются в здание, встаёт солнце, потом ворота откатываются. Назад всё обратно
+const room = $('.scene-room'), stage = $('.scene'), set = $('.set'), sun = $('.sun'), gateLayer = $('.gt');
+let strips = null;
+function cutScene() {
+  const n = innerWidth < 900 ? 9 : 16;
+  strips = [...Array(n)].map((_, i) => {
+    const b = document.createElement('b');
+    b.style.cssText = `left:${i * 100 / n}%;width:calc(${100 / n}% + 1px);background-size:${n * 100}% 100%;background-position:${i * 100 / (n - 1)}% 0`;
+    const k = (i * .618) % 1;
+    b.far = (i % 2 ? 1 : -1) * (.3 + .4 * k);
+    b.from = ((i * .382) % 1) * .22;
+    set.insertBefore(b, gateLayer);
+    return b;
+  });
+  stage.classList.add('cut');
+}
+const toEase = (v) => 1 - (1 - v) ** 3;
 function sceneFrame() {
   const box = room.getBoundingClientRect();
   if (box.bottom < -innerHeight || box.top > innerHeight * 2) return;
-  const p = Math.min(1, Math.max(0, -box.top / Math.max(1, box.height - stage.offsetHeight)));
-  const open = Math.min(1, Math.max(0, (p - .12) / .7)), wide = Math.max(stage.offsetWidth, stage.offsetHeight * 4 / 3);
-  const s = 1 + .07 * p, x = open * open * (3 - 2 * open) * .43 * wide * s;
-  far.style.transform = `translate3d(0,${(p * -14).toFixed(1)}px,0) scale(${(1 + .02 * p).toFixed(4)})`;
-  mid.style.transform = post.style.transform = `scale(${s.toFixed(4)})`;
-  gateLayer.style.transform = `translate3d(${x.toFixed(1)}px,0,0) scale(${s.toFixed(4)})`;
-  near.style.transform = `scale(${(1 + .16 * p).toFixed(4)})`;
+  if (!strips) cutScene();
+  const tall = stage.offsetHeight, p = Math.min(1, Math.max(0, -box.top / Math.max(1, box.height - tall)));
+  strips.forEach((b) => {
+    const left = 1 - toEase(Math.min(1, Math.max(0, (p - b.from) / .3)));
+    b.style.transform = `translate3d(0,${(b.far * tall * left).toFixed(1)}px,0)`;
+  });
+  const open = Math.min(1, Math.max(0, (p - .55) / .38));
+  gateLayer.style.transform = `translate3d(${(open * open * (3 - 2 * open) * 43).toFixed(2)}%,0,0)`;
+  sun.style.transform = `translate3d(0,${((1 - toEase(Math.min(1, p / .6))) * 160).toFixed(1)}%,0)`;
+  set.style.transform = `scale(${(1 + .05 * p).toFixed(4)})`;
 }
 if (!still) {
   let flowQueued = false;
