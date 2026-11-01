@@ -14,6 +14,7 @@
 <link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js" as="script">
+<link rel="preload" href="img/maket.webp" as="image" fetchpriority="high">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -34,30 +35,32 @@
   </details>
 </div>
 
-<a class="logo" href="#top">Madison</a>
 <header class="hero" id="top">
-  <h1 data-en="Small offices in Sacramento from&nbsp;$500 a&nbsp;month">Небольшие офисы в Сакраменто от&nbsp;$500 в&nbsp;месяц</h1>
-  <p class="addr">5345 Madison Ave, Sacramento, CA 95841</p>
-  <p data-en="One-year lease, gated parking, 24/7 access for tenants.">Договор от года, парковка за воротами, у арендаторов доступ круглосуточно.</p>
+  <div class="hero-set live" id="hero-live"><img src="img/maket.webp" width="1920" height="1080" alt="" fetchpriority="high"></div>
+  <a class="logo" href="#top">Madison</a>
+  <div class="hero-offer">
+    <h1 data-en="Small offices in Sacramento from&nbsp;$500 a&nbsp;month">Небольшие офисы в Сакраменто от&nbsp;$500 в&nbsp;месяц</h1>
+    <p class="addr">5345 Madison Ave, Sacramento, CA 95841</p>
+    <p data-en="One-year lease, gated parking, 24/7 access for tenants.">Договор от года, парковка за воротами, у арендаторов доступ круглосуточно.</p>
+  </div>
   <form class="lead" id="lead" novalidate>
-    <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name">Как вас зовут</span></label>
-    <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad"><span data-en="Phone">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
-    <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
-    <div class="acts">
-      <button class="btn" type="submit" data-en="Send request">Оставить заявку</button>
-      <a class="btn call" href="tel:+19169144407"><span data-en="Call">Позвонить</span>&nbsp;916-914-4407</a>
-    </div>
-    <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
+    <h2 data-en="Request a viewing">Заявка на просмотр</h2>
+    <label><span data-en="Name">Имя</span><input name="name" autocomplete="name"></label>
+    <label><span data-en="Phone">Телефон</span><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="lead-bad"></label>
+    <p class="form-note" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
+    <button class="btn" type="submit" data-en="Send request">Оставить заявку</button>
+    <p class="form-note" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a> or <a class=map href=https://wa.me/19169144407>message us on WhatsApp</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните: <a class=map href=tel:+19169144407>916-914-4407</a>, или <a class=map href=https://wa.me/19169144407>напишите в WhatsApp</a>.</p>
   </form>
 </header>
 
+<main>
 <section class="plan" id="building">
   <div class="plan-head">
     <h2 data-en="Floor plan">План здания</h2>
     <p data-en="Pick a room to see a photo of an office. Prices and open rooms aren't marked on the plan.">Нажмите на комнату, откроется снимок офиса. Цены и свободные комнаты на плане не отмечены.</p>
   </div>
   <div class="plan-stage" id="plan-stage">
-    <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
+    <div class="rig live" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
       <img src="img/maket.webp" width="1920" height="1080" alt="">
       <canvas id="glow"></canvas>
     </div>
@@ -65,7 +68,7 @@
   <p class="said" id="said" aria-live="polite"></p>
 </section>
 
-<dialog class="sheet" id="sheet">
+<dialog class="sheet" id="sheet" aria-labelledby="room-title">
   <button class="close" type="button" id="close" aria-label="Закрыть" data-en-label="Close"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5"/></svg></button>
   <figure class="shot"><img id="room-img" width="800" height="600" alt=""><figcaption id="room-caption"></figcaption></figure>
   <div class="sheet-text">
@@ -97,9 +100,9 @@
 <section class="flow" id="radio">
   <img class="deco deco-mic rise" src="img/deco-mic.webp" width="480" height="1046" loading="lazy" alt="">
   <h2 class="rise" data-en="Radio stations used to work out of this building">Раньше в этом здании работали радиостанции</h2>
-  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
   <p class="rise" data-en="They left behind soundproofed rooms, and now those are offices where you can work and talk with clients in peace.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
   <p class="rise" data-en="IN USE signs still hang over the doors, like in a studio. You can check how quiet it is when you come to see it.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
 </section>
 
 <section id="gates">
@@ -108,7 +111,7 @@
     <div class="scene" role="img" aria-label="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-label="A sliding gate with the parking lot behind it and the brick building on the left">
       <div class="set">
         <i class="sun"></i>
-        <img class="whole" src="img/scene-print.webp" width="1448" height="1086" loading="lazy" alt="">
+        <img class="whole" src="img/scene-print-900.webp" srcset="img/scene-print-900.webp 900w, img/scene-print.webp 1448w" sizes="(max-width:899px) 900px, 100vw" width="1448" height="1086" loading="lazy" alt="">
         <img class="gt" src="img/scene-gate.webp" width="1448" height="1086" loading="lazy" alt="">
         <img class="post" src="img/scene-post.webp" width="1448" height="1086" loading="lazy" alt="">
       </div>
@@ -142,6 +145,8 @@
     <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
   </div>
 </section>
+
+</main>
 
 <script src="rooms.js"></script>
 <script src="site.js"></script>
