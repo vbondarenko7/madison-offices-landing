@@ -339,7 +339,7 @@ function splitLines(e) {
 const EASE = 'cubic-bezier(.165,.84,.44,1)';
 function riseUp(block) {
   block.classList.remove('wait');
-  if (block.matches('.acts')) {
+  if (block.matches('.acts, .deco')) {
     block.animate([{ transform: 'translateY(30px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 1200, easing: EASE });
     return;
   }

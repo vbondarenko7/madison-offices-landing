@@ -110,7 +110,7 @@ html:not(.on) .pin>*,html:not(.on) .corner{opacity:0;transition:none}
 .close:hover{background:var(--cream)}
 
 /* Страница ниже плана: одно поле, один цвет текста, один акцент на кнопках, один столбец. На блоке заголовок, снимок и пара строк */
-.flow{width:min(73.3vw,1017px);margin:auto;padding:128px 0}
+.flow{display:flow-root;width:min(73.3vw,1017px);margin:auto;padding:128px 0}
 .flow h2{font-size:clamp(36px,5vw,72px);line-height:1.1;font-weight:600;text-wrap:balance}
 .flow p{margin-top:32px;font-size:clamp(18px,1.67vw,24px);line-height:1.5;max-width:40rem}
 .flow .acts{margin-top:40px;gap:8px}
@@ -120,7 +120,12 @@ figure{margin:0;display:flex;flex-direction:column}
 figure picture{flex:1;display:block;overflow:hidden}
 figure img{height:100%;object-fit:cover}
 figcaption{padding:16px var(--m);font-weight:600}
-.big{margin-top:64px}
+.big{clear:both;margin-top:64px}
+/* Рисунок в цвет текста лежит на поле справа от заголовка */
+.deco{float:right;height:auto;margin:0 -8vw 48px 48px}
+.deco-mic{width:min(22vw,320px)}
+.deco-gate{width:min(30vw,432px)}
+.deco-phone{width:min(23.5vw,340px)}
 .big figure{aspect-ratio:4/3;transform-origin:50% 50%}
 .big picture{height:100%}
 .rents{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px}
@@ -138,6 +143,10 @@ figcaption{padding:16px var(--m);font-weight:600}
   .flow .acts{margin-top:32px}
   .flow .btn{flex:1 1 100%}
   .big{margin-top:40px}
+  .deco{float:none;margin:0 0 40px auto}
+  .deco-mic{width:50%}
+  .deco-gate{width:80%}
+  .deco-phone{width:55%}
   .rents{grid-template-columns:1fr;gap:24px;margin-top:40px}
   .flow .rent .sum{font-size:min(48px,12.8vw)}
   .phone{margin-top:32px;font-size:calc((100vw - 2*var(--m))/6.9)}
