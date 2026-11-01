@@ -300,6 +300,85 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
+// --- Цены: движение как в оригинале, числа сняты с его кода и кадров, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
+const prices = $('#prices'), bigPhoto = $('.big figure'), runLine = $('#prices h2');
+
+// Цвет поля и текста меняется целиком: на свой, когда верх блока прошёл середину экрана, и на цвет следующего блока, когда тот показался. Шва между ними нет
+function pricesFrame() {
+  const box = prices.getBoundingClientRect();
+  prices.classList.toggle('above', box.top > innerHeight / 2);
+  prices.classList.toggle('below', box.bottom < innerHeight * .9);
+  if (still || box.bottom < -innerHeight || box.top > innerHeight * 2) return;
+  // Снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
+  const height = bigPhoto.offsetHeight, centre = bigPhoto.parentElement.getBoundingClientRect().top + height / 2;
+  const from = innerHeight + height * .33, to = innerHeight * .45, small = innerWidth < 900 ? .88 : .66;
+  const grown = Math.min(1, Math.max(0, (from - centre) / (from - to)));
+  runLineFrame();
+  bigPhoto.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
+}
+// Огромный вопрос едет вбок вместе с прокруткой и наклоняется от её скорости, потом выпрямляется. На телефоне он стоит на месте, как в оригинале
+let runShift = 0, runSkew = 0, lastY = scrollY, lastT = performance.now(), runFading = false;
+const runPaint = () => { runLine.style.transform = `translate3d(${runShift.toFixed(1)}px,0,0) skewX(${runSkew.toFixed(2)}deg)`; };
+function runFade() {
+  runSkew = Math.abs(runSkew) > .1 ? runSkew * .8 : 0;
+  runPaint();
+  runFading = runSkew !== 0;
+  if (runFading) requestAnimationFrame(runFade);
+}
+function runLineFrame() {
+  const now = performance.now(), speed = (scrollY - lastY) / Math.max(1, now - lastT) * 1000;
+  lastY = scrollY; lastT = now;
+  if (innerWidth < 900) { runLine.style.transform = ''; return; }
+  const start = innerHeight, end = innerHeight * .3 - runLine.offsetHeight, top = runLine.getBoundingClientRect().top;
+  const road = Math.max(0, runLine.offsetWidth + 2 * runLine.offsetLeft - prices.clientWidth);
+  runShift = -road * Math.min(1, Math.max(0, (start - top) / (start - end)));
+  if (speed && top < innerHeight && top > -runLine.offsetHeight) runSkew = Math.max(-15, Math.min(15, speed / 20));
+  runPaint();
+  if (runSkew && !runFading) { runFading = true; requestAnimationFrame(runFade); }
+}
+let pricesQueued = false;
+addEventListener('scroll', () => {
+  if (pricesQueued) return;
+  pricesQueued = true;
+  requestAnimationFrame(() => { pricesQueued = false; pricesFrame(); });
+}, { passive: true });
+if (!still) prices.classList.add('running');
+addEventListener('resize', pricesFrame);
+pricesFrame();
+
+// Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
+function splitLines(e) {
+  const whole = e.innerHTML, words = e.textContent.trim().split(' ');
+  e.innerHTML = words.map((w) => `<span>${w}</span>`).join(' ');
+  const rows = [];
+  [...e.children].forEach((w, i) => {
+    if (!rows.length || w.offsetTop > rows.at(-1).top + 4) rows.push({ top: w.offsetTop, words: [] });
+    rows.at(-1).words.push(words[i]);
+  });
+  e.innerHTML = rows.map((r) => `<span class="ln">${r.words.join(' ')}</span>`).join(' ');
+  return { whole, lines: [...e.children] };
+}
+function riseUp(block) {
+  block.classList.remove('wait');
+  if (block.matches('.links')) return;
+  let n = 0;
+  (block.matches('.rent') ? [...block.children] : [block]).forEach((e) => {
+    const { whole, lines } = splitLines(e);
+    const moves = lines.map((l) => l.animate(
+      [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 800, delay: 100 * n++, easing: 'cubic-bezier(.165,.84,.44,1)', fill: 'backwards' },
+    ));
+    moves.at(-1).finished.then(() => { if (e.querySelector('.ln')) e.innerHTML = whole; }).catch(() => {});
+  });
+}
+if (!still && 'IntersectionObserver' in window) {
+  const rising = new IntersectionObserver((seen) => seen.forEach((s) => {
+    if (!s.isIntersecting && s.boundingClientRect.top > 0) return;
+    rising.unobserve(s.target);
+    riseUp(s.target);
+  }), { rootMargin: '0px 0px -10% 0px' });
+  $$('#prices h2, #prices .rent, #prices .deal, #prices .links').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
+}
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));
 document.addEventListener('click', (e) => {

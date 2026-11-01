@@ -17,7 +17,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 img{display:block;width:100%;height:auto}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--wine);outline-offset:2px}
-h1,h2,h3,.ribbon,.logo,.badge b,.addr,.phone,.sum,.whole p,.terms-big,.say p,.step b{font-family:var(--head);font-weight:500}
+h1,h2,h3,.ribbon,.logo,.badge b,.addr,.phone,.sum,.terms-big,.say p,.step b{font-family:var(--head);font-weight:500}
 
 /* Угол: звонок всегда на экране */
 .corner{position:fixed;z-index:20;top:0;right:0;display:flex;height:var(--bar)}
@@ -117,7 +117,7 @@ html:not(.on) .pin>*,html:not(.on) .corner{opacity:0;transition:none}
 .past-doors img{position:absolute;inset:0}
 .past figcaption{font-weight:600;color:var(--lime)}
 .past-text{padding:112px var(--m) 40px}
-.past h2,.prices h2,.fit h2,.voice h2,.road h2{font-size:clamp(40px,4.4vw,72px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
+.past h2,.fit h2,.voice h2,.road h2{font-size:clamp(40px,4.4vw,72px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
 .past h2{color:var(--lime);margin-bottom:32px}
 .past p{max-width:34em}
 .past .lead{font-size:clamp(20px,1.7vw,24px);line-height:1.5;color:var(--lime);margin-bottom:24px}
@@ -136,29 +136,31 @@ html:not(.on) .pin>*,html:not(.on) .corner{opacity:0;transition:none}
 /* Переход к следующему экрану встык в углу блока */
 .next{position:absolute;z-index:1;right:0;bottom:0;display:flex;height:var(--bar)}
 
-/* Цены: поля встык, цифра главная */
-.rent{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,min(40vw,1200px))}
-.rent-text{padding:64px var(--m);min-width:0}
-.sum{font-size:calc((100vw - min(40vw,1200px) - 2*var(--m))/2.55);line-height:1;letter-spacing:-.025em;font-weight:600;white-space:nowrap}
-.rent h3{font-size:clamp(24px,2.8vw,40px);line-height:1.15;margin-top:12px}
-.rent-text p:not(.sum){margin-top:16px;font-weight:600}
-.rent figcaption{font-weight:600}
-.r-small{background:var(--coral);color:var(--pine)}
-.r-small .rent-text{padding-top:96px}
-.r-small h2{margin-bottom:32px}
-.r-small figcaption{background:var(--pine);color:var(--lime)}
-.r-bigger{grid-template-columns:minmax(0,min(40vw,1200px)) minmax(0,1fr);background:var(--lime);color:var(--wine)}
-.r-bigger figcaption{background:var(--wine);color:var(--lime)}
-.r-entrance{grid-template-columns:1fr;background:var(--sky);color:var(--wine)}
-.r-entrance .rent-text{display:flex;align-items:flex-end;gap:48px}
-.r-entrance h3{margin:0 0 .6em}
-.whole{display:flex;align-items:center;background:var(--paper);color:var(--wine)}
-.whole img{flex:0 0 clamp(120px,22vw,360px);width:clamp(120px,22vw,360px);height:144px;object-fit:cover}
-.whole p{padding:16px var(--m);font-size:clamp(20px,2.2vw,32px);line-height:1.2;text-wrap:balance}
-.terms{position:relative;display:grid;grid-template-columns:7fr 5fr;gap:64px;padding:96px var(--m) calc(48px + var(--bar));background:var(--wine);color:var(--lime)}
+/* Цены: как блок с большим снимком в оригинале. Один цвет поля, один цвет текста, снимок лежит на поле, цифры заходят на него */
+.prices{padding:192px var(--m) 128px;overflow-x:clip;background:var(--lime);color:var(--wine);transition:background-color .75s,color .75s}
+.prices.above{background:var(--pine);color:var(--leaf)}
+.prices.below{background:var(--paper)}
+.prices h2,.sum{font-size:clamp(40px,6.67vw,96px);line-height:1.05;font-weight:600}
+.prices h2{text-wrap:balance}
+.running h2{font-size:clamp(150px,16.7vw,240px);line-height:1.1;white-space:nowrap;width:max-content;transform-origin:50% 100%}
+.big{position:relative;width:min(73.3vw,1017px);margin:128px auto 0}
+.big figure{aspect-ratio:1056/934;transform-origin:50% 50%}
+.big picture{height:100%}
+.rent h3{font-size:clamp(24px,2.78vw,40px);line-height:1.15;font-weight:500;text-wrap:balance}
+.r-small{position:absolute;z-index:1;top:36%;right:-14.5%;width:36%}
+.prices-end{display:grid;grid-template-columns:calc(46.7vw - var(--m)) minmax(0,1fr);margin-top:128px}
+.r-bigger{grid-row:1/3}
+.r-entrance{margin-top:256px}
+.prices-end>:not(.r-bigger){grid-column:2;max-width:40rem}
+.deal{margin-top:128px;font-size:clamp(18px,1.67vw,24px);line-height:1.5}
+.prices .links{margin-top:48px;flex-wrap:wrap}
+.prices .line{color:inherit;border:0;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size 2s cubic-bezier(.3,.7,.3,1),opacity .2s}
+.prices .line:hover{opacity:.65}
+.prices .wait .line{background-size:0 1px}
+.prices .ln{display:block}
+.prices h2.wait,.prices .rent.wait,.prices .deal.wait{opacity:0}
+
 .terms-big{font-size:clamp(28px,3.2vw,48px);line-height:1.15;text-wrap:balance}
-.terms p:not(.terms-big){margin-bottom:24px;font-size:20px;line-height:30px}
-.past :focus-visible,.terms :focus-visible{outline-color:var(--lime)}
 
 figure{margin:0;display:flex;flex-direction:column}
 figure picture{flex:1;display:block;overflow:hidden}
@@ -269,7 +271,7 @@ figcaption{padding:16px var(--m);font-weight:600}
   .past-doors{max-height:none}
   .past-doors img{position:static;height:auto}
   .past-text{padding:32px var(--m) 32px}
-  .past h2,.prices h2,.fit h2,.voice h2,.road h2{font-size:min(40px,10.6vw)}
+  .past h2,.fit h2,.voice h2,.road h2{font-size:min(40px,10.6vw)}
   .past h2{margin-bottom:20px}
   .past .lead{font-size:18px;line-height:27px;margin-bottom:16px}
   .past-air{margin:0}
@@ -277,22 +279,18 @@ figcaption{padding:16px var(--m);font-weight:600}
   .past-air figcaption{padding:0 16px 8px var(--m);font-size:14px;line-height:20px}
   .next{position:static;height:auto}
   .next .tab{flex:1;height:auto;min-height:56px;padding:12px 16px;justify-content:center;text-align:center;white-space:normal;text-wrap:balance;font-size:14px;letter-spacing:1px}
-  .rent,.r-entrance{display:block}
-  .r-bigger{display:flex;flex-direction:column-reverse}
-  .rent-text,.r-small .rent-text{padding:40px var(--m) 32px}
-  .r-small h2{margin-bottom:16px}
-  .sum{font-size:calc((100vw - 2*var(--m))/2.55)}
-  .r-entrance .sum{margin-left:0}
+  .prices{padding:96px var(--m) 64px}
+  .prices h2,.running h2{font-size:min(56px,14.3vw);line-height:1.05;white-space:normal;width:auto}
+  .sum{font-size:min(56px,14.4vw)}
+  .big figure{aspect-ratio:294/485}
   .rent h3{font-size:24px;line-height:28px}
-  .whole img{height:96px}
-  .whole p{padding:12px var(--m);font-size:18px;line-height:23px}
-  .terms{display:block;padding:40px var(--m)}
-  .terms-big{margin-bottom:24px}
-  .terms p:not(.terms-big){font-size:16px;line-height:24px}
-  .terms .next{position:static;margin:32px calc(-1*var(--m)) -40px}
-  .r-entrance .rent-text{display:block}
-  .r-entrance .sum{font-size:calc((100vw - 2*var(--m))/3.28);margin-left:0}
-  .r-entrance h3{margin:12px 0 0}
+  .r-small{position:static;width:auto;margin-top:64px;text-align:right}
+  .big{width:100%;margin-top:96px}
+  .big figure{width:min(75.4%,48svh,480px);margin:auto}
+  .prices-end{display:block;margin-top:128px}
+  .r-entrance{margin-top:128px;text-align:right}
+  .deal{margin-top:128px;font-size:18px;line-height:27px}
+  .prices .links{margin-top:32px;flex-direction:column;align-items:flex-start;gap:8px}
   .fit-head,.job,.voice-top,.voice-deal,.road-head,.tips{display:block}
   .fit-head{padding:48px var(--m) 24px}
   .fit-head p{margin-top:12px}
