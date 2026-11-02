@@ -94,6 +94,9 @@ h1{font-size:clamp(40px,min(6.2vw,11vh),96px);line-height:1.05;font-weight:600;t
 .close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--paper);color:var(--wine);display:grid;place-items:center}
 .close:hover{background:var(--cream)}
 
+/* Почти квадратное окно: макету нужна ширина, заголовок уже */
+@media (min-width:900px) and (max-aspect-ratio:7/5){.plan-head{width:200px}.plan-head h2{font-size:32px}}
+
 /* Страница ниже плана: одно поле, один цвет текста, один акцент на кнопках, один столбец. На блоке заголовок, снимок и пара строк */
 .flow{display:flow-root;width:min(73.3vw,1017px);margin:auto;padding:128px 0}
 .flow h2{font-size:clamp(36px,5vw,72px);line-height:1.1;font-weight:600;text-wrap:balance}

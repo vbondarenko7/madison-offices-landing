@@ -54,9 +54,9 @@ function place() {
   planStage.style.top = head + 'px';
   // Сбоку от макета остаётся место для заголовка: левый край стола на его высоте примерно на 480 в кадре
   const free = $('.plan-head').offsetLeft + $('.plan-head').offsetWidth + 16;
-  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, (w - free) / (x1 - 480));
-  const cx = tall() ? w / 2 : Math.max(w * .68, free + (x0 + bw / 2 - 480) * k);
-  // Низ кадра не должен показаться на экране: там он обрезан ровной линией
+  // Кадр всегда выше экрана: его верх и низ обрезаны ровной линией и показаться не должны
+  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.max(h / 1080, Math.min((h - 32) / bh, 1.3, (w - free) / (x1 - 480)));
+  const cx = tall() ? w / 2 : Math.min(w - bw * k / 2 - 8, Math.max(w * .68, free + (x0 + bw / 2 - 480) * k));
   Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k, room - 1080 * k) });
   lifted = 0;
   rig.style.transition = 'none'; // на свои места сразу, плавно едет только подъём под лист
