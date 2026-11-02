@@ -412,9 +412,11 @@ addEventListener('scroll', () => {
 }, { passive: true });
 addEventListener('resize', arrive);
 arrive();
-// --- Живой макет: свет идёт волной от комнаты к комнате, деревья шевелятся. Видеокарта считает один проход по видимой части кадра; нет видеокарты или «меньше движения», остаётся обычный снимок -----
+// --- Живой макет: свет идёт волной от комнаты к комнате, кроны сдвигаются от прокрутки, как объём при смене взгляда. Видеокарта считает один проход по видимой части кадра; нет видеокарты или «меньше движения», остаётся обычный снимок -----
 // Настройка одной строкой. warm и cool множители к кадру со светом, coolShare доля комнат с прохладным светом, rest свет между волнами, strength сила, seconds за сколько волна возвращается в ту же комнату
 const BREATH = { warm: [1.06, 1, .92], cool: [.66, .86, 1.3], coolShare: .12, rest: .12, strength: .9, seconds: 11 };
+// Сдвиг самых высоких крон в точках кадра, когда макет на экран от своего места; sideways доля вбок. Низкие кроны сдвигаются меньше, пока страница стоит, стоят и деревья
+const TREES = { px: 20, sideways: -.33 };
 
 const LIVE_VERTEX = 'attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}';
 const LIVE_FRAGMENT = `#ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -425,13 +427,29 @@ const LIVE_FRAGMENT = `#ifdef GL_FRAGMENT_PRECISION_HIGH
   uniform sampler2D img, map, svet, mask;
   uniform vec4 box, crop;
   uniform vec3 warm, cool;
-  uniform float t, beat, rest, strength, on;
+  uniform vec2 shift;
+  uniform float beat, rest, strength, on;
   varying vec2 v;
+  // Высота над землёй берётся только у деревьев: красный канал высота, зелёный где дерево
+  float crown(vec2 p) {
+    vec4 d = texture2D(map, p);
+    return smoothstep(.5, .9, d.g) * max(0., d.r - .62) / .38; // стены рядом с кроной не гнутся
+  }
   void main() {
     vec2 f = box.xy + vec2(v.x, 1. - v.y) * box.zw;
     vec2 q = f / vec2(1920., 1080.);
-    float wind = texture2D(map, q).g;
-    if (wind > .02) q += wind * vec2(.0024 * sin(t * 1.3 + q.y * 70. + q.x * 31.) + .0012 * sin(t * 2.7 + q.x * 90.), .004 * cos(t * 1.1 + q.x * 60. + q.y * 20.));
+    // Луч идёт сверху вниз, пока не встретит крону: высокие части сдвигаются больше низких, край кроны не рвётся. Вся работа только рядом с деревьями
+    if (texture2D(map, q).g + texture2D(map, q - shift).g > .02) {
+      float h = 1., gap = 1. - crown(q - shift), low = 0., under = 0.;
+      for (int i = 0; i < 6; i++) {
+        low = h - 1. / 6.;
+        under = low - crown(q - shift * low);
+        if (under <= 0.) break;
+        h = low;
+        gap = under;
+      }
+      q -= shift * (h - (h - low) * gap / max(gap - under, .0001));
+    }
     vec4 c = texture2D(img, q);
     vec2 r = (f - crop.xy) / crop.zw;
     if (r.x > 0. && r.y > 0. && r.x < 1. && r.y < 1.) {
@@ -500,7 +518,7 @@ function makeLive(depth) {
   // Телефон может отобрать видеопамять: тогда под холстом обычный снимок
   canvas.addEventListener('webglcontextlost', () => { canvas.remove(); live = null; });
   rig.insertBefore(canvas, glow);
-  return { canvas, gl, uBox: u('box'), uT: u('t'), uBeat: u('beat'), uOn: u('on') };
+  return { canvas, gl, uBox: u('box'), uShift: u('shift'), uBeat: u('beat'), uOn: u('on') };
 }
 // Холст только на ту часть кадра, что видна на этом экране, с запасом. Точек столько, сколько даёт сам кадр, остальное дорисует браузер
 function fitLive() {
@@ -514,13 +532,16 @@ function fitLive() {
   live.gl.viewport(0, 0, live.canvas.width, live.canvas.height);
   live.gl.uniform4f(live.uBox, x0, y0, w, h);
 }
-let liveSeen = false, liveBefore = 0;
+let liveSeen = false, liveBefore = 0, treesNow = null;
 function liveFrame(now) {
   if (!liveSeen || !live) return;
   requestAnimationFrame(liveFrame);
   if (now - liveBefore < 30) return; // тридцати кадров хватает, телефон не греется
+  // Цель зависит только от положения прокрутки, сдвиг плавно её догоняет
+  const treesAim = Math.max(-1, Math.min(1, plan.getBoundingClientRect().top / innerHeight)) * TREES.px;
+  treesNow = treesNow === null ? treesAim : treesNow + (treesAim - treesNow) * (1 - .925 ** (Math.min(now - liveBefore, 50) / 16.7));
   liveBefore = now;
-  live.gl.uniform1f(live.uT, (now / 1000) % 3600);
+  live.gl.uniform2f(live.uShift, TREES.sideways * treesNow / 1920, treesNow / 1080);
   live.gl.uniform1f(live.uBeat, (now / 1000 / BREATH.seconds) % 1);
   live.gl.uniform1f(live.uOn, lightsOn);
   live.gl.drawArrays(live.gl.TRIANGLES, 0, 3);
