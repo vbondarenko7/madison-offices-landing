@@ -52,11 +52,18 @@ function place() {
   const w = plan.clientWidth, h = plan.clientHeight, [x0, y0, x1, y1] = BOX, bw = x1 - x0, bh = y1 - y0;
   const head = tall() ? $('.plan-head').offsetHeight : 0, room = h - head;
   planStage.style.top = head + 'px';
-  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, w * .66 / bw);
-  const cx = tall() ? w / 2 : w * .68;
-  Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k });
+  // Сбоку от макета остаётся место для заголовка: левый край стола на его высоте примерно на 480 в кадре
+  const free = $('.plan-head').offsetLeft + $('.plan-head').offsetWidth + 16;
+  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.min((h - 32) / bh, 1.3, (w - free) / (x1 - 480));
+  const cx = tall() ? w / 2 : Math.max(w * .68, free + (x0 + bw / 2 - 480) * k);
+  // Низ кадра не должен показаться на экране: там он обрезан ровной линией
+  Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k, room - 1080 * k) });
   lifted = 0;
+  rig.style.transition = 'none'; // на свои места сразу, плавно едет только подъём под лист
   if (shown) lift(shown); else apply();
+  rig.offsetWidth;
+  rig.style.transition = '';
+  fitLive();
 }
 // Страницу двинули дальше: лист уходит сразу, чтобы прокрутка не казалась зависшей
 addEventListener('scroll', () => { if (Math.abs(scrollY - sheetAt) > 40) closeSheet(true); }, { passive: true });
@@ -144,6 +151,7 @@ function frame(now) {
     }
   }
   ctx.globalAlpha = 1;
+  if (drawNudge(now)) busy = true;
   if (busy) requestAnimationFrame(frame); else running = false;
 }
 function wake() {
@@ -170,11 +178,13 @@ rig.addEventListener('pointerdown', (e) => {
   dragged = false;
   if (e.pointerType === 'mouse') return;
   setHot(point(e));
+  if (hot) hot.a = 1; // палец: комната горит сразу, без нарастания
   dragX = tall() ? e.clientX : null;
   rig.style.transition = 'none';
 });
 rig.addEventListener('pointermove', (e) => {
   setHot(point(e));
+  if (e.pointerType === 'mouse') rig.classList.toggle('over', !!hot); // рука только над комнатой
   if (dragX === null) return;
   const by = e.clientX - dragX;
   if (Math.abs(by) < 4 && !dragged) return;
@@ -379,6 +389,254 @@ if (!still && 'IntersectionObserver' in window) {
     riseUp(s.target);
   }), { rootMargin: '0px 0px -10% 0px' });
   $$('.rise').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
+}
+// --- Стык первого экрана и макета. Чем дальше макет от своего места, тем выше над ним дымка цвета страницы, поэтому верхнего края у него не видно. Заодно макет чуть вырастает и в комнатах постепенно загорается свет. Всё считается только от прокрутки, сама она ничем не задерживается ---
+// from размер макета в начале, haze высота дымки от пройденного пути
+const ARRIVE = { from: .9, haze: .5 };
+const veil = $('#veil'), nearBox = $('#near');
+let lightsOn = still ? 1 : 0;
+
+function arrive() {
+  const away = Math.max(0, plan.getBoundingClientRect().top), h = plan.offsetHeight || 1;
+  veil.style.transform = `scaleY(${Math.min(1, away * ARRIVE.haze / h).toFixed(4)})`;
+  if (still) return;
+  const near = Math.max(0, 1 - away / (innerHeight * .95));
+  nearBox.style.transform = `scale(${(ARRIVE.from + (1 - ARRIVE.from) * toEase(near)).toFixed(4)})`;
+  lightsOn = near;
+}
+let arriveQueued = false;
+addEventListener('scroll', () => {
+  if (arriveQueued) return;
+  arriveQueued = true;
+  requestAnimationFrame(() => { arriveQueued = false; arrive(); });
+}, { passive: true });
+addEventListener('resize', arrive);
+arrive();
+// --- Живой макет: свет идёт волной от комнаты к комнате, деревья шевелятся. Видеокарта считает один проход по видимой части кадра; нет видеокарты или «меньше движения», остаётся обычный снимок -----
+// Настройка одной строкой. warm и cool множители к кадру со светом, coolShare доля комнат с прохладным светом, rest свет между волнами, strength сила, seconds за сколько волна возвращается в ту же комнату
+const BREATH = { warm: [1.06, 1, .92], cool: [.66, .86, 1.3], coolShare: .12, rest: .12, strength: .9, seconds: 11 };
+
+const LIVE_VERTEX = 'attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}';
+const LIVE_FRAGMENT = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+  uniform sampler2D img, map, svet, mask;
+  uniform vec4 box, crop;
+  uniform vec3 warm, cool;
+  uniform float t, beat, rest, strength, on;
+  varying vec2 v;
+  void main() {
+    vec2 f = box.xy + vec2(v.x, 1. - v.y) * box.zw;
+    vec2 q = f / vec2(1920., 1080.);
+    float wind = texture2D(map, q).g;
+    if (wind > .02) q += wind * vec2(.0024 * sin(t * 1.3 + q.y * 70. + q.x * 31.) + .0012 * sin(t * 2.7 + q.x * 90.), .004 * cos(t * 1.1 + q.x * 60. + q.y * 20.));
+    vec4 c = texture2D(img, q);
+    vec2 r = (f - crop.xy) / crop.zw;
+    if (r.x > 0. && r.y > 0. && r.x < 1. && r.y < 1.) {
+      vec4 m = texture2D(mask, r);
+      if (m.a > 0.) {
+        float wave = .5 + .5 * sin(6.2832 * (beat - 2. * m.r));
+        float amount = m.a * strength * (rest + (1. - rest) * wave * wave * wave) * smoothstep(m.r - .15, m.r + .15, on * 1.3 - .15);
+        c.rgb = mix(c.rgb, texture2D(svet, r).rgb * mix(warm, cool, m.g), amount);
+      }
+    }
+    gl_FragColor = c;
+  }`;
+let live; // пока не готов; null, когда без него
+
+// У каждой комнаты своё место в волне: сверху вниз по зданию и чуть вразнобой. Красный канал это место в волне, зелёный прохладный свет
+function roomMask() {
+  const c = document.createElement('canvas');
+  c.width = CW; c.height = CH;
+  const g = c.getContext('2d');
+  g.translate(-CX, -CY);
+  rooms.forEach((r) => {
+    const ys = r.floor.filter((_, i) => i % 2), down = (ys.reduce((a, b) => a + b) / ys.length - CY) / CH;
+    const place = .8 * down + .2 * ((r.id * .618) % 1), cold = (r.id * .382) % 1 < BREATH.coolShare ? 255 : 0;
+    g.fillStyle = `rgb(${Math.round(place * 255)},${cold},0)`;
+    g.fill(r.all);
+  });
+  return c;
+}
+
+function makeLive(depth) {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'alive';
+  const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
+  if (!gl) return null;
+  const program = gl.createProgram();
+  [[gl.VERTEX_SHADER, LIVE_VERTEX], [gl.FRAGMENT_SHADER, LIVE_FRAGMENT]].forEach(([type, src]) => {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    gl.attachShader(program, s);
+  });
+  gl.bindAttribLocation(program, 0, 'a');
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
+  gl.useProgram(program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  const u = (name) => gl.getUniformLocation(program, name);
+  [['img', rig.querySelector('img'), true], ['map', depth, false], ['svet', lit, false], ['mask', roomMask(), false]].forEach(([name, pic, clear], unit) => {
+    gl.activeTexture(gl.TEXTURE0 + unit);
+    gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, clear);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pic);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform1i(u(name), unit);
+  });
+  gl.uniform4f(u('crop'), CX, CY, CW, CH);
+  gl.uniform3fv(u('warm'), BREATH.warm);
+  gl.uniform3fv(u('cool'), BREATH.cool);
+  gl.uniform1f(u('rest'), BREATH.rest);
+  gl.uniform1f(u('strength'), BREATH.strength);
+  // Телефон может отобрать видеопамять: тогда под холстом обычный снимок
+  canvas.addEventListener('webglcontextlost', () => { canvas.remove(); live = null; });
+  rig.insertBefore(canvas, glow);
+  return { canvas, gl, uBox: u('box'), uT: u('t'), uBeat: u('beat'), uOn: u('on') };
+}
+// Холст только на ту часть кадра, что видна на этом экране, с запасом. Точек столько, сколько даёт сам кадр, остальное дорисует браузер
+function fitLive() {
+  if (!live) return;
+  const { k, x, y } = view, m = 60;
+  const x0 = Math.max(0, Math.floor(tall() ? BOX[0] - m : -x / k - m)), x1 = Math.min(1920, Math.ceil(tall() ? BOX[2] + m : (plan.clientWidth - x) / k + m));
+  const y0 = Math.max(0, Math.floor(-y / k - m)), w = x1 - x0, h = 1080 - y0, sharp = Math.min(1, k * devicePixelRatio);
+  Object.assign(live.canvas.style, { left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px' });
+  live.canvas.width = Math.round(w * sharp);
+  live.canvas.height = Math.round(h * sharp);
+  live.gl.viewport(0, 0, live.canvas.width, live.canvas.height);
+  live.gl.uniform4f(live.uBox, x0, y0, w, h);
+}
+let liveSeen = false, liveBefore = 0;
+function liveFrame(now) {
+  if (!liveSeen || !live) return;
+  requestAnimationFrame(liveFrame);
+  if (now - liveBefore < 30) return; // тридцати кадров хватает, телефон не греется
+  liveBefore = now;
+  live.gl.uniform1f(live.uT, (now / 1000) % 3600);
+  live.gl.uniform1f(live.uBeat, (now / 1000 / BREATH.seconds) % 1);
+  live.gl.uniform1f(live.uOn, lightsOn);
+  live.gl.drawArrays(live.gl.TRIANGLES, 0, 3);
+}
+if (!still) {
+  const depth = new Image();
+  depth.src = 'img/maket-depth.webp';
+  Promise.all([depth.decode(), new Promise((done) => lit.addEventListener('load', done, { once: true }))]).then(() => {
+    live = makeLive(depth);
+    if (!live) return;
+    fitLive();
+    new IntersectionObserver(([e]) => {
+      const was = liveSeen;
+      liveSeen = e.isIntersecting;
+      if (liveSeen && !was) requestAnimationFrame(liveFrame);
+    }).observe(plan);
+  }).catch(() => { live = null; });
+} else live = null;
+// --- Подсказка без слов: сам макет показывает, что на комнату можно нажать. Комната загорается, чуть приподнимается, на ней расходится круг. Первое действие человека её выключает, остаётся дыхание ---
+// ms одна комната, gap пауза между комнатами, total сколько комнат показать и замолчать, lift подъём и ring радиус круга в точках экрана
+const NUDGE = { ms: 2100, gap: 1500, total: 8, lift: 7, ring: 46 };
+let nudge = null, nudgesLeft = NUDGE.total, nudgeTimer = 0, nudgeBag = [];
+
+const nudgeSeen = () => plan.getBoundingClientRect().top < innerHeight * .35 && plan.getBoundingClientRect().bottom > innerHeight * .65;
+// Комнаты вперемешку: каждая покажется только после всех остальных, с листа и в углах не показываем
+function nextNudge() {
+  const b = rig.getBoundingClientRect(), k = b.width / 1920, head = $('.plan-head').getBoundingClientRect();
+  if (!nudgeBag.length) {
+    nudgeBag = [...rooms];
+    for (let i = nudgeBag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [nudgeBag[i], nudgeBag[j]] = [nudgeBag[j], nudgeBag[i]];
+    }
+  }
+  for (let i = nudgeBag.length - 1; i >= 0; i--) {
+    const r = nudgeBag[i], xs = r.floor.filter((_, n) => !(n % 2)), ys = r.floor.filter((_, n) => n % 2);
+    const x = xs.reduce((a, c) => a + c) / xs.length, y = ys.reduce((a, c) => a + c) / ys.length;
+    const sx = b.left + x * k, sy = b.top + y * k, reach = NUDGE.ring + 16;
+    if (sx < reach || sx > innerWidth - reach || sy < Math.max(reach, tall() ? head.bottom + reach : 96) || sy > innerHeight - reach) continue;
+    if (x - CX < reach / k || x > CX + CW - reach / k || y - CY < reach / k || y > CY + CH - reach / k) continue;
+    nudgeBag.splice(i, 1);
+    return { room: r, x, y };
+  }
+  nudgeBag = [];
+  return null;
+}
+function playNudge() {
+  clearTimeout(nudgeTimer);
+  if (nudgesLeft <= 0 || live === null) return;
+  const next = live && nudgeSeen() && !hot && !shown ? nextNudge() : null;
+  if (!next) { nudgeTimer = setTimeout(playNudge, 700); return; }
+  nudgesLeft--;
+  nudge = { ...next, at: performance.now() };
+  wake();
+}
+function hushNudge() {
+  nudgesLeft = 0;
+  clearTimeout(nudgeTimer);
+}
+// Рисует rooms.js в своём кадре, отвечает, идёт ли ещё движение
+function drawNudge(now) {
+  if (!nudge) return false;
+  const age = (now - nudge.at) / NUDGE.ms;
+  if (age >= 1) {
+    nudge = null;
+    if (nudgesLeft > 0) nudgeTimer = setTimeout(playNudge, NUDGE.gap);
+    return false;
+  }
+  if (age < 0) return true;
+  const { room, x, y } = nudge;
+  // Быстро загорается, долго гаснет
+  const glowAt = age < .2 ? toEase(age / .2) : 1 - (Math.max(0, age - .4) / .6) ** 2;
+  const up = NUDGE.lift * glowAt / view.k;
+  ctx.save();
+  ctx.globalAlpha = glowAt * .4;
+  ctx.fillStyle = '#1c0d04';
+  ctx.fill(room.all);
+  ctx.restore();
+  ctx.save();
+  ctx.translate(0, -up);
+  ctx.globalAlpha = glowAt;
+  ctx.save();
+  ctx.clip(room.all);
+  if (litReady()) ctx.drawImage(lit, CX, CY, CW, CH);
+  ctx.globalCompositeOperation = 'screen'; // заметнее дышащих соседей
+  ctx.fillStyle = 'rgba(255,190,120,.26)';
+  ctx.fill(room.all);
+  ctx.restore();
+  ctx.strokeStyle = '#ffe2bd';
+  ctx.lineWidth = 1.6 / view.k;
+  ctx.lineJoin = 'round';
+  ctx.stroke(room.line);
+  ctx.restore();
+  // Круг расходится как от касания, начинается, когда комната уже загорелась
+  const spread = Math.max(0, (age - .14) / .62);
+  if (spread > 0 && spread < 1) {
+    ctx.save();
+    ctx.globalAlpha = (1 - spread) ** 1.5 * .9;
+    ctx.strokeStyle = '#fff4e4';
+    ctx.lineWidth = 2 / view.k;
+    ctx.beginPath();
+    ctx.arc(x, y - up, (10 + (NUDGE.ring - 10) * toEase(spread)) / view.k, 0, 6.2832);
+    ctx.stroke();
+    ctx.restore();
+  }
+  return true;
+}
+// Человек сам взялся за макет: мышь над ним, нажатие, стрелки или палец вбок. Прокрутка не считается
+rig.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || dragged) hushNudge(); });
+rig.addEventListener('click', hushNudge);
+rig.addEventListener('keydown', hushNudge);
+if (!still) {
+  let started = false;
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !started) { started = true; nudgeTimer = setTimeout(playNudge, 500); }
+  }, { threshold: .4 }).observe(planStage);
 }
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
 $$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));

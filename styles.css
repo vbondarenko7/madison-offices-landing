@@ -72,7 +72,10 @@ h1{font-size:clamp(40px,min(6.2vw,11vh),96px);line-height:1.05;font-weight:600;t
 .plan-head h2{font-size:clamp(32px,3.1vw,44px);line-height:1.1;font-weight:600}
 .plan-head p{margin-top:12px}
 .plan-stage{position:absolute;inset:0;overflow:hidden;overflow:clip}
-.rig{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .5s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer}
+.near{position:absolute;inset:0;transform-origin:68% 50%}
+.veil{position:absolute;z-index:2;left:0;right:0;top:0;height:100%;transform:scaleY(0);transform-origin:0 0;pointer-events:none;background:linear-gradient(var(--paper),rgba(240,239,235,.82) 25%,rgba(240,239,235,.5) 50%,rgba(240,239,235,.18) 75%,rgba(240,239,235,0))}
+.rig{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .5s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.rig.over{cursor:pointer}
 .rig img{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
 .rig canvas{position:absolute;pointer-events:none}
 .rig:focus-visible{outline:none}
@@ -190,6 +193,7 @@ figcaption{padding:16px var(--m);font-weight:600}
   .plan-head{position:relative;left:0;top:0;width:auto;padding:72px var(--m) 12px}
   .plan-head h2{font-size:32px}
   .plan-head p{margin-top:12px;font-size:16px;line-height:24px}
+  .near{transform-origin:50% 45%}
   .plan-stage{-webkit-mask-image:linear-gradient(transparent,#000 28px);mask-image:linear-gradient(transparent,#000 28px)}
 }
 @media (prefers-reduced-motion:reduce){
