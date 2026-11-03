@@ -296,6 +296,12 @@ lead.addEventListener('submit', (e) => {
   leadOff.hidden = false;
   leadOff.scrollIntoView({ block: 'nearest' });
 });
+// На экране с людьми (v5) форма лежит в листе и открывается кнопкой «Записаться на просмотр»; на других экранах листа нет
+const ask = $('#ask');
+if (ask) {
+  $('#book').addEventListener('click', () => ask.showModal());
+  $('#ask-close').addEventListener('click', () => ask.close());
+}
 
 // --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
 const growing = $$('.grow');
