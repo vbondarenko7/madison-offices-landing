@@ -34,8 +34,9 @@ h1 em{font-style:normal;color:var(--coral)}
 /* Люди: картинка во всю ширину, прижата к низу. На коротком экране обрезается снизу, не сверху: макушки всегда под заголовком */
 .crowd{position:absolute;left:0;right:0;bottom:0;z-index:1;container-type:inline-size;height:min(46.62vw,calc(100% - 290px));animation:walk 1.4s cubic-bezier(.16,1,.3,1) both}
 .crowd img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
-/* Подпись кремовая, по буквам тонкая бордовая обводка: на тёмной одежде её не видно, на светлом халате врача она держит буквы */
-.tag{position:absolute;width:max-content;color:var(--cream);font:700 clamp(16px,1.95cqw,30px)/1.12 var(--text);text-wrap:balance;paint-order:stroke fill;-webkit-text-stroke:.09em var(--wine);pointer-events:none;animation:rise .8s calc(.9s + var(--i)*.1s) cubic-bezier(.16,1,.3,1) both}
+/* Подпись кремовая, под ней мягкое бордовое пятно без краёв, как на эскизе: на тёмной одежде его не видно, на светлом халате врача оно держит буквы */
+.tag{position:absolute;z-index:1;width:max-content;color:var(--cream);font:700 clamp(16px,1.95cqw,30px)/1.12 var(--text);text-wrap:balance;pointer-events:none;animation:rise .8s calc(.9s + var(--i)*.1s) cubic-bezier(.16,1,.3,1) both}
+.tag::before{content:"";position:absolute;z-index:-1;inset:-.3em -.5em;border-radius:1em;background:var(--wine);opacity:.85;filter:blur(.45em)}
 .t1{--i:0;left:6.6cqw;top:21.4cqw;max-width:6.5em}
 .t2{--i:1;left:21cqw;top:22.6cqw;max-width:7.5em}
 .t3{--i:2;left:41.4cqw;top:21.4cqw;max-width:8em}
@@ -73,8 +74,8 @@ h1 em{font-style:normal;color:var(--coral)}
   .book{align-self:flex-start;margin-top:16px;font-size:14px;letter-spacing:1.2px;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
   .crowd{position:relative;height:auto;aspect-ratio:852/1301;margin:16px calc(-1*var(--m)) 0}
   .tag{font-size:clamp(14px,4.4cqw,20px)}
-  .t3{left:14.7cqw;top:33.5cqw;max-width:7.6em}
-  .t4{left:51cqw;top:33.5cqw;max-width:8.6em}
+  .t3{left:12cqw;top:33.5cqw;max-width:7.6em}
+  .t4{left:49.5cqw;top:33.5cqw;max-width:8.6em}
   .t1{left:12.9cqw;top:81.6cqw;max-width:6em}
   .t2{left:37.6cqw;top:81.6cqw;max-width:7em}
   .t5{left:auto;right:4cqw;top:81.6cqw;max-width:5.6em}
