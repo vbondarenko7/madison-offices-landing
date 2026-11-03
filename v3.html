@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center</title>
+<meta name="description" content="Сдаём офисы на 5345 Madison Ave в Сакраменто. Самый маленький стоит $500 в месяц, договор от года. Здание за забором с воротами, доступ круглосуточный. Звоните: 916-914-4407.">
+<meta property="og:title" content="Офисы в аренду в Сакраменто от $500 в месяц">
+<meta property="og:description" content="Madison Business Center, 5345 Madison Ave. Самый маленький офис стоит $500 в месяц. Звоните или пишите: 916-914-4407.">
+<meta name="theme-color" content="#792228">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="site.js" as="script">
+<link rel="stylesheet" href="styles.css">
+<style>/* Вариант 3: первым экраном нарисованная сцена здания и ворот, та же, что была в блоке «Ворота и доступ». Заголовок стоит в её небе, факты и заявка на светлой карточке справа.
+   При загрузке проступает рисунок, встаёт солнце и ворота откатываются. Ниже по странице сцена не повторяется */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) min(440px,36vw);grid-template-rows:auto 1fr;column-gap:64px;min-height:100vh;min-height:100svh;padding:96px var(--m) 0;overflow:hidden;overflow:clip}
+/* Заголовок шире своей колонки: над карточкой место свободно, она прижата к низу */
+.offer{grid-column:1;grid-row:1;position:relative;z-index:1}
+h1{width:min(19.5em,100vw - 2 * var(--m));font-size:clamp(40px,min(3.9vw,7.6vh),72px);line-height:1.05;font-weight:600}
+.offer .deal{margin-top:16px}
+/* Рисунок лежит низом на краю экрана, его пустое небо уходит под заголовок. Ширина такая, чтобы деревья не доставали до текста */
+.scape{grid-column:1/-1;grid-row:2;position:relative;min-height:280px;margin:0 calc(-1 * var(--m));container-type:size}
+.scape-set{position:absolute;left:0;bottom:0;width:min(100cqw,162cqh);aspect-ratio:4/3;-webkit-mask-image:linear-gradient(to left,transparent,#000 12%);mask-image:linear-gradient(to left,transparent,#000 12%)}
+.scape-set img{position:absolute;inset:0;width:100%;height:100%}
+.scape-set img:first-of-type{animation:ink 1.2s ease-out both}
+.scape-sun{position:absolute;left:50%;top:24%;width:22%;aspect-ratio:1;border-radius:50%;background:var(--coral);animation:dawn 2.4s .2s cubic-bezier(.16,1,.3,1) both}
+.scape-gate{animation:open 2.6s .9s cubic-bezier(.65,0,.35,1) both}
+.card{grid-column:2;grid-row:1/-1;align-self:end;position:relative;z-index:1;margin-bottom:clamp(24px,5vh,48px);padding:32px;background:var(--paper);color:var(--wine)}
+.card .book{margin-top:28px}
+/* Сцена переехала наверх, в блоке ворот остаются заголовок и строка */
+#gates .scene-room{display:none}
+@keyframes ink{from{opacity:0}}
+@keyframes dawn{from{transform:translateY(130%)}}
+@keyframes open{to{transform:translateX(43%)}}
+
+@media (max-width:899px){
+  /* На телефоне рисунок сверху под шапкой и берёт место, что осталось от заявки. На низком экране видны ворота, верх и низ растворяются в поле */
+  .hero{display:flex;flex-direction:column;padding:60px var(--m) 20px}
+  .scape{order:-1;flex:1 0 0;min-height:80px;max-height:50svh;overflow:hidden;overflow:clip;-webkit-mask-image:linear-gradient(transparent,#000 25%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 25%,#000 80%,transparent)}
+  .scape-set{left:calc((100cqw - max(100cqw,133.4cqh)) * .5);bottom:-20%;width:max(100cqw,133.4cqh);-webkit-mask-image:none;mask-image:none}
+  .offer{margin-top:8px}
+  h1{font-size:min(32px,8.6vw)}
+  .offer .deal{margin-top:10px;font-size:15px;line-height:22px}
+  .card{margin:16px 0 0;padding:0;background:none}
+  .card .facts li{padding:6px 0}
+  .card .book{margin-top:16px}
+}</style>
+</head>
+<body>
+<div class="corner">
+  <a class="cta" href="tel:+19169144407" aria-label="Позвонить 916-914-4407" data-en-label="Call 916-914-4407"><span class="roll"><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i></span></a>
+  <button class="sq" type="button" id="lang" aria-label="English">EN</button>
+  <details class="menu sq" id="menu">
+    <summary aria-label="Меню" data-en-label="Menu"><span class="lines"></span></summary>
+    <nav class="drop">
+      <a href="#building" data-en="Floor plan">План здания</a>
+      <a href="#prices" data-en="Prices">Цены</a>
+      <a href="#radio" data-en="Radio stations and quiet">Радиостанции и тишина</a>
+      <a href="#gates" data-en="Gate and access">Ворота и доступ</a>
+      <a href="#fit" data-en="For your business">Для вашего дела</a>
+      <a href="#voice" data-en="Voice assistant bonus">Голосовой помощник</a>
+      <a href="#contact" data-en="Come see it">Приехать посмотреть</a>
+    </nav>
+  </details>
+</div>
+
+<a class="logo" href="#top">Madison</a>
+<header class="hero" id="top">
+  <div class="offer">
+    <h1 data-en="Small offices in Sacramento from&nbsp;$500 a&nbsp;month">Небольшие офисы в Сакраменто от&nbsp;$500 в&nbsp;месяц</h1>
+    <p class="deal"><span data-en="One-year lease, one month's rent as deposit.">Договор от года, залог как месяц аренды.</span><br>5345 Madison Ave, Sacramento, CA 95841</p>
+  </div>
+  <div class="scape" role="img" aria-label="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-label="A sliding gate with the parking lot behind it and the brick building on the left">
+    <div class="scape-set">
+      <i class="scape-sun"></i>
+      <img src="img/scene-print.webp" width="1448" height="1086" fetchpriority="high" alt="">
+      <img class="scape-gate" src="img/scene-gate.webp" width="1448" height="1086" alt="">
+      <img src="img/scene-post.webp" width="1448" height="1086" alt="">
+    </div>
+  </div>
+  <div class="card">
+    <ul class="facts"><li data-en="Soundproofed rooms: radio stations used to work here">Комнаты с шумоизоляцией: раньше здесь работали радиостанции</li><li data-en="Gated parking and 24/7 access">Парковка за воротами, доступ круглосуточно</li><li data-en="A shared conference room for tenants">Общая переговорная для арендаторов</li></ul>
+    <form class="book" id="lead" novalidate>
+      <label class="field"><span data-en="Your name">Как вас зовут</span><input name="name" autocomplete="name"></label>
+      <label class="field"><span data-en="Phone">Телефон</span><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="lead-bad"><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+      <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
+      <button class="btn" type="submit" data-en="Book a viewing">Записаться на просмотр</button>
+      <p class="book-after" data-en="We'll call you back to set a time.">Перезвоним и договоримся о времени.</p>
+      <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
+    </form>
+  </div>
+</header>
+
+<section class="plan" id="building">
+  <div class="plan-head">
+    <h2 data-en="Floor plan">План здания</h2>
+    <p data-en="Pick a room to see a photo of an office. Prices and open rooms aren't marked on the plan.">Нажмите на комнату, откроется снимок офиса. Цены и свободные комнаты на плане не отмечены.</p>
+  </div>
+  <div class="plan-stage" id="plan-stage">
+    <div class="near" id="near">
+      <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
+        <img src="img/maket.webp" width="1920" height="1080" alt="">
+        <canvas id="glow"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="veil" id="veil"></div>
+  <p class="said" id="said" aria-live="polite"></p>
+</section>
+
+<dialog class="sheet" id="sheet">
+  <button class="close" type="button" id="close" aria-label="Закрыть" data-en-label="Close"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  <figure class="shot"><img id="room-img" width="800" height="600" alt=""><figcaption id="room-caption"></figcaption></figure>
+  <div class="sheet-text">
+    <h2 id="room-title"></h2>
+    <p id="room-facts" hidden></p>
+    <p id="room-note" hidden></p>
+    <div class="acts">
+      <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+      <a class="btn alt wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
+    </div>
+  </div>
+</dialog>
+
+<section class="flow" id="prices">
+  <h2 class="rise" data-en="Offices from&nbsp;$500 to&nbsp;$2,500 a&nbsp;month">Офисы от&nbsp;$500 до&nbsp;$2,500 в&nbsp;месяц</h2>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="1200" height="900" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture></figure></div>
+  <div class="rents">
+    <div class="rent rise"><p class="sum">$500</p><p data-en="the smallest office">самый маленький офис</p></div>
+    <div class="rent rise"><p class="sum">$800</p><p data-en="a bigger office">офис побольше</p></div>
+    <div class="rent rise"><p class="sum">$2,500</p><p data-en="a unit with its own entrance">помещение с отдельным входом</p></div>
+  </div>
+  <p class="rise" data-en="The lease is one year minimum, and the deposit is one month's rent.">Договор минимум на год, залог как месяц аренды.</p>
+  <div class="acts rise">
+    <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+    <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
+  </div>
+</section>
+
+<section class="flow" id="radio">
+  <img class="deco deco-mic rise" src="img/deco-mic.webp" width="480" height="1046" loading="lazy" alt="">
+  <h2 class="rise" data-en="Radio stations used to work out of this building">Раньше в этом здании работали радиостанции</h2>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
+  <p class="rise" data-en="They left behind soundproofed rooms, and now those are offices where you can work and talk with clients in peace.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
+  <p class="rise" data-en="IN USE signs still hang over the doors, like in a studio. You can check how quiet it is when you come to see it.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
+</section>
+
+<section id="gates">
+  <div class="flow scene-top"><h2 class="rise" data-en="The building is gated, and tenants have 24/7 access">Здание за воротами, у арендаторов доступ круглосуточно</h2></div>
+  <div class="scene-room">
+    <div class="scene" role="img" aria-label="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-label="A sliding gate with the parking lot behind it and the brick building on the left">
+      <div class="set">
+        <i class="sun"></i>
+        <img class="whole" src="img/scene-print.webp" width="1448" height="1086" loading="lazy" alt="">
+        <img class="gt" src="img/scene-gate.webp" width="1448" height="1086" loading="lazy" alt="">
+        <img class="post" src="img/scene-post.webp" width="1448" height="1086" loading="lazy" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="flow scene-end"><p class="rise" data-en="Parking behind the gate, security cameras, a conference room for tenants, everything on one floor.">Парковка за воротами, камеры, переговорная для арендаторов, всё на одном этаже.</p></div>
+</section>
+
+<section class="flow" id="fit">
+  <h2 class="rise" data-en="Works for a lawyer, a realtor, a salon, a doctor, a studio or a music school">Подходит юристу, риелтору, салону, врачу, студии, музыкальной школе</h2>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/office-corner.webp"><img src="img/office-corner-800.webp" width="1200" height="900" loading="lazy" alt="Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр" data-en-alt="Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet"></picture></figure></div>
+  <p class="rise" data-en="If you need water and ventilation, ask right away.">Если нужны вода и вытяжка, спросите сразу.</p>
+  <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave для моего дела. Какого он размера, что входит в аренду, есть ли вода и вытяжка?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave for my business. What size is it, what's included in the rent, and is there water and ventilation?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+</section>
+
+<section class="flow" id="voice">
+  <img class="deco deco-phone rise" src="img/deco-phone.webp" width="570" height="863" loading="lazy" alt="">
+  <h2 class="rise" data-en="A bonus for tenants: a voice assistant answers the calls you miss">Бонус арендаторам: на пропущенные звонки ответит голосовой помощник</h2>
+  <p class="rise" data-en="When you're busy, it picks up, takes the caller's name and number, and sends you a message.">Когда вы заняты, он берёт трубку, записывает имя и номер и присылает вам сообщение.</p>
+  <p class="rise" data-en="We'll help you set it up for free, and tell you by phone what it costs after that.">Поможем подключить бесплатно. Сколько он стоит дальше, расскажем по телефону.</p>
+  <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave и бонус с голосовым помощником. Как это работает и сколько стоит дальше?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave and the voice assistant bonus. How does it work, and what does it cost after setup?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+</section>
+
+<section class="flow" id="contact">
+  <h2 class="rise" data-en="Come see an office">Приезжайте посмотреть офис</h2>
+  <a class="phone" href="tel:+19169144407">916-914-4407</a>
+  <p class="rise">5345 Madison Ave, Sacramento, CA 95841. <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" data-en="Open in Maps">Открыть на карте</a></p>
+  <p class="rise" data-en="Call or message us and we'll set up a time.">Позвоните или напишите, и мы назначим время. Можно <span class=nb>по-русски</span>.</p>
+  <div class="acts rise">
+    <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+    <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
+  </div>
+</section>
+
+<script src="rooms.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
