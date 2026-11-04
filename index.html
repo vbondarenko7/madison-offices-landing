@@ -15,19 +15,18 @@
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js" as="script">
 <link rel="stylesheet" href="styles.css">
-<style>/* Первый экран (V 04.11: снимок с забором «плохо смотрится», нужен арт): винное поле, сверху заголовок, под ним фасад здания (cl-10, без забора спереди)
-   без неба, в шалфейной краске страницы (tools/duotone.py --light), как вырезанные люди у Žít Braník. Фасад разрезан на полосы со сдвигом (site/code/hero.js):
-   при загрузке съезжаются, при прокрутке расходятся. Внизу пять выгод, линия во всю ширину, адрес и «Записаться на просмотр». Форма открывается листом (dialog) */
-.hero{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh;height:100svh;min-height:640px;padding:112px var(--m) 40px;overflow:hidden;overflow:clip}
-.hero h1{position:relative;z-index:2}
-.hero .photo{position:relative;z-index:1;margin:-56px calc(-1*var(--m)) 0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent)}
-.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 85%}
-/* Полосы фасада: копии одного снимка, каждая обрезана в свою полосу и движется сама */
+<style>/* Первый экран как у Žít Braník: картинка здания на весь экран, слова слева снизу. Картинка сгенерирована Codex по снимкам cl-10 и cl-06 по решению V 04.11
+   (content/facts.md): тот же фасад, свет золотого часа, чистый асфальт. Снизу она уходит в винное поле, поэтому стыка с макетом ниже нет.
+   Картинка разрезана на полосы (site/code/hero.js): при загрузке съезжаются, при прокрутке расходятся. Форма открывается листом (dialog) */
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;height:100vh;height:100svh;min-height:620px;padding:0 var(--m) 40px;color:var(--cream);overflow:hidden;overflow:clip}
+.hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+/* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама */
 .hero .bands{position:absolute;inset:0}
 .hero .bands i{position:absolute;inset:0;will-change:transform}
-.hero.cut .photo>img{visibility:hidden}
-.words{position:relative;z-index:2}
-h1{max-width:15em;font-size:clamp(40px,5vw,72px);line-height:1.02;font-weight:600;letter-spacing:-.01em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
+.hero.cut .photo>picture{visibility:hidden}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(rgba(69,28,37,0) 40%,rgba(69,28,37,.5) 60%,rgba(69,28,37,.88) 84%,var(--claret))}
+h1{max-width:15em;font-size:clamp(40px,4.4vw,64px);line-height:1.02;font-weight:600;letter-spacing:-.01em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{font-style:normal;color:var(--coral)}
 .perks{display:flex;flex-wrap:wrap;gap:6px 32px;margin:28px 0 0;padding:0;list-style:none;font:600 16px/24px var(--text);animation:rise 1s .3s cubic-bezier(.16,1,.3,1) both}
 /* Линия во всю ширину, под ней адрес слева и ссылка справа, как у оригинала */
@@ -63,10 +62,9 @@ h1 em{font-style:normal;color:var(--coral)}
 .asking .form-bad,.asking .form-off{font-weight:600}
 
 @media (max-width:899px){
-  /* Телефон: заголовок, фасад, слова столбцом, адрес и ссылка друг под другом */
-  .hero{min-height:600px;padding:88px var(--m) 24px}
-  .hero .photo{margin-top:-16px}
-  .hero .photo img{object-position:18% 85%}
+  /* Телефон: картинка на весь экран, слова снизу столбцом, адрес и ссылка друг под другом */
+  .hero{min-height:560px;padding-bottom:24px}
+  .hero .photo img{object-position:30% 70%}
   h1{font-size:min(40px,8.6vw);line-height:1.05;max-width:none}
   .perks{gap:4px 20px;margin-top:20px;font-size:15px;line-height:22px}
   .row{flex-direction:column;align-items:flex-start;gap:12px;margin-top:20px;padding-top:16px}
@@ -98,9 +96,9 @@ h1 em{font-style:normal;color:var(--coral)}
 
 <a class="logo" href="#top">Madison</a>
 <header class="hero" id="top" data-tone="claret">
-  <h1 data-en="Small offices for&nbsp;rent in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;аренду в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
-  <div class="photo"><img src="img/art-facade.webp" width="2048" height="940" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></div>
+  <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></picture></div>
   <div class="words">
+    <h1 data-en="Small offices for&nbsp;rent in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;аренду в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
     <ul class="perks">
       <li data-en="Your own room with&nbsp;a&nbsp;door">Своя комната с&nbsp;дверью</li>
       <li data-en="Parking inside the&nbsp;gated&nbsp;lot">Парковка на&nbsp;закрытой территории</li>
@@ -215,6 +213,7 @@ h1 em{font-style:normal;color:var(--coral)}
     <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
     <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
   </div>
+  <figure class="sliced finale"><picture><img src="img/art-facade.webp" width="2048" height="940" loading="lazy" alt=""></picture></figure>
 </section>
 
 <script src="rooms.js"></script>

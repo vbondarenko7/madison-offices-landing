@@ -301,9 +301,9 @@ const ask = $('#ask');
 $('#book').addEventListener('click', () => ask.showModal());
 $('#ask-close').addEventListener('click', () => ask.close());
 
-// --- Первый экран: фасад разрезан на полосы, как вырезанные люди у Žít Braník. Полосы и в покое стоят чуть вразнобой (rest, доля высоты),
-// при загрузке съезжаются с большей высоты, при прокрутке вниз расходятся, каждая со своей скоростью. Без движения остаётся целый снимок ---
-const STRIPS = { desk: 14, phone: 7, drift: .32, rest: .012 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
+// --- Первый экран: картинка здания разрезана на полосы, как вырезанные люди у Žít Braník. В покое она целая (rest, доля высоты, 0),
+// при загрузке полосы съезжаются с разной высоты, при прокрутке вниз расходятся, каждая со своей скоростью. Без движения остаётся целая картинка ---
+const STRIPS = { desk: 14, phone: 7, drift: .32, rest: 0 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
 const heroBox = $('.hero'), heroPhoto = $('.hero .photo');
 addEventListener('resize', () => heroFrame());
 let heroStrips = [];
@@ -410,7 +410,9 @@ function sliceFrame() {
   slicedPhotos.forEach(({ f, strips }) => {
     const r = f.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight) return;
-    const v = Math.min(1, Math.max(0, (innerHeight - (r.top + r.height / 2)) / (innerHeight * .5))), left = 1 - toEase(v);
+    // Полосы сходятся к середине экрана, а снимок в самом низу страницы, который до середины не доедет, — к своему крайнему месту
+    const centre = r.top + r.height / 2, last = centre - (document.documentElement.scrollHeight - innerHeight - scrollY);
+    const v = Math.min(1, Math.max(0, (innerHeight - centre) / Math.max(1, innerHeight - Math.max(innerHeight * .5, last)))), left = 1 - toEase(v);
     strips.forEach((s) => { s.style.transform = `translate3d(0,${(s.far * r.height * left).toFixed(1)}px,0)`; });
   });
 }
