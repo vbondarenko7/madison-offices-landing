@@ -288,7 +288,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 // Видео, а не картинки: картинку 1920 браузер распаковывал прямо при прокрутке, и первый проход шёл рывками. Видео распаковывает видеокарта.
 // При прокрутке меняются только прозрачность, сдвиг и время видео, и только когда изменились: ничего не перерисовывается целиком ---
 {
-  const KRYSHA = { frames: 72, fps: 24, seq: 2, fade: .3, hold: .35 };
+  const KRYSHA = { frames: 120, fps: 24, seq: 2, fade: .3, hold: .35 };
   const track = $('#krysha'), stage = $('#krysha-stage'), film = $('#krysha-film'), field = $('#krysha-field'), edge = $('#krysha-edge'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
   if (track && !still) {
     root.classList.add('krysha-on');
@@ -354,7 +354,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       if (into <= 0 || live >= 1) return;
       const k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
       put(film, 'transform', `translate3d(${mix(from.x, to.x, c).toFixed(1)}px,${mix(from.y, to.y, c).toFixed(1)}px,0) scale(${k.toFixed(4)})`);
-      want = (Math.round(p * (KRYSHA.frames - 1)) + .5) / KRYSHA.fps;
+      // Кадры в видео идут ровными шагами пути камеры (blender/rise.py), замедление в начале и в конце даёт smooth
+      want = (Math.round(c * (KRYSHA.frames - 1)) + .5) / KRYSHA.fps;
       seek();
     }
 
