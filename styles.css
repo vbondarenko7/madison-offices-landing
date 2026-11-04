@@ -8,21 +8,21 @@
 @font-face{font-family:Manrope;src:url(fonts/manrope-latin.woff2) format("woff2");font-weight:200 800;font-display:swap}
 :root{--claret:#451c25;--sage:#d9dfc1;--sky:#c9d5e2;--blush:#e8c0ad;--coral:#ee7359;--coral-d:#e0624a;--cream:#f3efe6;--m:64px;--bar:64px;--h2:clamp(32px,3.1vw,44px);--ease:cubic-bezier(.65,0,.2,1);--text:Manrope,Arial,sans-serif;--head:"Montserrat Alternates",Arial,sans-serif}
 /* Палитра по парам Žít Braník, приглушённая до деловой (V 04.11: прежний бордовый «кровавый, мультяшный»).
-   Пара на экран: поле --bg и цвет всего текста --ink. Страница берёт пару той секции, что дошла до середины экрана (data-tone, site/code/flow.js).
+   Пара на экран: поле --bg и цвет всего текста --ink у каждой секции (data-tone). Страница смешивает их по ходу прокрутки (site/code/tone.js).
    Контраст текста на поле от 9,7:1, коралловая кнопка с бордовым текстом 5:1, бордовый на персиковом 8,7:1 */
-body{--bg:var(--claret);--ink:var(--sage)}
-body[data-tone=sage]{--bg:var(--sage);--ink:var(--claret)}
-body[data-tone=sky]{--bg:var(--sky);--ink:var(--claret)}
-body[data-tone=blush]{--bg:var(--blush);--ink:var(--claret)}
+body,[data-tone=claret]{--bg:var(--claret);--ink:var(--sage)}
+[data-tone=sage]{--bg:var(--sage);--ink:var(--claret)}
+[data-tone=sky]{--bg:var(--sky);--ink:var(--claret)}
+[data-tone=blush]{--bg:var(--blush);--ink:var(--claret)}
 /* На персиковом поле коралловый звонок теряется: угол меняет его на бордовый, как оригинал на своём коралловом поле */
 body[data-tone=blush] .cta{background:var(--claret);color:var(--cream)}
-body[data-tone=end]{--bg:var(--claret);--ink:var(--coral)}
+[data-tone=end]{--bg:var(--claret);--ink:var(--coral)}
 /* --h2: заголовок раздела. Огромные только главный заголовок первого экрана и телефон в конце (V 01.11) */
 @media (max-width:899px){:root{--m:16px;--bar:56px;--h2:min(28px,7.4vw)}}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
-/* Одно поле на всю страницу: у секций своего цвета нет, поле и текст перетекают целиком за 0,75 с, как у Žít Braník */
-body{font:400 16px/24px var(--text);color:var(--ink);background:var(--bg);transition:background-color .75s var(--ease),color .75s var(--ease);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+/* Одно поле на всю страницу: у секций своего цвета нет, поле перетекает вместе с прокруткой (site/code/tone.js), текст меняется за .5 с */
+body{font:400 16px/24px var(--text);color:var(--ink);background:var(--bg);transition:color .5s var(--ease);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 ::selection{background:var(--coral);color:var(--claret)}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
@@ -49,8 +49,8 @@ details.menu summary::-webkit-details-marker{display:none}
 .drop a:first-child{border-top:0}
 .drop a:hover{color:var(--coral-d)}
 
-/* Логотип и кнопки. Первый экран лежит отдельно, в site/screens/. Логотип стоит на снимке первого экрана, поэтому кремовый */
-.logo{position:absolute;z-index:3;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600;color:var(--cream)}
+/* Логотип и кнопки. Первый экран лежит отдельно, в site/screens/ */
+.logo{position:absolute;z-index:3;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600}
 .btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--claret);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s;cursor:pointer}
 .btn:hover{background:var(--coral-d)}
 /* Вторая кнопка рядом с коралловой — контуром в цвет текста */
@@ -113,12 +113,23 @@ figcaption{padding:16px var(--m);font-weight:600}
 
 /* У каждого блока своя раскладка, как у оригинала, а не одна «заголовок, абзац, снимок по центру».
    Радио: снимок слева, столбец текста справа (оригинал, кадры 30–35). Подходит ли: заголовок заходит на снимок, снимок сдвинут вправо (кадры 13–17) */
-.pair{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:64px;align-content:start}
+.pair{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:repeat(3,auto) 1fr;column-gap:64px;align-items:start}
 .pair .big{grid-column:1;grid-row:1/span 4;margin:8px 0 0}
-.pair>h2,.pair>p{grid-column:2}
+.pair>h2,.pair>p,.pair>.acts{grid-column:2}
+/* Помощник: текст слева, высокое окно студии с вывеской ON AIR справа */
+.flip{grid-template-columns:minmax(0,7fr) minmax(0,4fr)}
+.flip .big{grid-column:2}
+.flip>h2,.flip>p,.flip>.acts{grid-column:1}
+.pair.flip .big figure{aspect-ratio:550/1050}
 .pair .big figure{aspect-ratio:3/4}
 .over h2{position:relative;z-index:1;max-width:13em;margin-bottom:-1.15em}
 .over .big{width:80%;margin:0 0 0 auto}
+/* Снимок полосами (.sliced, site/code/flow.js): копии одного снимка, каждая в своей полосе, со сдвигом, который сходится к середине экрана */
+.sliced picture{position:relative}
+.sliced .bands{position:absolute;inset:0}
+.sliced .bands i{position:absolute;inset:0;will-change:transform}
+.sliced .bands img{width:100%;height:100%;object-fit:cover}
+.sliced.cut picture>img,.sliced.cut picture>source+img{visibility:hidden}
 /* Ворота: снимок в краске страницы на всю ширину, полосы съезжаются, пока сцена въезжает, потом ворота откатываются. Около полутора экранов */
 .scene-top{padding-bottom:0}
 .scene-room{--h:100vh;--h:100svh;height:calc(var(--h)*1.2)}
@@ -143,6 +154,8 @@ figcaption{padding:16px var(--m);font-weight:600}
   .pair{display:block}
   .pair .big{margin-top:40px}
   .pair .big figure{aspect-ratio:4/3}
+  .flip .big{width:62%;margin-left:auto}
+  .pair.flip .big figure{aspect-ratio:550/1050}
   .over .big{width:100%}
   .over h2{margin-bottom:0}
   .scene-room{--h:72vh;--h:72svh}

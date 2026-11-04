@@ -301,10 +301,11 @@ const ask = $('#ask');
 $('#book').addEventListener('click', () => ask.showModal());
 $('#ask-close').addEventListener('click', () => ask.close());
 
-// --- Первый экран: снимок здания разрезан на полосы, как вырезанные люди у Žít Braník. При загрузке полосы съезжаются в здание с разной высоты,
-// при прокрутке вниз расходятся, каждая со своей скоростью, и снимок уходит в поле страницы. Без движения остаётся целый снимок ---
-const STRIPS = { desk: 14, phone: 7, drift: .32 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
+// --- Первый экран: фасад разрезан на полосы, как вырезанные люди у Žít Braník. Полосы и в покое стоят чуть вразнобой (rest, доля высоты),
+// при загрузке съезжаются с большей высоты, при прокрутке вниз расходятся, каждая со своей скоростью. Без движения остаётся целый снимок ---
+const STRIPS = { desk: 14, phone: 7, drift: .32, rest: .012 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
 const heroBox = $('.hero'), heroPhoto = $('.hero .photo');
+addEventListener('resize', () => heroFrame());
 let heroStrips = [];
 function cutHero() {
   const img = heroPhoto.querySelector('img'), n = innerWidth < 900 ? STRIPS.phone : STRIPS.desk;
@@ -316,6 +317,7 @@ function cutHero() {
     copy.alt = '';
     s.style.clipPath = `inset(0 ${(100 - (i + 1) * 100 / n - .05).toFixed(3)}% 0 ${(i * 100 / n).toFixed(3)}%)`;
     s.speed = ((i * .618) % 1) * STRIPS.drift;
+    s.rest = (i % 2 ? 1 : -1) * (.3 + .7 * ((i * .382) % 1)) * STRIPS.rest;
     s.append(copy);
     // Сборка: полоса приходит сверху или снизу на долю своей высоты, по очереди от середины к краям
     copy.animate([{ transform: `translateY(${((i % 2 ? 1 : -1) * (6 + 10 * ((i * .382) % 1))).toFixed(1)}%)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
@@ -323,12 +325,12 @@ function cutHero() {
     band.append(s);
     return s;
   });
-  heroPhoto.after(band);
+  heroPhoto.append(band);
   heroBox.classList.add('cut');
 }
 function heroFrame() {
-  const y = Math.min(scrollY, heroBox.offsetHeight);
-  heroStrips.forEach((s) => { s.style.transform = `translate3d(0,${(-y * s.speed).toFixed(1)}px,0)`; });
+  const y = Math.min(scrollY, heroBox.offsetHeight), h = heroPhoto.offsetHeight;
+  heroStrips.forEach((s) => { s.style.transform = `translate3d(0,${(s.rest * h - y * s.speed).toFixed(1)}px,0)`; });
 }
 if (!still) {
   const img = heroPhoto.querySelector('img');
@@ -341,12 +343,37 @@ if (!still) {
     requestAnimationFrame(() => { heroQueued = false; heroFrame(); });
   }, { passive: true });
 }
-// --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
-// Цвет всей страницы: секция, дошедшая до середины экрана, отдаёт странице свою пару цветов (data-tone), поле и текст перетекают в CSS за 0,75 с
-if ('IntersectionObserver' in window) {
-  const toning = new IntersectionObserver((seen) => seen.forEach((s) => { if (s.isIntersecting) body.dataset.tone = s.target.dataset.tone; }), { rootMargin: '-50% 0px -50% 0px' });
-  $$('section[data-tone], header[data-tone]').forEach((s) => toning.observe(s));
+// --- Цвет страницы перетекает вместе с прокруткой, как у Žít Braník: пока следующая секция поднимается от низа экрана до TONE.end его высоты,
+// поле постепенно переходит в её цвет. Текст берёт её цвет на середине пути (CSS доводит его за .5 с), иначе на миг поле и текст совпали бы.
+// Пары цветов у секций в site/design/settings.css (data-tone), здесь только смешивание ---
+const TONE = { end: .3 };
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.trim().slice(i, i + 2), 16));
+const toned = $$('section[data-tone], header[data-tone]').map((s) => {
+  const cs = getComputedStyle(s);
+  return { s, name: s.dataset.tone, bg: hex(cs.getPropertyValue('--bg')), ink: cs.getPropertyValue('--ink').trim() };
+});
+function toneFrame() {
+  let bg = toned[0].bg, ink = toned[0].ink, name = toned[0].name;
+  for (const t of toned.slice(1)) {
+    const v = Math.min(1, Math.max(0, (innerHeight - t.s.getBoundingClientRect().top) / (innerHeight * (1 - TONE.end))));
+    if (!v) break;
+    const k = v * v * (3 - 2 * v);
+    bg = bg.map((c, i) => c + (t.bg[i] - c) * k);
+    if (v >= .5) { ink = t.ink; name = t.name; }
+  }
+  body.style.setProperty('--bg', `rgb(${bg.map(Math.round).join(',')})`);
+  body.style.setProperty('--ink', ink);
+  body.dataset.tone = name;
 }
+let toneQueued = false;
+addEventListener('scroll', () => {
+  if (toneQueued) return;
+  toneQueued = true;
+  requestAnimationFrame(() => { toneQueued = false; toneFrame(); });
+}, { passive: true });
+addEventListener('resize', toneFrame);
+toneFrame();
+// --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
 const growing = $$('.grow');
 const toEase = (v) => 1 - (1 - v) ** 3;
 
@@ -358,6 +385,33 @@ function flowFrame() {
     const from = innerHeight + height * .33, to = innerHeight * .45, small = innerWidth < 900 ? .88 : .66;
     const grown = Math.min(1, Math.max(0, (from - centre) / (from - to)));
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
+  });
+}
+// Снимок полосами (.sliced): полосы стоят со сдвигом вверх и вниз и сходятся в целый снимок, пока его середина идёт от низа экрана к середине
+const slicedPhotos = $$('.sliced').map((f) => {
+  const pic = f.querySelector('picture'), img = pic.querySelector('img'), n = innerWidth < 900 ? 5 : 7, bands = document.createElement('div');
+  bands.className = 'bands';
+  const strips = [...Array(n)].map((_, i) => {
+    const s = document.createElement('i'), copy = document.createElement('img');
+    copy.alt = '';
+    copy.loading = 'lazy';
+    copy.src = img.getAttribute('src');
+    s.style.clipPath = `inset(0 ${(100 - (i + 1) * 100 / n - .05).toFixed(3)}% 0 ${(i * 100 / n).toFixed(3)}%)`;
+    s.far = (i % 2 ? 1 : -1) * (.08 + .14 * ((i * .618) % 1));
+    s.append(copy);
+    bands.append(s);
+    return s;
+  });
+  pic.append(bands);
+  f.classList.add('cut');
+  return { f, strips };
+});
+function sliceFrame() {
+  slicedPhotos.forEach(({ f, strips }) => {
+    const r = f.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const v = Math.min(1, Math.max(0, (innerHeight - (r.top + r.height / 2)) / (innerHeight * .5))), left = 1 - toEase(v);
+    strips.forEach((s) => { s.style.transform = `translate3d(0,${(s.far * r.height * left).toFixed(1)}px,0)`; });
   });
 }
 // Ворота: настоящий снимок в краске страницы (tools/duotone.py), разрезан на полосы, как вырезанные люди у Žít Braník. Полосы разъехались вверх и вниз
@@ -397,11 +451,12 @@ if (!still) {
   addEventListener('scroll', () => {
     if (flowQueued) return;
     flowQueued = true;
-    requestAnimationFrame(() => { flowQueued = false; flowFrame(); sceneFrame(); });
+    requestAnimationFrame(() => { flowQueued = false; flowFrame(); sceneFrame(); sliceFrame(); });
   }, { passive: true });
-  addEventListener('resize', () => { flowFrame(); sceneFrame(); });
+  addEventListener('resize', () => { flowFrame(); sceneFrame(); sliceFrame(); });
   flowFrame();
   sceneFrame();
+  sliceFrame();
 }
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам

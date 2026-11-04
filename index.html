@@ -15,23 +15,23 @@
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js" as="script">
 <link rel="stylesheet" href="styles.css">
-<style>/* Первый экран как у Žít Braník (research/дизайн/оригинал/листы/главная-пк-1.jpg, кадры 0–2): настоящий снимок здания на весь экран,
-   притемнён в бордовый поля, внизу снимок растворяется в поле страницы, поэтому стыка с макетом ниже нет.
-   Слова слева снизу: заголовок с ценой коралловым, пять выгод строкой, линия во всю ширину, под ней адрес и ссылка «Записаться на просмотр».
-   Снимок site/img/building.webp: cl-06, кадр, тише цвет и теплее свет, здание не менялось (content/facts.md, обработка снимков).
-   При загрузке снимок медленно оседает, строки выезжают, подчёркивание ссылки прорисовывается. Форма открывается листом (dialog) */
-.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;height:100vh;height:100svh;min-height:620px;padding:0 var(--m) 40px;color:var(--cream);overflow:hidden;overflow:clip}
-.photo,.bands{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
-.photo img,.bands img{width:100%;height:100%;object-fit:cover;object-position:50% 38%}
-/* Полосы снимка (site/code/hero.js): копии одного снимка, каждая обрезана в свою полосу и движется сама */
-.bands i{position:absolute;inset:0;will-change:transform}
-.cut .photo{visibility:hidden}
-.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(rgba(69,28,37,.42),rgba(69,28,37,.12) 26%,rgba(69,28,37,.2) 46%,rgba(69,28,37,.82) 74%,var(--claret))}
+<style>/* Первый экран (V 04.11: снимок с забором «плохо смотрится», нужен арт): винное поле, сверху заголовок, под ним фасад здания (cl-10, без забора спереди)
+   без неба, в шалфейной краске страницы (tools/duotone.py --light), как вырезанные люди у Žít Braník. Фасад разрезан на полосы со сдвигом (site/code/hero.js):
+   при загрузке съезжаются, при прокрутке расходятся. Внизу пять выгод, линия во всю ширину, адрес и «Записаться на просмотр». Форма открывается листом (dialog) */
+.hero{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh;height:100svh;min-height:640px;padding:112px var(--m) 40px;overflow:hidden;overflow:clip}
+.hero h1{position:relative;z-index:2}
+.hero .photo{position:relative;z-index:1;margin:-56px calc(-1*var(--m)) 0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent)}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 85%}
+/* Полосы фасада: копии одного снимка, каждая обрезана в свою полосу и движется сама */
+.hero .bands{position:absolute;inset:0}
+.hero .bands i{position:absolute;inset:0;will-change:transform}
+.hero.cut .photo>img{visibility:hidden}
+.words{position:relative;z-index:2}
 h1{max-width:15em;font-size:clamp(40px,5vw,72px);line-height:1.02;font-weight:600;letter-spacing:-.01em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{font-style:normal;color:var(--coral)}
 .perks{display:flex;flex-wrap:wrap;gap:6px 32px;margin:28px 0 0;padding:0;list-style:none;font:600 16px/24px var(--text);animation:rise 1s .3s cubic-bezier(.16,1,.3,1) both}
 /* Линия во всю ширину, под ней адрес слева и ссылка справа, как у оригинала */
-.row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(243,239,230,.35);animation:rise 1s .42s cubic-bezier(.16,1,.3,1) both}
+.row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid color-mix(in srgb,currentColor 35%,transparent);animation:rise 1s .42s cubic-bezier(.16,1,.3,1) both}
 .addr{font-size:16px;line-height:24px;font-weight:600}
 .book{position:relative;display:inline-block;margin-right:1.4em;padding-bottom:6px;font:700 16px/24px var(--text);letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap}
 .book::before{content:"→";position:absolute;right:-1.4em;top:0;transition:transform .3s var(--ease)}
@@ -39,7 +39,7 @@ h1 em{font-style:normal;color:var(--coral)}
 .book:hover::after{transform:scaleX(.3)}
 .book:hover::before{transform:translateX(6px)}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
-@keyframes settle{from{transform:scale(1.06)}}
+@keyframes settle{from{transform:scale(1.04)}}
 @keyframes draw{from{transform:scaleX(0)}}
 
 /* Заявка листом, как лист комнаты, в паре цветов текущего экрана. Поля линией, подпись поднимается, у верного номера галочка.
@@ -63,9 +63,10 @@ h1 em{font-style:normal;color:var(--coral)}
 .asking .form-bad,.asking .form-off{font-weight:600}
 
 @media (max-width:899px){
-  /* Телефон: снимок на весь экран, слова снизу столбцом, адрес и ссылка друг под другом */
-  .hero{min-height:560px;padding-bottom:24px}
-  .photo img,.bands img{object-position:42% 40%}
+  /* Телефон: заголовок, фасад, слова столбцом, адрес и ссылка друг под другом */
+  .hero{min-height:600px;padding:88px var(--m) 24px}
+  .hero .photo{margin-top:-16px}
+  .hero .photo img{object-position:18% 85%}
   h1{font-size:min(40px,8.6vw);line-height:1.05;max-width:none}
   .perks{gap:4px 20px;margin-top:20px;font-size:15px;line-height:22px}
   .row{flex-direction:column;align-items:flex-start;gap:12px;margin-top:20px;padding-top:16px}
@@ -97,9 +98,9 @@ h1 em{font-style:normal;color:var(--coral)}
 
 <a class="logo" href="#top">Madison</a>
 <header class="hero" id="top" data-tone="claret">
-  <picture class="photo"><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-1100.webp" width="2048" height="1360" fetchpriority="high" alt="Угол одноэтажного кирпичного здания с тёмными окнами за чёрной оградой, перед ним газон" data-en-alt="The corner of the one-storey brick building with dark windows behind a black fence, a lawn in front"></picture>
+  <h1 data-en="Small offices for&nbsp;rent in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;аренду в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
+  <div class="photo"><img src="img/art-facade.webp" width="2048" height="940" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></div>
   <div class="words">
-    <h1 data-en="Small offices for&nbsp;rent in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;аренду в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
     <ul class="perks">
       <li data-en="Your own room with&nbsp;a&nbsp;door">Своя комната с&nbsp;дверью</li>
       <li data-en="Parking inside the&nbsp;gated&nbsp;lot">Парковка на&nbsp;закрытой территории</li>
@@ -197,7 +198,8 @@ h1 em{font-style:normal;color:var(--coral)}
   <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave для моего дела. Какого он размера, что входит в аренду, есть ли вода и вытяжка?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave for my business. What size is it, what's included in the rent, and is there water and ventilation?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
 </section>
 
-<section class="flow" id="voice" data-tone="sky">
+<section class="flow pair flip" id="voice" data-tone="sky">
+  <div class="big"><figure class="sliced"><picture><img src="img/on-air.webp" width="550" height="1050" loading="lazy" alt="Окно студии в этом здании, за стеклом горит вывеска ON AIR" data-en-alt="A studio window in this building with an ON AIR sign glowing behind the glass"></picture></figure></div>
   <h2 class="rise" data-en="A bonus for tenants: a voice assistant answers the calls you miss">Бонус арендаторам: на пропущенные звонки ответит голосовой помощник</h2>
   <p class="rise" data-en="When you're busy, it picks up, takes the caller's name and number, and sends you a message.">Когда вы заняты, он берёт трубку, записывает имя и номер и присылает вам сообщение.</p>
   <p class="rise" data-en="We'll help you set it up for free, and tell you by phone what it costs after that.">Поможем подключить бесплатно. Сколько он стоит дальше, расскажем по телефону.</p>
