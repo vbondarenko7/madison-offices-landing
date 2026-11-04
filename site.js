@@ -3,6 +3,20 @@ const $$ = (s) => [...document.querySelectorAll(s)];
 const body = document.body, plan = $('#building'), planStage = $('#plan-stage'), rig = $('#rig'), glow = $('#glow'), sheet = $('#sheet'), root = document.documentElement;
 const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+// --- Цели счётчиков, одинаковые во всех трёх: звонок, WhatsApp, заявка. Сами счётчики подключает сборка (site/counters.html).
+// Личных данных не передаём: только название цели. Поля заявки закрыты от записи Вебвизора
+const GOALS = { call: ['Contact', 'call'], whatsapp: ['Contact', 'whatsapp'], lead: ['Lead', 'generate_lead'] };   // Метрика: Meta, GA4
+const goal = (name) => {
+  const [meta, ga] = GOALS[name];
+  if (window.ym) ym(+'', 'reachGoal', name);
+  if (window.fbq) fbq('track', meta, { content_name: name });
+  if (window.gtag) gtag('event', ga, { method: name });
+};
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="tel:"], a[href*="wa.me/"]');
+  if (a) goal(a.href.startsWith('tel:') ? 'call' : 'whatsapp');
+});
+$$('#lead input').forEach((i) => i.classList.add('ym-disable-keys'));
 // --- Язык: русский текст в разметке, английский в data-en ------------------------------------
 const TEXT = {
   ru: { position: (n, total) => `Комната ${n} из ${total}`,
@@ -292,6 +306,7 @@ lead.addEventListener('submit', (e) => {
     leadPhone.focus();
     return;
   }
+  goal('lead');   // цель считаем уже сейчас, хотя отправки ещё нет
   // ponytail: отправки ещё нет, почта не выбрана (PROJECT_STATE.md). Поэтому заявка не считается принятой: человек видит, что надо позвонить
   leadOff.hidden = false;
   leadOff.scrollIntoView({ block: 'nearest' });
