@@ -16,13 +16,14 @@
 <link rel="preload" href="site.js" as="script">
 <link rel="stylesheet" href="styles.css">
 <style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
-   Фото фасада на весь экран, затемнение только слева под словами и внизу под формой, плашек нет. Шапка: название, что здесь и адрес.
+   Фото фасада на весь экран, дальний план размыт (tools/depth.py), затемнение только слева под словами и внизу под формой, плашек нет.
+   Текст белый с мягкой тенью у букв, чтобы читался с одного взгляда (V 04.11: «текст сливается с изображением»). Шапка: название, что здесь и адрес.
    Заголовок с ценой, строка «кому», три выгоды (жирный заголовок и строка пояснения), повод и форма строкой внизу, мелкая строка под ней.
    Картинка сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md), низ уходит в винное поле, стыка с макетом нет */
-.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:var(--cream);overflow:hidden;overflow:clip}
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip}
 .hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
 .hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
-.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(28,11,15,.78) 0%,rgba(28,11,15,.52) 34%,rgba(28,11,15,0) 62%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.8) 16%,rgba(69,28,37,0) 40%)}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.8) 16%,rgba(69,28,37,0) 40%)}
 /* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама (site/code/hero.js) */
 .hero .bands{position:absolute;inset:0}
 .hero .bands i{position:absolute;inset:0;will-change:transform}
@@ -35,28 +36,28 @@
 
 h1{margin-top:clamp(32px,9vh,104px);max-width:12em;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{display:block;font-style:normal;color:var(--coral)}
-.sub{margin-top:16px;font-size:19px;line-height:28px;font-weight:500;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+.sub{margin-top:16px;font-size:21px;line-height:30px;font-weight:600;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
 /* Три выгоды: тонкий значок, жирный заголовок и строка пояснения. Без <b>: в .cut его забирают полосы ворот (styles.css) */
 .perks{display:flex;flex-wrap:wrap;gap:16px 48px;margin-top:36px;padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
 .perks li{display:flex;align-items:flex-start;gap:12px;white-space:nowrap}
-.perks svg{flex:none;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
-.perks strong{display:block;font-size:17px;line-height:24px;font-weight:700}
-.perks span{display:block;font-size:15px;line-height:22px;opacity:.85}
+.perks svg{flex:none;width:26px;height:26px;filter:drop-shadow(0 1px 2px rgba(20,8,11,.4));fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+.perks strong{display:block;font-size:19px;line-height:26px;font-weight:700}
+.perks span{display:block;font-size:16px;line-height:24px;font-weight:500;opacity:.92}
 
 /* Форма строкой, как бронирование: над ней повод, под ней мелкая строка. Отправки нет, после кнопки видно form.off (site/code/lead.js) */
 .lead{align-self:stretch;margin-top:auto;padding-top:48px;animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
-.get{font-size:17px;line-height:24px;font-weight:700}
+.get{font-size:19px;line-height:26px;font-weight:700}
 .fields{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 32px}
 .fields .fld{flex:1 1 180px}
-.fields .btn{flex:none}
-.small{margin-top:12px;font-size:14px;line-height:20px;opacity:.85}
+.fields .btn{flex:none;text-shadow:none}
+.small{margin-top:12px;font-size:15px;line-height:22px;font-weight:500;opacity:.92}
 .form-bad,.form-off{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
 .fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 60%,transparent)}
 .fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
 .fld:focus-within::after{transform:scaleX(1)}
 .fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
-.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:var(--cream)}
+.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:#fff}
 .fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.85;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
 .fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.75);opacity:1}
 .tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
