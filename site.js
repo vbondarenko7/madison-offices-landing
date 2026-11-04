@@ -8,7 +8,7 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 const GOALS = { call: ['Contact', 'call'], whatsapp: ['Contact', 'whatsapp'], lead: ['Lead', 'generate_lead'] };   // Метрика: Meta, GA4
 const goal = (name) => {
   const [meta, ga] = GOALS[name];
-  if (window.ym) ym(+'', 'reachGoal', name);
+  if (window.ym) ym(+'114074741', 'reachGoal', name);
   if (window.fbq) fbq('track', meta, { content_name: name });
   if (window.gtag) gtag('event', ga, { method: name });
 };
