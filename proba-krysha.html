@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center</title>
+<meta name="description" content="Сдаём офисы на 5345 Madison Ave в Сакраменто. Самый маленький стоит $500 в месяц, договор от года. Здание за забором с воротами, доступ круглосуточный. Звоните: 916-914-4407.">
+<meta property="og:title" content="Офисы в аренду в Сакраменто от $500 в месяц">
+<meta property="og:description" content="Madison Business Center, 5345 Madison Ave. Самый маленький офис стоит $500 в месяц. Звоните или пишите: 916-914-4407.">
+<meta name="theme-color" content="#451c25">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="site.js" as="script">
+<link rel="stylesheet" href="styles.css">
+<style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
+   Фото фасада на весь экран, затемнение только слева под словами и мягко внизу, плашек нет.
+   Текст белый с мягкой тенью у букв, чтобы читался с одного взгляда (V 04.11: «текст сливается с изображением»). Шапка: название, что здесь и адрес.
+   Заголовок с ценой, строка «кому», три выгоды (жирный заголовок и строка пояснения), под ними объёмная кнопка, рядом с ней раскрываются
+   имя и телефон (V 04.11: «форма внизу растянута… красивую кнопку, выпуклую»). Бонус — коралловая печать на фото, как круг у Žít Braník.
+   Картинка сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md), низ уходит в винное поле, стыка с макетом нет */
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip}
+.hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
+/* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама (site/code/hero.js) */
+.hero .bands{position:absolute;inset:0}
+.hero .bands i{position:absolute;inset:0;will-change:transform}
+.hero.cut .photo>picture{visibility:hidden}
+
+/* Шапка: название, что здесь и адрес мелко, как у ConvertMonster. Звонок, WhatsApp, язык и меню справа в углу (site/page.html) */
+.bar{display:flex;align-items:center;gap:16px;height:var(--bar)}
+.logo{font-size:26px;line-height:28px;font-weight:600}
+.tag{padding-left:16px;border-left:1px solid color-mix(in srgb,currentColor 40%,transparent);font:700 11px/14px var(--text);letter-spacing:.16em;text-transform:uppercase}
+
+h1{margin-top:clamp(32px,14vh,140px);width:max-content;max-width:100%;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
+h1 em{display:block;font-style:normal;color:var(--coral)}
+.sub{margin-top:12px;font-size:21px;line-height:30px;font-weight:600;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+
+/* Отступы лесенкой: заголовок и подзаголовок вплотную, выгоды и кнопка отбиты одинаково (--step).
+   Три выгоды плотным блоком в ширину подзаголовка: коралловая черта как метка (квадратики у Octagon), крупный заголовок, бледное пояснение.
+   Без <b>: в .cut его забирают полосы ворот (styles.css) */
+.hero{--step:clamp(28px,4.4vh,40px)}
+.perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+.perks li::before{content:"";display:block;width:28px;height:3px;margin-bottom:14px;background:var(--coral);box-shadow:0 1px 3px rgba(20,8,11,.35)}
+.perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
+.perks span{display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
+
+/* Заявка под выгодами: одна объёмная кнопка. Первое нажатие раскрывает слева от неё имя и телефон, кнопка становится «Отправить»
+   (site/code/lead.js). На телефоне поля раскрываются над кнопкой. Отправки нет, после кнопки видно form.off */
+.lead{display:grid;grid-template-columns:0fr auto;justify-content:start;align-items:end;width:min(100%,800px);margin-top:var(--step);transition:grid-template-columns .7s var(--ease),grid-template-rows .7s var(--ease);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
+.lead.open{grid-template-columns:1fr auto}
+.lead>p{grid-column:1/-1}
+.fields{display:flex;gap:24px;min-width:0;min-height:0;overflow:hidden;opacity:0;transition:opacity .35s,padding .7s var(--ease)}
+.lead.open .fields{padding-right:28px;opacity:1;transition-delay:.3s,0s}
+.fields .fld{flex:1 1 0;min-width:130px}
+/* Кнопка выпуклая, но спокойная: мягкий свет сверху, тень под ней, при наведении приподнимается, при нажатии вдавливается */
+.book{display:inline-flex;align-items:center;gap:24px;height:64px;padding:0 10px 0 32px;border-radius:999px;background:linear-gradient(180deg,#f58b72,var(--coral) 52%,#e2654b);color:var(--claret);font:700 15px/20px var(--text);letter-spacing:1.4px;text-transform:uppercase;text-shadow:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(110,30,20,.2),0 1px 2px rgba(20,8,11,.35),0 12px 28px -10px rgba(20,8,11,.8);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.book:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(110,30,20,.2),0 2px 4px rgba(20,8,11,.3),0 18px 36px -12px rgba(20,8,11,.85)}
+.book:active{transform:translateY(1px);box-shadow:inset 0 2px 6px rgba(110,30,20,.35),0 1px 2px rgba(20,8,11,.35)}
+.book:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.says{display:grid;justify-items:center}
+.says>span{grid-area:1/1;transition:opacity .3s,transform .45s var(--ease)}
+.says>span+span,.open .says>span:first-child{opacity:0;transform:translateY(-10px)}
+.says>span+span{transform:translateY(10px)}
+.open .says>span+span{opacity:1;transform:none}
+.book i{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--claret);color:var(--coral);box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
+.book:hover i{transform:translateX(3px)}
+
+/* Печать с бонусом на конце строки с ценой, как наклейка на ценник: строки заголовка заданы переносами, рамка заголовка по самой длинной,
+   печать чуть заходит на её конец. По кругу медленно вращается текст, в середине кого подключим */
+.head{position:relative;width:max-content;max-width:100%}
+.seal{--s:clamp(104px,8.6vw,128px);position:absolute;right:calc(var(--s)*-.82);bottom:calc(var(--s)*.12);display:grid;place-items:center;width:var(--s);aspect-ratio:1;margin:0;border-radius:50%;background:var(--coral);color:var(--claret);text-shadow:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px -10px rgba(20,8,11,.7);transform:rotate(-12deg);animation:stamp .9s .8s cubic-bezier(.34,1.56,.64,1) both}
+.seal::before{content:"";position:absolute;inset:18%;border:1px solid rgba(69,28,37,.4);border-radius:50%}
+.seal .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 48s linear infinite}
+.seal text{font:700 14px var(--text);text-transform:uppercase;fill:currentColor}
+.seal>span{max-width:58%;font:700 clamp(11px,.9vw,13px)/1.15 var(--text);text-align:center}
+@keyframes spin{to{transform:rotate(1turn)}}
+@keyframes stamp{from{opacity:0;transform:rotate(-40deg) scale(.6)}}
+@media (prefers-reduced-motion:reduce){.seal .ring{animation:none}}
+.form-bad,.form-off{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
+.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 60%,transparent)}
+.fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
+.fld:focus-within::after{transform:scaleX(1)}
+.fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
+.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:#fff}
+.fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.85;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
+.fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.75);opacity:1}
+.tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
+.good .tick{opacity:1;transform:none}
+.bad{box-shadow:inset 0 -2px var(--coral)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+@keyframes settle{from{transform:scale(1.04)}}
+
+@media (max-width:899px){
+  .logo{font-size:min(22px,5.6vw)}
+  .tag{display:none}
+  h1{margin-top:16px;font-size:min(40px,9vw)}
+  .sub{font-size:16px;line-height:24px}
+  .perks{grid-template-columns:1fr;gap:16px}
+  .perks li::before{margin-bottom:8px}
+  .perks strong{font-size:22px;line-height:26px}
+  .lead{width:100%;grid-template-columns:1fr;grid-template-rows:0fr auto;margin-top:28px}
+  .lead.open{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .fields{flex-wrap:wrap}
+  .lead.open .fields{padding:0 0 20px}
+  .fields .fld{min-width:120px}
+  .book{justify-content:space-between;padding-left:24px;font-size:14px;letter-spacing:1px}
+  .head{display:contents}
+  .seal{--s:112px;position:relative;right:auto;bottom:auto;order:1;align-self:flex-end;margin-top:24px}
+}
+/* Узкий телефон: в углу звонок, WhatsApp, язык и меню, название меньше, чтобы не уйти под них */
+@media (max-width:419px){.logo{font-size:18px}}</style>
+<style>/* Проба 04.11 «крыша поднимается», ждёт решения V. Фото фасада стоит на месте, пока уходят слова первого экрана, переходит в кадры макета
+   с поднимающейся крышей (blender/rise.py), и на том же месте проявляется живой макет. Всё только при .krysha-on, его ставит site/proba/krysha.js:
+   без него, без скрипта и при уменьшенном движении страница та же, что основная */
+.krysha{display:none}
+.krysha-on .krysha{display:block;position:relative;z-index:1}
+.krysha-on .hero{z-index:2}
+.krysha-on .hero .photo,.krysha-on .hero::after{display:none}
+.krysha-stage{position:sticky;top:0;overflow:hidden;overflow:clip}
+.krysha-photo img,.krysha-frames,.krysha-shade{position:absolute;inset:0;width:100%;height:100%}
+.krysha-photo img{object-fit:cover;object-position:50% 15%;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
+.krysha-frames{opacity:0}
+/* То же затемнение, что у первого экрана: под словами слева и мягко внизу. Уходит вместе со словами */
+.krysha-shade{background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
+.krysha-stage .plan{position:absolute;inset:0;height:100%;opacity:0}
+.krysha-at{position:absolute;left:0;width:1px;height:1px}
+</style>
+</head>
+<body data-tone="claret">
+<div class="corner">
+  <a class="cta" href="tel:+19169144407" aria-label="Позвонить 916-914-4407" data-en-label="Call 916-914-4407"><span class="roll"><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i></span></a>
+  <a class="sq wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" aria-label="WhatsApp" data-en-label="WhatsApp"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+  <button class="sq" type="button" id="lang" aria-label="English">EN</button>
+  <details class="menu sq" id="menu">
+    <summary aria-label="Меню" data-en-label="Menu"><span class="lines"></span></summary>
+    <nav class="drop">
+      <a href="#building" data-en="Floor plan">План здания</a>
+      <a href="#prices" data-en="Prices">Цены</a>
+      <a href="#radio" data-en="Radio stations and quiet">Радиостанции и тишина</a>
+      <a href="#gates" data-en="Gate and access">Ворота и доступ</a>
+      <a href="#fit" data-en="For your business">Для вашего дела</a>
+      <a href="#voice" data-en="Voice assistant bonus">Голосовой помощник</a>
+      <a href="#contact" data-en="Come see it">Приехать посмотреть</a>
+    </nav>
+  </details>
+</div>
+
+<header class="hero" id="top" data-tone="claret">
+  <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></picture></div>
+  <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
+  <div class="head"><h1 data-en="Small offices<br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы<br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1><p class="seal"><svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/><text textLength="500" lengthAdjust="spacing"><textPath href="#seal-path" data-en="Bonus for new tenants · we'll help set up ·">Бонус новым арендаторам · поможем подключить ·</textPath></text></svg><span data-en="a voice assistant">голосового помощника</span></p></div>
+  <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
+  <ul class="perks">
+    <li><strong data-en="Quiet">Тишина</strong><span data-en="Soundproofed: radio stations worked here">Шумоизоляция: здесь работали радиостанции</span></li>
+    <li><strong data-en="24/7">24/7</strong><span data-en="Round-the-clock access and parking inside the&nbsp;gated lot">Круглосуточный доступ и&nbsp;парковка на&nbsp;закрытой территории</span></li>
+    <li><strong data-en="Meeting room">Переговорная</strong><span data-en="A place to meet your clients">Есть где принять клиента</span></li>
+  </ul>
+  <form class="lead" id="lead" novalidate>
+    <div class="fields" id="lead-fields" inert>
+      <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name">Как вас зовут</span></label>
+      <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad"><span data-en="Phone">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+    </div>
+    <button class="book" type="submit" id="book" aria-controls="lead-fields" aria-expanded="false"><span class="says"><span data-en="Book a viewing">Записаться на просмотр</span><span data-en="Send">Отправить</span></span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
+    <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
+    <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
+  </form>
+</header>
+
+<div class="krysha" id="krysha">
+  <div class="krysha-stage" id="krysha-stage">
+    <picture class="krysha-photo"><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" alt=""></picture>
+    <canvas class="krysha-frames" id="krysha-frames" aria-hidden="true"></canvas>
+    <i class="krysha-shade" id="krysha-shade"></i>
+  </div>
+  <i class="krysha-at" id="krysha-at"></i>
+</div>
+
+<section class="plan" id="building" data-tone="claret">
+  <div class="plan-head">
+    <h2 data-en="Floor plan">План здания</h2>
+    <p data-en="Pick a room to see a photo of an office. Prices and open rooms aren't marked on the plan.">Нажмите на комнату, откроется снимок офиса. Цены и свободные комнаты на плане не отмечены.</p>
+  </div>
+  <div class="plan-stage" id="plan-stage">
+    <div class="near" id="near">
+      <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
+        <img src="img/maket.webp" width="1920" height="1080" alt="">
+        <canvas id="glow"></canvas>
+      </div>
+    </div>
+  </div>
+  <p class="said" id="said" aria-live="polite"></p>
+</section>
+
+<dialog class="sheet" id="sheet">
+  <button class="close" type="button" id="close" aria-label="Закрыть" data-en-label="Close"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  <figure class="shot"><img id="room-img" width="800" height="600" alt=""><figcaption id="room-caption"></figcaption></figure>
+  <div class="sheet-text">
+    <h2 id="room-title"></h2>
+    <p id="room-facts" hidden></p>
+    <p id="room-note" hidden></p>
+    <div class="acts">
+      <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+      <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="WhatsApp">WhatsApp</a>
+    </div>
+  </div>
+</dialog>
+
+<section class="flow" id="prices" data-tone="sage">
+  <h2 class="rise" data-en="Offices from&nbsp;$500 to&nbsp;$2,500 a&nbsp;month">Офисы от&nbsp;$500 до&nbsp;$2,500 в&nbsp;месяц</h2>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/office-window.webp"><img src="img/office-window-800.webp" width="1200" height="900" loading="lazy" alt="Пустой офис с большим окном" data-en-alt="Empty office with a large window"></picture></figure></div>
+  <div class="rents">
+    <div class="rent rise"><p class="sum">$500</p><p data-en="the smallest office">самый маленький офис</p></div>
+    <div class="rent rise"><p class="sum">$800</p><p data-en="a bigger office">офис побольше</p></div>
+    <div class="rent rise"><p class="sum">$2,500</p><p data-en="a unit with its own entrance">помещение с отдельным входом</p></div>
+  </div>
+  <p class="rise" data-en="The lease is one year minimum, and the deposit is one month's rent.">Договор минимум на год, залог как месяц аренды.</p>
+  <div class="acts rise">
+    <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+    <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a>
+  </div>
+</section>
+
+<section class="flow pair" id="radio" data-tone="sky">
+  <h2 class="rise" data-en="Radio stations used to work out of this building">Раньше в этом здании работали радиостанции</h2>
+  <p class="rise" data-en="They left behind soundproofed rooms, and now those are offices where you can work and talk with clients in peace.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
+  <p class="rise" data-en="IN USE signs still hang over the doors, like in a studio. You can check how quiet it is when you come to see it.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
+</section>
+
+<section id="gates" data-tone="blush">
+  <div class="flow scene-top"><h2 class="rise" data-en="The building is gated, and tenants have 24/7 access">Здание за воротами, у арендаторов доступ круглосуточно</h2><p class="rise" data-en="Parking behind the gate, security cameras, a conference room for tenants, everything on one floor.">Парковка за воротами, камеры, переговорная для арендаторов, всё на одном этаже.</p></div>
+  <div class="scene-room">
+    <div class="scene" role="img" aria-label="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-label="A sliding gate with the parking lot behind it and the brick building on the left">
+      <div class="set">
+        <img class="whole" src="img/art-yard.webp" width="1448" height="1086" loading="lazy" alt="">
+        <img class="gt" src="img/art-gate.webp" width="1448" height="1086" loading="lazy" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="flow over" id="fit" data-tone="sage">
+  <h2 class="rise" data-en="Works for a lawyer, a realtor, a salon, a doctor, a studio or a music school">Подходит юристу, риелтору, салону, врачу, студии, музыкальной школе</h2>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/office-corner.webp"><img src="img/office-corner-800.webp" width="1200" height="900" loading="lazy" alt="Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр" data-en-alt="Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet"></picture></figure></div>
+  <p class="rise" data-en="If you need water and ventilation, ask right away.">Если нужны вода и вытяжка, спросите сразу.</p>
+  <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave для моего дела. Какого он размера, что входит в аренду, есть ли вода и вытяжка?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave for my business. What size is it, what's included in the rent, and is there water and ventilation?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+</section>
+
+<section class="flow pair flip" id="voice" data-tone="sky">
+  <div class="big"><figure class="sliced"><picture><img src="img/on-air.webp" width="550" height="1050" loading="lazy" alt="Окно студии в этом здании, за стеклом горит вывеска ON AIR" data-en-alt="A studio window in this building with an ON AIR sign glowing behind the glass"></picture></figure></div>
+  <h2 class="rise" data-en="A bonus for tenants: a voice assistant answers the calls you miss">Бонус арендаторам: на пропущенные звонки ответит голосовой помощник</h2>
+  <p class="rise" data-en="When you're busy, it picks up, takes the caller's name and number, and sends you a message.">Когда вы заняты, он берёт трубку, записывает имя и номер и присылает вам сообщение.</p>
+  <p class="rise" data-en="We'll help you set it up for free, and tell you by phone what it costs after that.">Поможем подключить бесплатно. Сколько он стоит дальше, расскажем по телефону.</p>
+  <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave и бонус с голосовым помощником. Как это работает и сколько стоит дальше?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave and the voice assistant bonus. How does it work, and what does it cost after setup?" data-en="Ask on WhatsApp">Спросить в WhatsApp</a></div>
+</section>
+
+<section class="flow" id="contact" data-tone="end">
+  <h2 class="rise" data-en="Come see an office">Приезжайте посмотреть офис</h2>
+  <a class="phone" href="tel:+19169144407">916-914-4407</a>
+  <p class="rise">5345 Madison Ave, Sacramento, CA 95841. <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=5345+Madison+Ave,+Sacramento,+CA+95841" target="_blank" rel="noopener" data-en="Open in Maps">Открыть на карте</a></p>
+  <p class="rise" data-en="Call or message us and we'll set up a time.">Позвоните или напишите, и мы назначим время. Можно <span class=nb>по-русски</span>.</p>
+  <div class="acts rise">
+    <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
+    <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
+  </div>
+  <p class="legal"><a class="map" href="privacy.html" data-en="Privacy: what this site collects">Конфиденциальность: какие данные собирает сайт</a></p>
+</section>
+
+<script src="rooms.js"></script>
+<script src="site.js"></script>
+<script>// --- Проба 04.11 «крыша поднимается», ждёт решения V. Идёт после site.js и берёт его plan, rig, view, still, arrive, place.
+// Фото фасада стоит, пока слова первого экрана уходят вверх, и растворяется в первом кадре макета. Дальше прокрутка листает кадры
+// из blender/rise.py: крыша поднимается и уезжает, камера поднимается к принятому кадру. На том же месте проявляется живой макет,
+// и только потом всё вместе уходит вверх. Всё движется от прокрутки. SEQ, FADE и HOLD в высотах экрана: кадры, проявление макета, стоянка ---
+{
+  const KRYSHA = { frames: 72, seq: 2, fade: .3, hold: .35 };
+  const track = $('#krysha'), stage = $('#krysha-stage'), cv = $('#krysha-frames'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
+  if (track && !still) {
+    root.classList.add('krysha-on');
+    // Живой макет ждёт под сценой, сдвинутый за её нижний край: так его подсказка, свет и деревья не работают, пока его не видно.
+    // Пункт меню «Здание» ведёт туда, где макет уже проявился
+    stage.append(plan);
+    plan.id = 'building-live';
+    $('#krysha-at').id = 'building';
+    const ctx = cv.getContext('2d');
+    const shots = [...Array(KRYSHA.frames)].map((_, i) => {
+      const im = new Image();
+      im.decoding = 'async';
+      im.src = `img/krysha/rise-${String(i).padStart(3, '0')}.webp`;
+      im.addEventListener('load', () => { last = ''; frame(); }, { once: true });
+      return im;
+    });
+    const smooth = (u) => (u = Math.min(1, Math.max(0, u)), u * u * u * (u * (6 * u - 15) + 10));
+    const part = (v, a, b) => smooth((v - a) / (b - a));
+    const mix = (a, b, u) => a + (b - a) * u;
+    let W = 0, H = 0, hh = 0, dpr = 1, from = null, to = null, hidden = null, last = '';
+
+    function size() {
+      W = innerWidth;
+      H = innerHeight;
+      hh = hero.offsetHeight;
+      dpr = Math.min(2, devicePixelRatio || 1);
+      stage.style.height = H + 'px';
+      track.style.marginTop = -hh + 'px';
+      track.style.height = hh + (KRYSHA.seq + KRYSHA.fade + KRYSHA.hold + 1) * H + 'px';
+      $('#building').style.top = hh + (KRYSHA.seq + KRYSHA.fade) * H + 'px';
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      // Первый кадр ложится на экран целиком, как фото. Последний ровно туда, где его держит живой макет (placement.js), с той же маской краёв
+      const k0 = Math.max(W / 1920, H / 1080), top = planStage.offsetTop, h = planStage.offsetHeight;
+      from = { k: k0, x: (W - 1920 * k0) / 2, y: (H - 1080 * k0) / 2, m: [0, 0, H, H] };
+      to = { k: view.k, x: view.x, y: top + view.y, m: [top, top + h * .18, top + h * .8, top + h] };
+      last = '';
+      frame();
+    }
+
+    function frame() {
+      const y = scrollY, a = y / hh, p = Math.min(1, Math.max(0, (y - hh) / (KRYSHA.seq * H)));
+      const live = Math.min(1, Math.max(0, (y - hh - KRYSHA.seq * H) / (KRYSHA.fade * H)));
+      const into = part(a, .35, .95);
+      shade.style.opacity = 1 - part(a, 0, .8);
+      photo.style.visibility = into < 1 ? '' : 'hidden';
+      cv.style.opacity = into;
+      cv.style.visibility = live < 1 ? '' : 'hidden';
+      // Живой макет на месте с первой точки проявления, до этого за краем сцены
+      const off = live <= 0;
+      if (off !== hidden) {
+        hidden = off;
+        plan.style.transform = off ? 'translateY(100%)' : '';
+        plan.style.visibility = off ? 'hidden' : '';
+        if (!off) arrive();
+      }
+      plan.style.opacity = live;
+      if (into <= 0 || live >= 1) return;
+      // Кадр: ближайший загруженный, следующий поверх по доле, чтобы между кадрами не было ступенек
+      const f = p * (KRYSHA.frames - 1);
+      let i = Math.floor(f);
+      while (i > 0 && !shots[i].naturalWidth) i--;
+      const next = shots[Math.min(KRYSHA.frames - 1, Math.floor(f) + 1)], t = f - Math.floor(f);
+      if (!shots[i].naturalWidth) return;
+      const c = smooth(p), k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
+      const x = mix(from.x, to.x, c), top = mix(from.y, to.y, c), m = from.m.map((v, n) => mix(v, to.m[n], c).toFixed(1));
+      const key = `${f.toFixed(3)}|${W}|${H}`;
+      if (key !== last) {
+        last = key;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+        ctx.globalAlpha = 1;
+        ctx.drawImage(shots[i], x, top, 1920 * k, 1080 * k);
+        if (t > .02 && next.naturalWidth && i === Math.floor(f)) {
+          ctx.globalAlpha = t;
+          ctx.drawImage(next, x, top, 1920 * k, 1080 * k);
+        }
+      }
+      cv.style.webkitMaskImage = cv.style.maskImage = `linear-gradient(transparent ${m[0]}px,#000 ${m[1]}px,#000 ${m[2]}px,transparent ${m[3]}px)`;
+    }
+
+    let queued = false;
+    addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; frame(); });
+    }, { passive: true });
+    // После place() из placement.js: он тоже слушает resize и стоит раньше
+    addEventListener('resize', size);
+    place();
+    size();
+  }
+}
+</script>
+</body>
+</html>
