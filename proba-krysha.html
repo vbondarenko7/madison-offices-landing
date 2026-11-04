@@ -122,9 +122,11 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 .krysha-on .hero .photo,.krysha-on .hero::after{display:none}
 /* Высота экрана сразу, до скрипта: по ней placement.js считает масштаб живого макета, при нулевой высоте кадры рисовались нулевого размера */
 .krysha-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip}
-.krysha-photo img,.krysha-frames,.krysha-shade{position:absolute;inset:0;width:100%;height:100%}
+.krysha-photo img,.krysha-edge,.krysha-shade{position:absolute;inset:0;width:100%;height:100%}
 .krysha-photo img{object-fit:cover;object-position:50% 15%;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
-.krysha-frames{opacity:0}
+/* Видео в размере кадра, на место его ставит сдвиг и масштаб из krysha.js. Края растворяет .krysha-edge поверх, видео не маскируется */
+.krysha-film{position:absolute;left:0;top:0;width:1920px;height:1080px;max-width:none;transform-origin:0 0;opacity:0;pointer-events:none;will-change:transform,opacity}
+.krysha-edge{opacity:0;pointer-events:none}
 /* То же затемнение, что у первого экрана: под словами слева и мягко внизу. Уходит вместе со словами */
 .krysha-shade{background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
 .krysha-stage .plan{position:absolute;inset:0;height:100%;opacity:0}
@@ -174,7 +176,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 <div class="krysha" id="krysha">
   <div class="krysha-stage" id="krysha-stage">
     <picture class="krysha-photo"><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" alt=""></picture>
-    <canvas class="krysha-frames" id="krysha-frames" aria-hidden="true"></canvas>
+    <video class="krysha-film" id="krysha-film" muted playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true"><source src="img/krysha/rise.mp4" type="video/mp4"></video>
+    <i class="krysha-edge" id="krysha-edge"></i>
     <i class="krysha-shade" id="krysha-shade"></i>
   </div>
   <i class="krysha-at" id="krysha-at"></i>
@@ -273,13 +276,15 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 <script src="rooms.js"></script>
 <script src="site.js"></script>
-<script>// --- Проба 04.11 «крыша поднимается», ждёт решения V. Идёт после site.js и берёт его plan, rig, view, still, arrive, place.
-// Фото фасада стоит, пока слова первого экрана уходят вверх, и растворяется в первом кадре макета. Дальше прокрутка листает кадры
-// из blender/rise.py: крыша поднимается и уезжает, камера поднимается к принятому кадру. На том же месте проявляется живой макет,
-// и только потом всё вместе уходит вверх. Всё движется от прокрутки. SEQ, FADE и HOLD в высотах экрана: кадры, проявление макета, стоянка ---
+<script>// --- Проба 04.11 «крыша поднимается», ждёт решения V. Идёт после site.js и берёт его plan, view, still, arrive, place.
+// Фото фасада стоит, пока слова первого экрана уходят вверх, и растворяется в первом кадре макета. Дальше прокрутка перематывает видео
+// из кадров blender/rise.py: крыша поднимается и уезжает, камера поднимается к принятому кадру. На том же месте проявляется живой макет,
+// и только потом всё вместе уходит вверх. Всё движется от прокрутки. seq, fade и hold в высотах экрана: видео, проявление макета, стоянка.
+// Видео, а не картинки: картинку 1920 браузер распаковывал прямо при прокрутке, и первый проход шёл рывками. Видео распаковывает видеокарта.
+// При прокрутке меняются только прозрачность, сдвиг и время видео, и только когда изменились: ничего не перерисовывается целиком ---
 {
-  const KRYSHA = { frames: 72, seq: 2, fade: .3, hold: .35 };
-  const track = $('#krysha'), stage = $('#krysha-stage'), cv = $('#krysha-frames'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
+  const KRYSHA = { frames: 72, fps: 24, seq: 2, fade: .3, hold: .35 };
+  const track = $('#krysha'), stage = $('#krysha-stage'), film = $('#krysha-film'), edge = $('#krysha-edge'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
   if (track && !still) {
     root.classList.add('krysha-on');
     // Живой макет ждёт под сценой, сдвинутый за её нижний край: так его подсказка, свет и деревья не работают, пока его не видно.
@@ -287,49 +292,49 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
     stage.append(plan);
     plan.id = 'building-live';
     $('#krysha-at').id = 'building';
-    const ctx = cv.getContext('2d');
-    const shots = [...Array(KRYSHA.frames)].map((_, i) => {
-      const im = new Image();
-      im.decoding = 'async';
-      im.src = `img/krysha/rise-${String(i).padStart(3, '0')}.webp`;
-      im.addEventListener('load', () => { last = ''; frame(); }, { once: true });
-      // Сервер иногда отвечает ошибкой на один кадр: просим его ещё раз, пока рисуется соседний
-      im.addEventListener('error', () => setTimeout(() => { im.src += '?again'; }, 1000), { once: true });
-      return im;
-    });
     const smooth = (u) => (u = Math.min(1, Math.max(0, u)), u * u * u * (u * (6 * u - 15) + 10));
     const part = (v, a, b) => smooth((v - a) / (b - a));
     const mix = (a, b, u) => a + (b - a) * u;
-    let W = 0, H = 0, hh = 0, dpr = 1, from = null, to = null, hidden = null, last = '', drawn = false;
+    // Пишем в страницу только изменившееся значение
+    const put = (el, prop, v) => { if (el['_' + prop] !== v) { el['_' + prop] = v; el.style[prop] = v; } };
+    let H = 0, hh = 0, from = null, to = null, hidden = null, ready = false, want = 0;
+
+    // Видео перематывается на середину нужного кадра. Пока идёт одна перемотка, следующая ждёт её конца
+    const seek = () => { if (!film.seeking && Math.abs(film.currentTime - want) > .001) film.currentTime = want; };
+    const shown = () => { ready = true; frame(); seek(); };
+    film.addEventListener('seeked', shown);
+    film.addEventListener('loadeddata', shown, { once: true });
+    // Телефоны не грузят видео без запуска: короткий запуск без звука и сразу пауза
+    film.play().then(() => film.pause()).catch(() => {});
 
     function size() {
-      W = innerWidth;
+      const W = innerWidth;
       H = innerHeight;
       hh = hero.offsetHeight;
-      dpr = Math.min(2, devicePixelRatio || 1);
       stage.style.height = H + 'px';
       track.style.marginTop = -hh + 'px';
       track.style.height = hh + (KRYSHA.seq + KRYSHA.fade + KRYSHA.hold + 1) * H + 'px';
       $('#building').style.top = hh + (KRYSHA.seq + KRYSHA.fade) * H + 'px';
-      cv.width = Math.round(W * dpr);
-      cv.height = Math.round(H * dpr);
-      // Первый кадр ложится на экран целиком, как фото. Последний ровно туда, где его держит живой макет (placement.js), с той же маской краёв
+      // Первый кадр ложится на экран целиком, как фото. Последний ровно туда, где его держит живой макет (placement.js).
+      // Края: тот же переход в поле, что у маски живого макета, неподвижной полосой цвета поля; меняется только её прозрачность
       const k0 = Math.max(W / 1920, H / 1080), top = planStage.offsetTop, h = planStage.offsetHeight;
-      from = { k: k0, x: (W - 1920 * k0) / 2, y: (H - 1080 * k0) / 2, m: [0, 0, H, H] };
-      to = { k: view.k, x: view.x, y: top + view.y, m: [top, top + h * .18, top + h * .8, top + h] };
-      last = '';
+      from = { k: k0, x: (W - 1920 * k0) / 2, y: (H - 1080 * k0) / 2 };
+      to = { k: view.k, x: view.x, y: top + view.y };
+      edge.style.background = `linear-gradient(var(--bg) ${top}px,transparent ${top + h * .18}px,transparent ${top + h * .8}px,var(--bg) ${top + h}px)`;
+      film._transform = '';
       frame();
     }
 
     function frame() {
       const y = scrollY, a = y / hh, p = Math.min(1, Math.max(0, (y - hh) / (KRYSHA.seq * H)));
       const live = Math.min(1, Math.max(0, (y - hh - KRYSHA.seq * H) / (KRYSHA.fade * H)));
-      const into = part(a, .35, .95);
-      shade.style.opacity = 1 - part(a, 0, .8);
-      // Фото уходит, только когда под ним уже есть кадр: пока кадры грузятся, лучше фото, чем пустое поле
-      photo.style.visibility = into < 1 || !drawn ? '' : 'hidden';
-      cv.style.opacity = into;
-      cv.style.visibility = live < 1 ? '' : 'hidden';
+      const into = part(a, .35, .95), c = smooth(p);
+      put(shade, 'opacity', (1 - part(a, 0, .8)).toFixed(3));
+      // Фото уходит, только когда под ним уже есть кадр видео: пока оно грузится, лучше фото, чем пустое поле
+      put(photo, 'visibility', into < 1 || !ready ? '' : 'hidden');
+      put(film, 'opacity', (ready ? into : 0).toFixed(3));
+      put(film, 'visibility', live < 1 ? '' : 'hidden');
+      put(edge, 'opacity', c.toFixed(3));
       // Живой макет на месте с первой точки проявления, до этого за краем сцены
       const off = live <= 0;
       if (off !== hidden) {
@@ -338,28 +343,12 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
         plan.style.visibility = off ? 'hidden' : '';
         if (!off) arrive();
       }
-      plan.style.opacity = live;
+      put(plan, 'opacity', live.toFixed(3));
       if (into <= 0 || live >= 1) return;
-      // Кадр: ближайший к доле пути, если он ещё не пришёл, то ближайший загруженный. Соседние не смешиваем:
-      // камера между кадрами уезжает далеко, и полупрозрачная смесь двоит края крыши
-      const f = Math.round(p * (KRYSHA.frames - 1));
-      let i = f;
-      for (let d = 1; !shots[i].naturalWidth && d < KRYSHA.frames; d++) {
-        const n = [f - d, f + d].find((j) => shots[j]?.naturalWidth);
-        if (n !== undefined) i = n;
-      }
-      if (!shots[i].naturalWidth) return;
-      const c = smooth(p), k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
-      const x = mix(from.x, to.x, c), top = mix(from.y, to.y, c), m = from.m.map((v, n) => mix(v, to.m[n], c).toFixed(1));
-      const key = `${i}|${x.toFixed(1)}|${top.toFixed(1)}|${k.toFixed(4)}`;
-      if (key !== last) {
-        last = key;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.clearRect(0, 0, W, H);
-        ctx.drawImage(shots[i], x, top, 1920 * k, 1080 * k);
-        if (!drawn) { drawn = true; photo.style.visibility = into < 1 ? '' : 'hidden'; }
-      }
-      cv.style.webkitMaskImage = cv.style.maskImage = `linear-gradient(transparent ${m[0]}px,#000 ${m[1]}px,#000 ${m[2]}px,transparent ${m[3]}px)`;
+      const k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
+      put(film, 'transform', `translate3d(${mix(from.x, to.x, c).toFixed(1)}px,${mix(from.y, to.y, c).toFixed(1)}px,0) scale(${k.toFixed(4)})`);
+      want = (Math.round(p * (KRYSHA.frames - 1)) + .5) / KRYSHA.fps;
+      seek();
     }
 
     let queued = false;
