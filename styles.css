@@ -130,9 +130,6 @@ figcaption{padding:16px var(--m);font-weight:600}
 .sliced .bands i{position:absolute;inset:0;will-change:transform}
 .sliced .bands img{width:100%;height:100%;object-fit:cover}
 .sliced.cut picture>img,.sliced.cut picture>source+img{visibility:hidden}
-/* Конец страницы: фасад в краске страницы во всю ширину, как снимок здания, которым кончается оригинал. Полосы сходятся при подходе */
-.finale{width:100vw;margin:96px calc(50% - 50vw) -128px;aspect-ratio:2048/940}
-.finale picture,.finale img{height:100%}
 /* Ворота: снимок в краске страницы на всю ширину, полосы съезжаются, пока сцена въезжает, потом ворота откатываются. Около полутора экранов */
 .scene-top{padding-bottom:0}
 .scene-room{--h:100vh;--h:100svh;height:calc(var(--h)*1.2)}
@@ -161,7 +158,6 @@ figcaption{padding:16px var(--m);font-weight:600}
   .pair.flip .big figure{aspect-ratio:550/1050}
   .over .big{width:100%}
   .over h2{margin-bottom:0}
-  .finale{margin:64px -16px -80px;width:auto}
   .scene-room{--h:72vh;--h:72svh}
   .scene{top:14vh;top:14svh}
   .rents{grid-template-columns:1fr;gap:24px;margin-top:40px}

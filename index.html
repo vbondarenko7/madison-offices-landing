@@ -18,7 +18,7 @@
 <style>/* Первый экран как у Žít Braník: картинка здания на весь экран, слова слева снизу. Картинка сгенерирована Codex по снимкам cl-10 и cl-06 по решению V 04.11
    (content/facts.md): тот же фасад, свет золотого часа, чистый асфальт. Снизу она уходит в винное поле, поэтому стыка с макетом ниже нет.
    Картинка разрезана на полосы (site/code/hero.js): при загрузке съезжаются, при прокрутке расходятся. Форма открывается листом (dialog) */
-.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;height:100vh;height:100svh;min-height:620px;padding:0 var(--m) 40px;color:var(--cream);overflow:hidden;overflow:clip}
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;height:100vh;height:100svh;min-height:620px;padding:0 var(--m) 56px;color:var(--cream);overflow:hidden;overflow:clip}
 .hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
 .hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
 /* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама */
@@ -28,9 +28,10 @@
 .hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(rgba(69,28,37,0) 40%,rgba(69,28,37,.5) 60%,rgba(69,28,37,.88) 84%,var(--claret))}
 h1{max-width:15em;font-size:clamp(40px,4.4vw,64px);line-height:1.02;font-weight:600;letter-spacing:-.01em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{font-style:normal;color:var(--coral)}
-.perks{display:flex;flex-wrap:wrap;gap:6px 32px;margin:28px 0 0;padding:0;list-style:none;font:600 16px/24px var(--text);animation:rise 1s .3s cubic-bezier(.16,1,.3,1) both}
-/* Линия во всю ширину, под ней адрес слева и ссылка справа, как у оригинала */
-.row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid color-mix(in srgb,currentColor 35%,transparent);animation:rise 1s .42s cubic-bezier(.16,1,.3,1) both}
+/* Слова в две колонки: заголовок слева, выгоды столбцом справа, низ по одной линии. Ниже воздух, линия во всю ширину, адрес и ссылка, как у оригинала */
+.words{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:64px;align-items:end}
+.perks{display:grid;gap:6px;padding:0 0 .35em;list-style:none;font:500 17px/28px var(--text);animation:rise 1s .3s cubic-bezier(.16,1,.3,1) both}
+.row{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-top:56px;padding-top:36px;border-top:1px solid color-mix(in srgb,currentColor 35%,transparent);animation:rise 1s .42s cubic-bezier(.16,1,.3,1) both}
 .addr{font-size:16px;line-height:24px;font-weight:600}
 .book{position:relative;display:inline-block;margin-right:1.4em;padding-bottom:6px;font:700 16px/24px var(--text);letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap}
 .book::before{content:"→";position:absolute;right:-1.4em;top:0;transition:transform .3s var(--ease)}
@@ -66,7 +67,8 @@ h1 em{font-style:normal;color:var(--coral)}
   .hero{min-height:560px;padding-bottom:24px}
   .hero .photo img{object-position:30% 70%}
   h1{font-size:min(40px,8.6vw);line-height:1.05;max-width:none}
-  .perks{gap:4px 20px;margin-top:20px;font-size:15px;line-height:22px}
+  .words{display:block}
+  .perks{display:flex;flex-wrap:wrap;gap:4px 20px;margin-top:20px;padding:0;font-size:15px;line-height:22px}
   .row{flex-direction:column;align-items:flex-start;gap:12px;margin-top:20px;padding-top:16px}
   .addr{font-size:15px}
   .book{font-size:14px;letter-spacing:1.2px}
@@ -213,7 +215,6 @@ h1 em{font-style:normal;color:var(--coral)}
     <a class="btn" href="tel:+19169144407" data-en="Call">Позвонить</a>
     <a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a>
   </div>
-  <figure class="sliced finale"><picture><img src="img/art-facade.webp" width="2048" height="940" loading="lazy" alt=""></picture></figure>
 </section>
 
 <script src="rooms.js"></script>
