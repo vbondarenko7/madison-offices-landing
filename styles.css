@@ -108,6 +108,7 @@ figcaption{padding:16px var(--m);font-weight:600}
 .phone{display:block;margin-top:48px;font-size:min(8.6vw,120px);line-height:1;font-weight:600;white-space:nowrap}
 .map{text-decoration:underline;text-underline-offset:4px;white-space:nowrap}
 .map:hover{text-decoration-thickness:2px}
+.flow .legal{margin-top:64px;font-size:15px;line-height:22px}
 .nb{white-space:nowrap}
 
 /* У каждого блока своя раскладка, как у оригинала, а не одна «заголовок, абзац, снимок по центру».
