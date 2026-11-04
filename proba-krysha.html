@@ -300,7 +300,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
     const smooth = (u) => (u = Math.min(1, Math.max(0, u)), u * u * u * (u * (6 * u - 15) + 10));
     const part = (v, a, b) => smooth((v - a) / (b - a));
     const mix = (a, b, u) => a + (b - a) * u;
-    let W = 0, H = 0, hh = 0, dpr = 1, from = null, to = null, hidden = null, last = '';
+    let W = 0, H = 0, hh = 0, dpr = 1, from = null, to = null, hidden = null, last = '', drawn = false;
 
     function size() {
       W = innerWidth;
@@ -326,7 +326,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       const live = Math.min(1, Math.max(0, (y - hh - KRYSHA.seq * H) / (KRYSHA.fade * H)));
       const into = part(a, .35, .95);
       shade.style.opacity = 1 - part(a, 0, .8);
-      photo.style.visibility = into < 1 ? '' : 'hidden';
+      // Фото уходит, только когда под ним уже есть кадр: пока кадры грузятся, лучше фото, чем пустое поле
+      photo.style.visibility = into < 1 || !drawn ? '' : 'hidden';
       cv.style.opacity = into;
       cv.style.visibility = live < 1 ? '' : 'hidden';
       // Живой макет на месте с первой точки проявления, до этого за краем сцены
@@ -339,28 +340,24 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       }
       plan.style.opacity = live;
       if (into <= 0 || live >= 1) return;
-      // Кадр: ближайший загруженный, следующий поверх по доле, чтобы между кадрами не было ступенек
-      const f = p * (KRYSHA.frames - 1);
-      let i = Math.floor(f);
+      // Кадр: ближайший к доле пути, если он ещё не пришёл, то ближайший загруженный. Соседние не смешиваем:
+      // камера между кадрами уезжает далеко, и полупрозрачная смесь двоит края крыши
+      const f = Math.round(p * (KRYSHA.frames - 1));
+      let i = f;
       for (let d = 1; !shots[i].naturalWidth && d < KRYSHA.frames; d++) {
-        const n = [Math.floor(f) - d, Math.floor(f) + d].find((j) => shots[j]?.naturalWidth);
+        const n = [f - d, f + d].find((j) => shots[j]?.naturalWidth);
         if (n !== undefined) i = n;
       }
-      const next = shots[Math.min(KRYSHA.frames - 1, Math.floor(f) + 1)], t = f - Math.floor(f);
       if (!shots[i].naturalWidth) return;
       const c = smooth(p), k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
       const x = mix(from.x, to.x, c), top = mix(from.y, to.y, c), m = from.m.map((v, n) => mix(v, to.m[n], c).toFixed(1));
-      const key = `${f.toFixed(3)}|${W}|${H}`;
+      const key = `${i}|${x.toFixed(1)}|${top.toFixed(1)}|${k.toFixed(4)}`;
       if (key !== last) {
         last = key;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
-        ctx.globalAlpha = 1;
         ctx.drawImage(shots[i], x, top, 1920 * k, 1080 * k);
-        if (t > .02 && next.naturalWidth && i === Math.floor(f)) {
-          ctx.globalAlpha = t;
-          ctx.drawImage(next, x, top, 1920 * k, 1080 * k);
-        }
+        if (!drawn) { drawn = true; photo.style.visibility = into < 1 ? '' : 'hidden'; }
       }
       cv.style.webkitMaskImage = cv.style.maskImage = `linear-gradient(transparent ${m[0]}px,#000 ${m[1]}px,#000 ${m[2]}px,transparent ${m[3]}px)`;
     }
