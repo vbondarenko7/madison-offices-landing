@@ -15,76 +15,72 @@
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js" as="script">
 <link rel="stylesheet" href="styles.css">
-<style>/* Первый экран продаёт (V 04.11, research/дизайн/первый-экран-как-делают/): шапка с дескриптором, заголовок-оффер сверху слева, подзаголовок,
-   четыре выгоды со значками и форма заявки прямо на экране. Слова слева на винном поле, картинка фасада справа во всю высоту, как у Regus.
-   Снизу картинка уходит в поле, поэтому стыка с макетом нет. Она сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md)
-   и разрезана на полосы (site/code/hero.js): при загрузке съезжаются, при прокрутке расходятся */
-.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;padding:0 var(--m);overflow:hidden;overflow:clip}
-.words{flex:1;display:flex;flex-direction:column;align-items:flex-start;width:calc(58vw - var(--m) - 72px);padding-bottom:clamp(32px,6vh,64px)}
-.hero .photo{position:absolute;z-index:-1;top:0;right:0;bottom:0;width:42%;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both;-webkit-mask-image:linear-gradient(#000 74%,transparent);mask-image:linear-gradient(#000 74%,transparent)}
-.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:36% 60%}
-/* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама */
+<style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
+   Фото фасада на весь экран, затемнение только слева под словами и внизу под формой, плашек нет. Шапка: название, что здесь и адрес.
+   Заголовок с ценой, строка «кому», три выгоды (жирный заголовок и строка пояснения), повод и форма строкой внизу, мелкая строка под ней.
+   Картинка сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md), низ уходит в винное поле, стыка с макетом нет */
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:var(--cream);overflow:hidden;overflow:clip}
+.hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(28,11,15,.78) 0%,rgba(28,11,15,.52) 34%,rgba(28,11,15,0) 62%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.8) 16%,rgba(69,28,37,0) 40%)}
+/* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама (site/code/hero.js) */
 .hero .bands{position:absolute;inset:0}
 .hero .bands i{position:absolute;inset:0;will-change:transform}
 .hero.cut .photo>picture{visibility:hidden}
 
-/* Шапка: название и что здесь, как подпись у Lucid. Звонок, язык и меню справа в углу (site/page.html) */
-.logo{display:flex;align-items:center;gap:16px;height:var(--bar);font-size:26px;line-height:28px;font-weight:600}
-.tag{padding-left:16px;border-left:1px solid color-mix(in srgb,currentColor 35%,transparent);font:700 11px/14px var(--text);letter-spacing:.16em;text-transform:uppercase}
+/* Шапка: название, что здесь и адрес мелко, как у ConvertMonster. Звонок, WhatsApp, язык и меню справа в углу (site/page.html) */
+.bar{display:flex;align-items:center;gap:16px;height:var(--bar)}
+.logo{font-size:26px;line-height:28px;font-weight:600}
+.tag{padding-left:16px;border-left:1px solid color-mix(in srgb,currentColor 40%,transparent);font:700 11px/14px var(--text);letter-spacing:.16em;text-transform:uppercase}
 
-h1{margin-top:clamp(24px,6vh,80px);font-size:clamp(40px,min(4.6vw,7.4vh),68px);line-height:1.04;font-weight:600;letter-spacing:-.015em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
+h1{margin-top:clamp(32px,9vh,104px);max-width:12em;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{display:block;font-style:normal;color:var(--coral)}
-.sub{max-width:34em;margin-top:20px;font-size:clamp(17px,1.32vw,19px);line-height:1.5;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+.sub{margin-top:16px;font-size:19px;line-height:28px;font-weight:500;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
-/* Без <b>: в .cut его забирают полосы ворот (styles.css). Выгоды: тонкие значки одного набора в цвет текста, выгода и под ней чем она подтверждается */
-.perks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 40px;width:100%;margin:clamp(28px,5vh,56px) 0 clamp(28px,5vh,56px);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
-.perks li{display:flex;gap:16px;align-items:flex-start}
-.perks svg{flex:none;width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+/* Три выгоды: тонкий значок, жирный заголовок и строка пояснения. Без <b>: в .cut его забирают полосы ворот (styles.css) */
+.perks{display:flex;flex-wrap:wrap;gap:16px 48px;margin-top:36px;padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+.perks li{display:flex;align-items:flex-start;gap:12px;white-space:nowrap}
+.perks svg{flex:none;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
 .perks strong{display:block;font-size:17px;line-height:24px;font-weight:700}
-.perks span{display:block;margin-top:2px;font-size:15px;line-height:22px;opacity:.75}
+.perks span{display:block;font-size:15px;line-height:22px;opacity:.85}
 
-/* Заявка прямо на экране: повод, бонус, имя и телефон, кнопка, ниже звонок и WhatsApp. Отправки нет, после кнопки видно form.off (site/code/lead.js) */
-.lead{width:100%;margin-top:auto;padding-top:28px;border-top:1px solid color-mix(in srgb,currentColor 25%,transparent);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
-.why{font-size:19px;line-height:28px;font-weight:700}
-.gift{margin-top:4px;font-size:15px;line-height:22px;opacity:.8}
-.gift strong{font-weight:700}
-.fields{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 24px;margin-top:16px}
-.fields .fld{flex:1 1 150px}
+/* Форма строкой, как бронирование: над ней повод, под ней мелкая строка. Отправки нет, после кнопки видно form.off (site/code/lead.js) */
+.lead{align-self:stretch;margin-top:auto;padding-top:48px;animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
+.get{font-size:17px;line-height:24px;font-weight:700}
+.fields{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 32px}
+.fields .fld{flex:1 1 180px}
 .fields .btn{flex:none}
-.or{margin-top:14px;font-size:15px;line-height:22px}
+.small{margin-top:12px;font-size:14px;line-height:20px;opacity:.85}
 .form-bad,.form-off{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
-/* Поля линией, подпись поднимается, у верного номера галочка */
-.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 50%,transparent)}
+.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 60%,transparent)}
 .fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
 .fld:focus-within::after{transform:scaleX(1)}
 .fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
-.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--bg);-webkit-text-fill-color:var(--ink)}
-.fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.75;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
+.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:var(--cream)}
+.fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.85;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
 .fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.75);opacity:1}
 .tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
 .good .tick{opacity:1;transform:none}
 .bad{box-shadow:inset 0 -2px var(--coral)}
-
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 @keyframes settle{from{transform:scale(1.04)}}
 
 @media (max-width:899px){
-  /* Телефон: столбцом, картинка во всю ширину между подзаголовком и выгодами */
-  .words{width:auto;padding-bottom:40px}
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
-  h1{margin-top:12px;font-size:min(40px,9vw);line-height:1.06}
-  .sub{margin-top:12px;font-size:16px;line-height:24px}
-  .hero .photo{position:relative;top:auto;right:auto;bottom:auto;width:auto;align-self:stretch;aspect-ratio:4/3;margin:28px calc(-1*var(--m)) 0;-webkit-mask-image:none;mask-image:none}
-  .perks{grid-template-columns:1fr;gap:16px;margin:28px 0 32px}
-  .why{font-size:17px;line-height:24px}
+  h1{margin-top:16px;font-size:min(40px,9vw)}
+  .sub{font-size:16px;line-height:24px}
+  .perks{flex-direction:column;gap:12px;margin-top:24px}
+  .perks li{white-space:normal}
   .fields .btn{flex:1 1 100%}
 }
-@media (max-width:340px){.logo{font-size:17px}}</style>
+/* Узкий телефон: в углу звонок, WhatsApp, язык и меню, название меньше, чтобы не уйти под них */
+@media (max-width:419px){.logo{font-size:18px}}</style>
 </head>
 <body data-tone="claret">
 <div class="corner">
   <a class="cta" href="tel:+19169144407" aria-label="Позвонить 916-914-4407" data-en-label="Call 916-914-4407"><span class="roll"><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i><i><span class="wide" data-en="Call ">Позвонить </span>916-914-4407</i></span></a>
+  <a class="sq wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" aria-label="WhatsApp" data-en-label="WhatsApp"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
   <button class="sq" type="button" id="lang" aria-label="English">EN</button>
   <details class="menu sq" id="menu">
     <summary aria-label="Меню" data-en-label="Menu"><span class="lines"></span></summary>
@@ -101,30 +97,26 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 </div>
 
 <header class="hero" id="top" data-tone="claret">
-  <div class="words">
-    <a class="logo" href="#top">Madison<span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span></a>
-    <h1 data-en="Small offices in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
-    <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses. We&nbsp;also speak Russian.">Для врачей, юристов, риелторов, мастеров красоты и&nbsp;небольшого бизнеса. Можно <span class=nb>по-русски</span>.</p>
-    <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></picture></div>
-    <ul class="perks">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m22 9-6 6M16 9l6 6"/></svg><p><strong data-en="Your calls stay private">Разговор за&nbsp;стеной не&nbsp;слышно</strong><span data-en="Radio stations used to work here">Здесь работали радиостанции</span></p></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p><strong data-en="Work when it suits you">Работайте, когда удобно</strong><span data-en="Access 24/7">Доступ круглосуточно, 24/7</span></p></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><p><strong data-en="A place to meet clients">Есть где принять клиента</strong><span data-en="Conference room for tenants">Переговорная для арендаторов</span></p></li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg><p><strong data-en="Park right by the&nbsp;door">Машина у&nbsp;входа</strong><span data-en="Inside the gated lot">Парковка на&nbsp;закрытой территории</span></p></li>
-    </ul>
-    <form class="lead" id="lead" novalidate>
-      <p class="why" data-en="Book a viewing, and we'll show you the open offices at&nbsp;a&nbsp;time that suits you">Запишитесь на просмотр — покажем свободные офисы в&nbsp;удобное время</p>
-      <p class="gift" data-en="<strong>A bonus for new tenants:</strong> we'll help you set up a voice assistant that answers your calls."><strong>Бонус новым арендаторам:</strong> поможем подключить голосового помощника, который отвечает на&nbsp;ваши звонки.</p>
-      <div class="fields">
-        <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name">Как вас зовут</span></label>
-        <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad"><span data-en="Phone">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
-        <button class="btn" type="submit" data-en="Book a viewing">Записаться на просмотр</button>
-      </div>
-      <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
-      <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
-      <p class="or"><span data-en="or call">или позвоните</span> <a class="map" href="tel:+19169144407">916-914-4407</a> · <a class="map wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave. Какого он размера, что входит в аренду и что свободно сейчас?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave. What size is it, what's included in the rent, and what's available now?" data-en="WhatsApp">WhatsApp</a></p>
-    </form>
-  </div>
+  <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></picture></div>
+  <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
+  <h1 data-en="Small offices in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
+  <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
+  <ul class="perks">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m22 9-6 6M16 9l6 6"/></svg><p><strong data-en="Quiet">Тишина</strong><span data-en="Soundproofed: radio stations worked here">Шумоизоляция: здесь работали радиостанции</span></p></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p><strong data-en="24/7 access">Доступ 24/7</strong><span data-en="Parking inside the&nbsp;gated lot">Парковка на&nbsp;закрытой территории</span></p></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><p><strong data-en="Meeting room">Переговорная</strong><span data-en="A place to meet your clients">Есть где принять клиента</span></p></li>
+  </ul>
+  <form class="lead" id="lead" novalidate>
+    <p class="get" data-en="We'll show you the open offices and prices and book a viewing at&nbsp;a&nbsp;time that suits you">Покажем свободные офисы и&nbsp;цены, запишем на&nbsp;просмотр в&nbsp;удобное время</p>
+    <div class="fields">
+      <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name">Как вас зовут</span></label>
+      <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad"><span data-en="Phone">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+      <button class="btn" type="submit" data-en="Book a viewing">Записаться на просмотр</button>
+    </div>
+    <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
+    <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
+    <p class="small" data-en="New tenants get help setting up a voice assistant for their calls.">Можно <span class=nb>по-русски</span>. Новым арендаторам поможем подключить голосового помощника.</p>
+  </form>
 </header>
 
 <section class="plan" id="building" data-tone="claret">

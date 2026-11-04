@@ -178,6 +178,8 @@ figcaption{padding:16px var(--m);font-weight:600}
   .sq,details.menu summary{width:46px}
   .lines{width:20px}
 }
+/* Совсем узкий телефон: WhatsApp из угла убираем, иначе угол наедет на название; звонок остаётся */
+@media (max-width:374px){.corner .wa{display:none}}
 /* Невысокий ноутбук: снимок в листе ниже */
 @media (min-width:900px) and (max-height:760px){.shot img{max-height:30vh;max-height:30svh}}
 /* Короткий телефон: снимок в листе ниже, макет остаётся виден */
