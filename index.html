@@ -23,8 +23,8 @@
    Картинка сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md), низ уходит в винное поле, стыка с макетом нет */
 .hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip}
 .hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
-.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
-.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.55) 12%,rgba(69,28,37,0) 28%)}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
 /* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама (site/code/hero.js) */
 .hero .bands{position:absolute;inset:0}
 .hero .bands i{position:absolute;inset:0;will-change:transform}
@@ -35,20 +35,22 @@
 .logo{font-size:26px;line-height:28px;font-weight:600}
 .tag{padding-left:16px;border-left:1px solid color-mix(in srgb,currentColor 40%,transparent);font:700 11px/14px var(--text);letter-spacing:.16em;text-transform:uppercase}
 
-h1{margin-top:clamp(32px,9vh,104px);max-width:12em;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;text-wrap:balance;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
+h1{margin-top:clamp(32px,14vh,140px);width:max-content;max-width:100%;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{display:block;font-style:normal;color:var(--coral)}
-.sub{margin-top:16px;font-size:21px;line-height:30px;font-weight:600;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+.sub{margin-top:12px;font-size:21px;line-height:30px;font-weight:600;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
-/* Три выгоды: тонкий значок, жирный заголовок и строка пояснения. Без <b>: в .cut его забирают полосы ворот (styles.css) */
-.perks{display:flex;flex-wrap:wrap;gap:16px 48px;margin-top:36px;padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
-.perks li{display:flex;align-items:flex-start;gap:12px;white-space:nowrap}
-.perks svg{flex:none;width:26px;height:26px;filter:drop-shadow(0 1px 2px rgba(20,8,11,.4));fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
-.perks strong{display:block;font-size:19px;line-height:26px;font-weight:700}
-.perks span{display:block;font-size:16px;line-height:24px;font-weight:500;opacity:.92}
+/* Отступы лесенкой: заголовок и подзаголовок вплотную, выгоды и кнопка отбиты одинаково (--step).
+   Три выгоды плотным блоком в ширину подзаголовка: коралловая черта как метка (квадратики у Octagon), крупный заголовок, бледное пояснение.
+   Без <b>: в .cut его забирают полосы ворот (styles.css) */
+.hero{--step:clamp(28px,4.4vh,40px)}
+.perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+.perks li::before{content:"";display:block;width:28px;height:3px;margin-bottom:14px;background:var(--coral);box-shadow:0 1px 3px rgba(20,8,11,.35)}
+.perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
+.perks span{display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
 
 /* Заявка под выгодами: одна объёмная кнопка. Первое нажатие раскрывает слева от неё имя и телефон, кнопка становится «Отправить»
    (site/code/lead.js). На телефоне поля раскрываются над кнопкой. Отправки нет, после кнопки видно form.off */
-.lead{display:grid;grid-template-columns:0fr auto;justify-content:start;align-items:end;width:min(100%,800px);margin-top:44px;transition:grid-template-columns .7s var(--ease),grid-template-rows .7s var(--ease);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
+.lead{display:grid;grid-template-columns:0fr auto;justify-content:start;align-items:end;width:min(100%,800px);margin-top:var(--step);transition:grid-template-columns .7s var(--ease),grid-template-rows .7s var(--ease);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
 .lead.open{grid-template-columns:1fr auto}
 .lead>p{grid-column:1/-1}
 .fields{display:flex;gap:24px;min-width:0;min-height:0;overflow:hidden;opacity:0;transition:opacity .35s,padding .7s var(--ease)}
@@ -67,12 +69,14 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 .book i{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--claret);color:var(--coral);box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
 .book:hover i{transform:translateX(3px)}
 
-/* Печать с бонусом на фото справа от заголовка: текст по кругу медленно вращается, в середине что именно */
-.seal{position:absolute;left:min(56vw,830px);top:clamp(110px,16vh,160px);display:grid;place-items:center;width:clamp(156px,13vw,192px);aspect-ratio:1;border-radius:50%;background:var(--coral);color:var(--claret);text-shadow:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 32px -14px rgba(20,8,11,.7);transform:rotate(-12deg);animation:stamp .9s .8s cubic-bezier(.34,1.56,.64,1) both}
-.seal::before{content:"";position:absolute;inset:17%;border:1px solid rgba(69,28,37,.4);border-radius:50%}
+/* Печать с бонусом на конце строки с ценой, как наклейка на ценник: строки заголовка заданы переносами, рамка заголовка по самой длинной,
+   печать чуть заходит на её конец. По кругу медленно вращается текст, в середине кого подключим */
+.head{position:relative;width:max-content;max-width:100%}
+.seal{--s:clamp(104px,8.6vw,128px);position:absolute;right:calc(var(--s)*-.82);bottom:calc(var(--s)*.12);display:grid;place-items:center;width:var(--s);aspect-ratio:1;margin:0;border-radius:50%;background:var(--coral);color:var(--claret);text-shadow:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px -10px rgba(20,8,11,.7);transform:rotate(-12deg);animation:stamp .9s .8s cubic-bezier(.34,1.56,.64,1) both}
+.seal::before{content:"";position:absolute;inset:18%;border:1px solid rgba(69,28,37,.4);border-radius:50%}
 .seal .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 48s linear infinite}
-.seal text{font:700 13px var(--text);letter-spacing:.1em;text-transform:uppercase;fill:currentColor}
-.seal>span{max-width:54%;font:700 clamp(12px,1vw,14px)/1.2 var(--text);text-align:center}
+.seal text{font:700 14px var(--text);text-transform:uppercase;fill:currentColor}
+.seal>span{max-width:58%;font:700 clamp(11px,.9vw,13px)/1.15 var(--text);text-align:center}
 @keyframes spin{to{transform:rotate(1turn)}}
 @keyframes stamp{from{opacity:0;transform:rotate(-40deg) scale(.6)}}
 @media (prefers-reduced-motion:reduce){.seal .ring{animation:none}}
@@ -95,16 +99,17 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
   .sub{font-size:16px;line-height:24px}
-  .perks{flex-direction:column;gap:12px;margin-top:24px}
-  .perks li{white-space:normal}
+  .perks{grid-template-columns:1fr;gap:16px}
+  .perks li::before{margin-bottom:8px}
+  .perks strong{font-size:22px;line-height:26px}
   .lead{width:100%;grid-template-columns:1fr;grid-template-rows:0fr auto;margin-top:28px}
   .lead.open{grid-template-columns:1fr;grid-template-rows:1fr auto}
   .fields{flex-wrap:wrap}
   .lead.open .fields{padding:0 0 20px}
   .fields .fld{min-width:120px}
   .book{justify-content:space-between;padding-left:24px;font-size:14px;letter-spacing:1px}
-  .seal{position:relative;left:auto;top:auto;align-self:flex-end;width:128px;margin-top:24px}
-  .seal>span{font-size:10px}
+  .head{display:contents}
+  .seal{--s:112px;position:relative;right:auto;bottom:auto;order:1;align-self:flex-end;margin-top:24px}
 }
 /* Узкий телефон: в углу звонок, WhatsApp, язык и меню, название меньше, чтобы не уйти под них */
 @media (max-width:419px){.logo{font-size:18px}}</style>
@@ -145,12 +150,12 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
 <header class="hero" id="top" data-tone="claret">
   <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front"></picture></div>
   <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
-  <h1 data-en="Small offices in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
+  <div class="head"><h1 data-en="Small offices<br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>">Небольшие офисы<br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1><p class="seal"><svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/><text textLength="500" lengthAdjust="spacing"><textPath href="#seal-path" data-en="Bonus for new tenants · we'll help set up ·">Бонус новым арендаторам · поможем подключить ·</textPath></text></svg><span data-en="a voice assistant">голосового помощника</span></p></div>
   <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
   <ul class="perks">
-    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m22 9-6 6M16 9l6 6"/></svg><p><strong data-en="Quiet">Тишина</strong><span data-en="Soundproofed: radio stations worked here">Шумоизоляция: здесь работали радиостанции</span></p></li>
-    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p><strong data-en="24/7 access">Доступ 24/7</strong><span data-en="Parking inside the&nbsp;gated lot">Парковка на&nbsp;закрытой территории</span></p></li>
-    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><p><strong data-en="Meeting room">Переговорная</strong><span data-en="A place to meet your clients">Есть где принять клиента</span></p></li>
+    <li><strong data-en="Quiet">Тишина</strong><span data-en="Soundproofed: radio stations worked here">Шумоизоляция: здесь работали радиостанции</span></li>
+    <li><strong data-en="24/7">24/7</strong><span data-en="Round-the-clock access and parking inside the&nbsp;gated lot">Круглосуточный доступ и&nbsp;парковка на&nbsp;закрытой территории</span></li>
+    <li><strong data-en="Meeting room">Переговорная</strong><span data-en="A place to meet your clients">Есть где принять клиента</span></li>
   </ul>
   <form class="lead" id="lead" novalidate>
     <div class="fields" id="lead-fields" inert>
@@ -161,7 +166,6 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
     <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
     <p class="form-off" id="lead-off" role="status" data-en="This form isn't connected yet, so your request wasn't sent. Please call <a class=map href=tel:+19169144407>916-914-4407</a>." hidden>Форма пока не подключена, заявка не отправилась. Позвоните, пожалуйста: <a class=map href=tel:+19169144407>916-914-4407</a>.</p>
   </form>
-  <p class="seal"><svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/><text textLength="502" lengthAdjust="spacing"><textPath href="#seal-path" data-en="Bonus for new tenants · Bonus for new tenants ·">Бонус новым арендаторам · Бонус новым арендаторам ·</textPath></text></svg><span data-en="We'll help set up a voice assistant">Поможем подключить голосового помощника</span></p>
 </header>
 
 <section class="plan" id="building" data-tone="claret">
