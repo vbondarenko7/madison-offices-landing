@@ -47,24 +47,25 @@ h1 em{font-style:normal;color:var(--coral)}
 @keyframes walk{from{opacity:0;transform:translateY(6%)}}
 @keyframes draw{from{transform:scaleX(0)}}
 
-/* Заявка листом, как лист комнаты: поля линией, подпись поднимается, у верного номера галочка. Отправки нет, после кнопки видно form.off */
-.ask{width:min(100%,560px)}
-.ask::backdrop{background:rgba(0,45,42,.45)}
+/* Заявка листом, как лист комнаты, но в цветах страницы: бежевое поле, бордовый текст, коралловая кнопка. Поля линией, подпись поднимается, у верного номера галочка.
+   Отправки нет, после кнопки видно form.off */
+.ask{width:min(100%,560px);background:var(--paper);color:var(--wine)}
+.ask::backdrop{background:rgba(121,34,40,.5)}
 .asking{display:grid;gap:12px;padding:40px var(--m) 40px}
 .asking h2{margin-bottom:12px}
 .asking p{margin:0;max-width:none}
-.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px rgba(213,232,175,.45)}
-.fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--lime);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
+.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px rgba(121,34,40,.5)}
+.fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--wine);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
 .fld:focus-within::after{transform:scaleX(1)}
-.fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:var(--lime);caret-color:var(--coral);font:500 20px/28px var(--text)}
-.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--pine);-webkit-text-fill-color:var(--lime)}
-.fld span{position:absolute;left:0;top:28px;font-size:20px;line-height:28px;color:var(--lime);opacity:.7;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
+.fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 20px/28px var(--text)}
+.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--paper);-webkit-text-fill-color:var(--wine)}
+.fld span{position:absolute;left:0;top:28px;font-size:20px;line-height:28px;opacity:.75;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
 .fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.7);opacity:1}
-.tick{position:absolute;right:0;bottom:12px;color:var(--lime);opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
+.tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
 .good .tick{opacity:1;transform:none}
-.bad{box-shadow:inset 0 -2px var(--coral)}
+.bad{box-shadow:inset 0 -2px var(--coral-d)}
 .asking .btn{margin-top:16px;justify-content:center}
-.asking .form-bad,.asking .form-off{font-weight:600;color:var(--lime)}
+.asking .form-bad,.asking .form-off{font-weight:600}
 
 @media (max-width:899px){
   /* Телефон по эскизу 12-телефон-1: заголовок в четыре строки, люди в два ряда своим слоем (people-phone.webp), экран растёт по людям, адрес под ними */
@@ -81,6 +82,8 @@ h1 em{font-style:normal;color:var(--coral)}
   .t5{left:auto;right:4cqw;top:81.6cqw;max-width:5.6em}
   .addr{order:9;padding:14px 0 16px;text-align:center;white-space:normal}
   .asking{padding:24px var(--m) 24px;gap:8px}
+  /* Заголовок не заходит под кнопку закрытия: она 56 точек, поле листа 16 */
+  .asking h2{padding-right:48px}
   .fld input,.fld span{font-size:18px;line-height:26px}
 }</style>
 </head>
@@ -180,13 +183,13 @@ h1 em{font-style:normal;color:var(--coral)}
 <section class="flow" id="radio">
   <img class="deco deco-mic rise" src="img/deco-mic.webp" width="480" height="1046" loading="lazy" alt="">
   <h2 class="rise" data-en="Radio stations used to work out of this building">Раньше в этом здании работали радиостанции</h2>
-  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
   <p class="rise" data-en="They left behind soundproofed rooms, and now those are offices where you can work and talk with clients in peace.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a corner of the hallway, each with an IN USE sign in red letters above it"></picture></figure></div>
   <p class="rise" data-en="IN USE signs still hang over the doors, like in a studio. You can check how quiet it is when you come to see it.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
 </section>
 
 <section id="gates">
-  <div class="flow scene-top"><h2 class="rise" data-en="The building is gated, and tenants have 24/7 access">Здание за воротами, у арендаторов доступ круглосуточно</h2></div>
+  <div class="flow scene-top"><h2 class="rise" data-en="The building is gated, and tenants have 24/7 access">Здание за воротами, у арендаторов доступ круглосуточно</h2><p class="rise" data-en="Parking behind the gate, security cameras, a conference room for tenants, everything on one floor.">Парковка за воротами, камеры, переговорная для арендаторов, всё на одном этаже.</p></div>
   <div class="scene-room">
     <div class="scene" role="img" aria-label="Откатные ворота, за ними парковка, слева кирпичное здание" data-en-label="A sliding gate with the parking lot behind it and the brick building on the left">
       <div class="set">
@@ -197,7 +200,6 @@ h1 em{font-style:normal;color:var(--coral)}
       </div>
     </div>
   </div>
-  <div class="flow scene-end"><p class="rise" data-en="Parking behind the gate, security cameras, a conference room for tenants, everything on one floor.">Парковка за воротами, камеры, переговорная для арендаторов, всё на одном этаже.</p></div>
 </section>
 
 <section class="flow" id="fit">

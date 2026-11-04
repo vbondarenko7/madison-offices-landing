@@ -314,7 +314,8 @@ function flowFrame() {
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
   });
 }
-// Ворота: рисунок разрезан на полосы, как фигуры в оригинале. Полосы разъехались вверх и вниз и съезжаются в здание, встаёт солнце, потом ворота откатываются. Назад всё обратно
+// Ворота: рисунок разрезан на полосы, как фигуры в оригинале. Полосы разъехались вверх и вниз и съезжаются в здание, пока сцена въезжает на экран, встаёт солнце,
+// потом сцена ненадолго встаёт и ворота откатываются. Назад всё обратно
 const room = $('.scene-room'), stage = $('.scene'), set = $('.set'), sun = $('.sun'), gateLayer = $('.gt');
 let strips = null;
 function cutScene() {
@@ -335,12 +336,14 @@ function sceneFrame() {
   const box = room.getBoundingClientRect();
   if (box.bottom < -innerHeight || box.top > innerHeight * 2) return;
   if (!strips) cutScene();
-  const tall = stage.offsetHeight, p = Math.min(1, Math.max(0, -box.top / Math.max(1, box.height - tall)));
+  // Ход 0..1: от края экрана снизу, где сцена появляется, до конца её остановки
+  const tall = stage.offsetHeight, stop = parseFloat(getComputedStyle(stage).top) || 0;
+  const p = Math.min(1, Math.max(0, (innerHeight - box.top) / Math.max(1, innerHeight - stop + box.height - tall)));
   strips.forEach((b) => {
     const left = 1 - toEase(Math.min(1, Math.max(0, (p - b.from) / .3)));
     b.style.transform = `translate3d(0,${(b.far * tall * left).toFixed(1)}px,0)`;
   });
-  const open = Math.min(1, Math.max(0, (p - .55) / .38));
+  const open = Math.min(1, Math.max(0, (p - .6) / .35));
   gateLayer.style.transform = `translate3d(${(open * open * (3 - 2 * open) * 43).toFixed(2)}%,0,0)`;
   sun.style.transform = `translate3d(0,${((1 - toEase(Math.min(1, p / .6))) * 160).toFixed(1)}%,0)`;
   set.style.transform = `scale(${(1 + .05 * p).toFixed(4)})`;
