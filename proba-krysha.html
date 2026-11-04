@@ -292,6 +292,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       im.decoding = 'async';
       im.src = `img/krysha/rise-${String(i).padStart(3, '0')}.webp`;
       im.addEventListener('load', () => { last = ''; frame(); }, { once: true });
+      // Сервер иногда отвечает ошибкой на один кадр: просим его ещё раз, пока рисуется соседний
+      im.addEventListener('error', () => setTimeout(() => { im.src += '?again'; }, 1000), { once: true });
       return im;
     });
     const smooth = (u) => (u = Math.min(1, Math.max(0, u)), u * u * u * (u * (6 * u - 15) + 10));
@@ -339,7 +341,10 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       // Кадр: ближайший загруженный, следующий поверх по доле, чтобы между кадрами не было ступенек
       const f = p * (KRYSHA.frames - 1);
       let i = Math.floor(f);
-      while (i > 0 && !shots[i].naturalWidth) i--;
+      for (let d = 1; !shots[i].naturalWidth && d < KRYSHA.frames; d++) {
+        const n = [Math.floor(f) - d, Math.floor(f) + d].find((j) => shots[j]?.naturalWidth);
+        if (n !== undefined) i = n;
+      }
       const next = shots[Math.min(KRYSHA.frames - 1, Math.floor(f) + 1)], t = f - Math.floor(f);
       if (!shots[i].naturalWidth) return;
       const c = smooth(p), k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
