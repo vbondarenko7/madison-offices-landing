@@ -49,8 +49,7 @@ details.menu summary::-webkit-details-marker{display:none}
 .drop a:first-child{border-top:0}
 .drop a:hover{color:var(--coral-d)}
 
-/* Логотип и кнопки. Первый экран лежит отдельно, в site/screens/. Логотип стоит на небе картинки первого экрана, поэтому винный */
-.logo{position:absolute;z-index:3;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600;color:var(--claret)}
+/* Кнопки. Первый экран с названием лежит отдельно, в site/screens/ */
 .btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--claret);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s;cursor:pointer}
 .btn:hover{background:var(--coral-d)}
 /* Вторая кнопка рядом с коралловой — контуром в цвет текста */
@@ -72,7 +71,7 @@ details.menu summary::-webkit-details-marker{display:none}
 .rig:focus-visible{outline:none}
 .said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 
-/* Лист снизу слева: карточка комнаты и заявка (site/screens/). Оба в паре цветов текущего экрана, как вся страница */
+/* Лист снизу слева: карточка комнаты, в паре цветов текущего экрана, как вся страница */
 .sheet{position:fixed;z-index:15;left:0;right:auto;bottom:0;top:auto;margin:0;width:560px;max-width:100%;max-height:100%;overflow:auto;border:0;padding:0;animation:up .35s var(--ease);background:var(--bg);color:var(--ink)}
 @keyframes up{from{transform:translateY(100%)}}
 .shot img{height:auto;aspect-ratio:4/3;max-height:38vh;max-height:38svh;object-fit:cover}
@@ -141,7 +140,6 @@ figcaption{padding:16px var(--m);font-weight:600}
 .gt{will-change:transform}
 
 @media (max-width:899px){
-  .logo{top:14px;font-size:min(22px,5.6vw)}
   .btn{height:56px;padding:0 24px;justify-content:center;letter-spacing:1.2px;flex:1 1 100%}
   .plan-head{top:12px;width:180px}
   .plan-head h2{font-size:24px}
@@ -184,7 +182,6 @@ figcaption{padding:16px var(--m);font-weight:600}
 @media (min-width:900px) and (max-height:760px){.shot img{max-height:30vh;max-height:30svh}}
 /* Короткий телефон: снимок в листе ниже, макет остаётся виден */
 @media (max-height:639px){.shot img{max-height:28vh;max-height:28svh}}
-@media (max-width:340px){.logo{font-size:17px}}
 /* Телефон боком: заголовок в две строки, карточка слева, план справа */
 @media (max-height:479px) and (orientation:landscape){
   .sheet{width:min(56vw,480px)}

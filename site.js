@@ -296,14 +296,10 @@ lead.addEventListener('submit', (e) => {
   leadOff.hidden = false;
   leadOff.scrollIntoView({ block: 'nearest' });
 });
-// Форма лежит в листе и открывается кнопкой «Записаться на просмотр»
-const ask = $('#ask');
-$('#book').addEventListener('click', () => ask.showModal());
-$('#ask-close').addEventListener('click', () => ask.close());
 
 // --- Первый экран: картинка здания разрезана на полосы, как вырезанные люди у Žít Braník. В покое она целая (rest, доля высоты, 0),
 // при загрузке полосы съезжаются с разной высоты, при прокрутке вниз расходятся, каждая со своей скоростью. Без движения остаётся целая картинка ---
-const STRIPS = { desk: 14, phone: 7, drift: .32, rest: 0 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
+const STRIPS = { desk: 8, phone: 7, drift: .32, rest: 0 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
 const heroBox = $('.hero'), heroPhoto = $('.hero .photo');
 addEventListener('resize', () => heroFrame());
 let heroStrips = [];
