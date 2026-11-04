@@ -288,7 +288,7 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Заявка: подпись поднимается над полем, телефон проверяется. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
+// --- Заявка на первом экране: подпись поднимается над полем, телефон проверяется. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
 const lead = $('#lead'), leadPhone = $('#lead-phone'), leadBad = $('#lead-bad'), leadOff = $('#lead-off');
 const phoneOk = () => { const n = leadPhone.value.replace(/\D/g, '').length; return n >= 10 && n <= 15; };
 leadPhone.addEventListener('input', () => {
@@ -296,8 +296,17 @@ leadPhone.addEventListener('input', () => {
   box.classList.toggle('good', phoneOk());
   if (phoneOk()) { box.classList.remove('bad'); leadBad.hidden = true; leadPhone.removeAttribute('aria-invalid'); }
 });
+// Кнопка «Записаться на просмотр» сначала раскрывает рядом имя и телефон и становится «Отправить»
+const leadFields = $('#lead-fields'), book = $('#book');
 lead.addEventListener('submit', (e) => {
   e.preventDefault();
+  if (leadFields.inert) {
+    leadFields.inert = false;
+    lead.classList.add('open');
+    book.setAttribute('aria-expanded', 'true');
+    leadFields.querySelector('input').focus({ preventScroll: true });
+    return;
+  }
   leadOff.hidden = true;
   if (!phoneOk()) {
     leadPhone.parentElement.classList.add('bad');
