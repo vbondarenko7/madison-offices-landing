@@ -127,6 +127,10 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 /* Видео в размере кадра, на место его ставит сдвиг и масштаб из krysha.js. Края растворяет .krysha-edge поверх, видео не маскируется */
 .krysha-film{position:absolute;left:0;top:0;width:1920px;height:1080px;max-width:none;transform-origin:0 0;opacity:0;pointer-events:none;will-change:transform,opacity}
 .krysha-edge{opacity:0;pointer-events:none}
+/* Поле вокруг макета: цвет страницы с вырезом по самому макету (прозрачность img/maket.webp). Проявляется вместе с живым макетом,
+   так стол последнего кадра видео растворяется в поле, а не исчезает рывком, когда видео прячется */
+.krysha-field{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);opacity:0;pointer-events:none;
+  -webkit-mask:linear-gradient(#000,#000),url(img/maket.webp);-webkit-mask-composite:xor;mask:linear-gradient(#000,#000),url(img/maket.webp);mask-composite:exclude}
 /* То же затемнение, что у первого экрана: под словами слева и мягко внизу. Уходит вместе со словами */
 .krysha-shade{background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
 .krysha-stage .plan{position:absolute;inset:0;height:100%;opacity:0}
@@ -177,6 +181,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   <div class="krysha-stage" id="krysha-stage">
     <picture class="krysha-photo"><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" alt=""></picture>
     <video class="krysha-film" id="krysha-film" muted playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true"><source src="img/krysha/rise.mp4" type="video/mp4"></video>
+    <i class="krysha-field" id="krysha-field"></i>
     <i class="krysha-edge" id="krysha-edge"></i>
     <i class="krysha-shade" id="krysha-shade"></i>
   </div>
@@ -284,7 +289,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 // При прокрутке меняются только прозрачность, сдвиг и время видео, и только когда изменились: ничего не перерисовывается целиком ---
 {
   const KRYSHA = { frames: 72, fps: 24, seq: 2, fade: .3, hold: .35 };
-  const track = $('#krysha'), stage = $('#krysha-stage'), film = $('#krysha-film'), edge = $('#krysha-edge'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
+  const track = $('#krysha'), stage = $('#krysha-stage'), film = $('#krysha-film'), field = $('#krysha-field'), edge = $('#krysha-edge'), photo = $('.krysha-photo'), shade = $('#krysha-shade'), hero = $('.hero');
   if (track && !still) {
     root.classList.add('krysha-on');
     // Живой макет ждёт под сценой, сдвинутый за её нижний край: так его подсказка, свет и деревья не работают, пока его не видно.
@@ -321,6 +326,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
       from = { k: k0, x: (W - 1920 * k0) / 2, y: (H - 1080 * k0) / 2 };
       to = { k: view.k, x: view.x, y: top + view.y };
       edge.style.background = `linear-gradient(var(--bg) ${top}px,transparent ${top + h * .18}px,transparent ${top + h * .8}px,var(--bg) ${top + h}px)`;
+      field.style.transform = `translate3d(${to.x}px,${to.y}px,0) scale(${to.k})`;
       film._transform = '';
       frame();
     }
@@ -344,6 +350,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
         if (!off) arrive();
       }
       put(plan, 'opacity', live.toFixed(3));
+      put(field, 'opacity', live.toFixed(3));
       if (into <= 0 || live >= 1) return;
       const k = Math.exp(mix(Math.log(from.k), Math.log(to.k), c));
       put(film, 'transform', `translate3d(${mix(from.x, to.x, c).toFixed(1)}px,${mix(from.y, to.y, c).toFixed(1)}px,0) scale(${k.toFixed(4)})`);
