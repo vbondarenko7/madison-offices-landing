@@ -302,7 +302,13 @@ $('#book').addEventListener('click', () => ask.showModal());
 $('#ask-close').addEventListener('click', () => ask.close());
 
 // --- Страница ниже плана: снимок растёт и отстаёт от страницы, строки выезжают. Числа сняты с оригинала, research/дизайн/ОРИГИНАЛ-как-устроен.md -----
+// Цвет всей страницы: секция, дошедшая до середины экрана, отдаёт странице свою пару цветов (data-tone), поле и текст перетекают в CSS за 0,75 с
+if ('IntersectionObserver' in window) {
+  const toning = new IntersectionObserver((seen) => seen.forEach((s) => { if (s.isIntersecting) body.dataset.tone = s.target.dataset.tone; }), { rootMargin: '-50% 0px -50% 0px' });
+  $$('section[data-tone], header[data-tone]').forEach((s) => toning.observe(s));
+}
 const growing = $$('.grow');
+const toEase = (v) => 1 - (1 - v) ** 3;
 
 // Большой снимок растёт с 66% (на телефоне с 88%), пока его середина идёт от края экрана до 45% высоты, и движется чуть медленнее страницы
 function flowFrame() {
@@ -314,50 +320,15 @@ function flowFrame() {
     f.style.transform = `translate3d(0,${((centre - innerHeight / 2) * .045).toFixed(1)}px,0) scale(${(small + (1 - small) * grown).toFixed(4)})`;
   });
 }
-// Ворота: рисунок разрезан на полосы, как фигуры в оригинале. Полосы разъехались вверх и вниз и съезжаются в здание, пока сцена въезжает на экран, встаёт солнце,
-// потом сцена ненадолго встаёт и ворота откатываются. Назад всё обратно
-const room = $('.scene-room'), stage = $('.scene'), set = $('.set'), sun = $('.sun'), gateLayer = $('.gt');
-let strips = null;
-function cutScene() {
-  const n = innerWidth < 900 ? 9 : 16;
-  strips = [...Array(n)].map((_, i) => {
-    const b = document.createElement('b');
-    b.style.cssText = `left:${i * 100 / n}%;width:calc(${100 / n}% + 1px);background-size:${n * 100}% 100%;background-position:${i * 100 / (n - 1)}% 0`;
-    const k = (i * .618) % 1;
-    b.far = (i % 2 ? 1 : -1) * (.3 + .4 * k);
-    b.from = ((i * .382) % 1) * .22;
-    set.insertBefore(b, gateLayer);
-    return b;
-  });
-  stage.classList.add('cut');
-}
-const toEase = (v) => 1 - (1 - v) ** 3;
-function sceneFrame() {
-  const box = room.getBoundingClientRect();
-  if (box.bottom < -innerHeight || box.top > innerHeight * 2) return;
-  if (!strips) cutScene();
-  // Ход 0..1: от края экрана снизу, где сцена появляется, до конца её остановки
-  const tall = stage.offsetHeight, stop = parseFloat(getComputedStyle(stage).top) || 0;
-  const p = Math.min(1, Math.max(0, (innerHeight - box.top) / Math.max(1, innerHeight - stop + box.height - tall)));
-  strips.forEach((b) => {
-    const left = 1 - toEase(Math.min(1, Math.max(0, (p - b.from) / .3)));
-    b.style.transform = `translate3d(0,${(b.far * tall * left).toFixed(1)}px,0)`;
-  });
-  const open = Math.min(1, Math.max(0, (p - .6) / .35));
-  gateLayer.style.transform = `translate3d(${(open * open * (3 - 2 * open) * 43).toFixed(2)}%,0,0)`;
-  sun.style.transform = `translate3d(0,${((1 - toEase(Math.min(1, p / .6))) * 160).toFixed(1)}%,0)`;
-  set.style.transform = `scale(${(1 + .05 * p).toFixed(4)})`;
-}
 if (!still) {
   let flowQueued = false;
   addEventListener('scroll', () => {
     if (flowQueued) return;
     flowQueued = true;
-    requestAnimationFrame(() => { flowQueued = false; flowFrame(); sceneFrame(); });
+    requestAnimationFrame(() => { flowQueued = false; flowFrame(); });
   }, { passive: true });
-  addEventListener('resize', () => { flowFrame(); sceneFrame(); });
+  addEventListener('resize', flowFrame);
   flowFrame();
-  sceneFrame();
 }
 
 // Строки выезжают снизу на свою высоту по очереди. Разбивка только на время движения, потом текст снова целый и переносится сам
@@ -375,7 +346,7 @@ function splitLines(e) {
 const EASE = 'cubic-bezier(.165,.84,.44,1)';
 function riseUp(block) {
   block.classList.remove('wait');
-  if (block.matches('.acts, .deco')) {
+  if (block.matches('.acts')) {
     block.animate([{ transform: 'translateY(30px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 1200, easing: EASE });
     return;
   }
@@ -397,15 +368,14 @@ if (!still && 'IntersectionObserver' in window) {
   }), { rootMargin: '0px 0px -10% 0px' });
   $$('.rise').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
 }
-// --- Стык первого экрана и макета. Чем дальше макет от своего места, тем выше над ним дымка цвета страницы, поэтому верхнего края у него не видно. Заодно макет чуть вырастает и в комнатах постепенно загорается свет. Всё считается только от прокрутки, сама она ничем не задерживается ---
-// from размер макета в начале, haze высота дымки от пройденного пути
-const ARRIVE = { from: .9, haze: .5 };
-const veil = $('#veil'), nearBox = $('#near');
+// --- Стык первого экрана и макета: макет чуть вырастает и в комнатах постепенно загорается свет. Края кадра растворяет маска в styles.css. Всё считается только от прокрутки, сама она ничем не задерживается ---
+// from размер макета в начале
+const ARRIVE = { from: .9 };
+const nearBox = $('#near');
 let lightsOn = still ? 1 : 0;
 
 function arrive() {
-  const away = Math.max(0, plan.getBoundingClientRect().top), h = plan.offsetHeight || 1;
-  veil.style.transform = `scaleY(${Math.min(1, away * ARRIVE.haze / h).toFixed(4)})`;
+  const away = Math.max(0, plan.getBoundingClientRect().top);
   if (still) return;
   const near = Math.max(0, 1 - away / (innerHeight * .95));
   nearBox.style.transform = `scale(${(ARRIVE.from + (1 - ARRIVE.from) * toEase(near)).toFixed(4)})`;

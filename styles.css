@@ -6,54 +6,65 @@
 @font-face{font-family:"Montserrat Alternates";src:url(fonts/montserrat-alternates-latin-600.woff2) format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:Manrope;src:url(fonts/manrope-cyrillic.woff2) format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:Manrope;src:url(fonts/manrope-latin.woff2) format("woff2");font-weight:200 800;font-display:swap}
-:root{--wine:#792228;--lime:#d5e8af;--coral:#ff5b4d;--coral-d:#e04a3d;--sky:#c2daf6;--paper:#f0efeb;--pine:#002d2a;--leaf:#5fba82;--cream:#f6f5f3;--red:#c8202c;--m:64px;--bar:64px;--band:338px;--band2:236px;--h2:clamp(32px,3.1vw,44px);--ease:cubic-bezier(.65,0,.2,1);--text:Manrope,Arial,sans-serif;--head:"Montserrat Alternates",Arial,sans-serif}
+:root{--claret:#451c25;--sage:#d9dfc1;--sky:#c9d5e2;--blush:#e8c0ad;--coral:#ee7359;--coral-d:#e0624a;--cream:#f3efe6;--m:64px;--bar:64px;--h2:clamp(32px,3.1vw,44px);--ease:cubic-bezier(.65,0,.2,1);--text:Manrope,Arial,sans-serif;--head:"Montserrat Alternates",Arial,sans-serif}
+/* Палитра по парам Žít Braník, приглушённая до деловой (V 04.11: прежний бордовый «кровавый, мультяшный»).
+   Пара на экран: поле --bg и цвет всего текста --ink. Страница берёт пару той секции, что дошла до середины экрана (data-tone, site/code/flow.js).
+   Контраст текста на поле от 9,7:1, коралловая кнопка с бордовым текстом 5:1, бордовый на персиковом 8,7:1 */
+body{--bg:var(--claret);--ink:var(--sage)}
+body[data-tone=sage]{--bg:var(--sage);--ink:var(--claret)}
+body[data-tone=sky]{--bg:var(--sky);--ink:var(--claret)}
+body[data-tone=blush]{--bg:var(--blush);--ink:var(--claret)}
+/* На персиковом поле коралловый звонок теряется: угол меняет его на бордовый, как оригинал на своём коралловом поле */
+body[data-tone=blush] .cta{background:var(--claret);color:var(--cream)}
+body[data-tone=end]{--bg:var(--claret);--ink:var(--coral)}
 /* --h2: заголовок раздела. Огромные только главный заголовок первого экрана и телефон в конце (V 01.11) */
 @media (max-width:899px){:root{--m:16px;--bar:56px;--h2:min(28px,7.4vw)}}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
-body{font:400 16px/24px var(--text);color:var(--wine);background:var(--paper);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-::selection{background:var(--coral);color:var(--pine)}
+/* Одно поле на всю страницу: у секций своего цвета нет, поле и текст перетекают целиком за 0,75 с, как у Žít Braník */
+body{font:400 16px/24px var(--text);color:var(--ink);background:var(--bg);transition:background-color .75s var(--ease),color .75s var(--ease);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+::selection{background:var(--coral);color:var(--claret)}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 img{display:block;width:100%;height:auto}
 :focus{outline:none}
-:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 h1,h2,h3,.logo,.phone,.sum{font-family:var(--head);font-weight:500}
 
 /* Угол: звонок всегда на экране */
 .corner{position:fixed;z-index:20;top:0;right:0;display:flex;height:var(--bar)}
-.cta{height:100%;padding:0 40px;background:var(--coral);color:var(--pine);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;display:flex;align-items:center;white-space:nowrap;transition:background .2s}
+.cta{height:100%;padding:0 40px;background:var(--coral);color:var(--claret);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;display:flex;align-items:center;white-space:nowrap;transition:background .2s}
 .roll{display:block;height:24px;overflow:hidden;white-space:nowrap}
 .roll i{display:block;font-style:normal;line-height:24px;transition:transform .35s var(--ease)}
 .cta:hover{background:var(--coral-d)}
 .cta:hover .roll i{transform:translateY(-24px)}
-.sq{width:var(--bar);height:100%;background:var(--paper);display:grid;place-items:center;font-weight:600;letter-spacing:1.6px;color:var(--wine);position:relative}
-.sq:hover{background:var(--cream)}
+.sq{width:var(--bar);height:100%;background:var(--cream);display:grid;place-items:center;font-weight:600;letter-spacing:1.6px;color:var(--claret);position:relative}
+.sq:hover{background:#e7e1d4}
 .lines{display:block;width:32px;height:8px;border-top:1px solid;border-bottom:1px solid}
 details.menu{display:block}
 details.menu summary{list-style:none;height:var(--bar);width:var(--bar);cursor:pointer;display:grid;place-items:center}
 details.menu summary::-webkit-details-marker{display:none}
-.drop{position:absolute;right:0;top:100%;width:280px;background:var(--paper);padding:12px 24px;display:grid;font-weight:600;letter-spacing:0}
-.drop a{padding:12px 0;border-top:1px solid rgba(121,34,40,.25)}
+.drop{position:absolute;right:0;top:100%;width:280px;background:var(--cream);padding:12px 24px;display:grid;font-weight:600;letter-spacing:0}
+.drop a{padding:12px 0;border-top:1px solid rgba(69,28,37,.2)}
 .drop a:first-child{border-top:0}
 .drop a:hover{color:var(--coral-d)}
 
-/* Логотип и кнопки. Первый экран лежит отдельно, в site/screens/ */
-.logo{position:absolute;z-index:3;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600}
-.btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--pine);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s;cursor:pointer}
+/* Логотип и кнопки. Первый экран лежит отдельно, в site/screens/. Логотип стоит на снимке первого экрана, поэтому кремовый */
+.logo{position:absolute;z-index:3;left:var(--m);top:18px;font-size:26px;line-height:28px;font-weight:600;color:var(--cream)}
+.btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--claret);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s;cursor:pointer}
 .btn:hover{background:var(--coral-d)}
-.btn.alt{background:var(--paper);color:var(--wine)}
-.btn.alt:hover{background:var(--cream)}
+/* Вторая кнопка рядом с коралловой — контуром в цвет текста */
+.btn+.btn{background:none;color:inherit;box-shadow:inset 0 0 0 1px currentColor}
+.btn+.btn:hover{background:var(--coral);color:var(--claret);box-shadow:none}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
 
-/* Второй экран: макет почти на весь экран, заголовок в пустом углу */
+/* Второй экран: макет лежит на общем поле, как большой снимок. Фона у него нет, край кадра сверху и снизу растворяется в поле маской, поэтому шва с соседями нет */
 .plan{position:relative;height:100vh;height:100svh;overflow:hidden;overflow:clip}
 .plan-head{position:absolute;z-index:3;left:var(--m);top:24px;width:280px}
 .plan-head h2{font-size:var(--h2);line-height:1.1;font-weight:600}
 .plan-head p{margin-top:12px}
-.plan-stage{position:absolute;inset:0;overflow:hidden;overflow:clip}
+.plan-stage{position:absolute;inset:0;overflow:hidden;overflow:clip;-webkit-mask-image:linear-gradient(transparent,#000 18%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 80%,transparent)}
 .near{position:absolute;inset:0;transform-origin:68% 50%}
-.veil{position:absolute;z-index:2;left:0;right:0;top:-2px;height:calc(100% + 2px);transform:scaleY(0);transform-origin:0 0;pointer-events:none;background:linear-gradient(var(--paper),rgba(240,239,235,.82) 25%,rgba(240,239,235,.5) 50%,rgba(240,239,235,.18) 75%,rgba(240,239,235,0))}
 .rig{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .5s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .rig.over{cursor:pointer}
 .rig img{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
@@ -61,11 +72,8 @@ details.menu summary::-webkit-details-marker{display:none}
 .rig:focus-visible{outline:none}
 .said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 
-/* Лист снизу слева: карточка комнаты и заявка (site/screens/). Цвета у каждого свои: карточка тёмная поверх макета, заявка в цветах страницы */
-.sheet{position:fixed;z-index:15;left:0;right:auto;bottom:0;top:auto;margin:0;width:560px;max-width:100%;max-height:100%;overflow:auto;border:0;padding:0;animation:up .35s var(--ease)}
-#sheet{background:var(--pine);color:var(--leaf)}
-#sheet :focus-visible{outline-color:var(--lime)}
-#sheet h2,#room-facts{color:var(--lime)}
+/* Лист снизу слева: карточка комнаты и заявка (site/screens/). Оба в паре цветов текущего экрана, как вся страница */
+.sheet{position:fixed;z-index:15;left:0;right:auto;bottom:0;top:auto;margin:0;width:560px;max-width:100%;max-height:100%;overflow:auto;border:0;padding:0;animation:up .35s var(--ease);background:var(--bg);color:var(--ink)}
 @keyframes up{from{transform:translateY(100%)}}
 .shot img{height:auto;aspect-ratio:4/3;max-height:38vh;max-height:38svh;object-fit:cover}
 .shot figcaption{padding:12px var(--m) 0;font-weight:500;font-size:14px;line-height:20px}
@@ -73,8 +81,8 @@ details.menu summary::-webkit-details-marker{display:none}
 .sheet h2{font-size:32px;line-height:36px;margin-bottom:24px}
 .sheet p{margin:-16px 0 24px}
 #room-facts{font-weight:600}
-.close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--paper);color:var(--wine);display:grid;place-items:center}
-.close:hover{background:var(--cream)}
+.close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--cream);color:var(--claret);display:grid;place-items:center}
+.close:hover{background:#e7e1d4}
 
 /* Почти квадратное окно: макету нужна ширина, заголовок уже */
 @media (min-width:900px) and (max-aspect-ratio:7/5){.plan-head{width:200px}.plan-head h2{font-size:32px}}
@@ -91,32 +99,17 @@ figure picture{flex:1;display:block;overflow:hidden}
 figure img{height:100%;object-fit:cover}
 figcaption{padding:16px var(--m);font-weight:600}
 .big{clear:both;margin-top:64px}
-/* Рисунок в цвет текста лежит на поле справа от заголовка */
-.deco{float:right;height:auto;margin:0 -8vw 48px 48px}
-/* Микрофон высокий и узкий: его высота ограничена от экрана, чтобы снимок дверей под ним был виден вместе с заголовком */
-.deco-mic{width:min(10.5vw,17vh,150px)}
-.deco-phone{width:min(23.5vw,340px)}
 .big figure{aspect-ratio:4/3;transform-origin:50% 50%}
+/* Снимки телефонные и яркие: чуть тише цвет, чтобы лежали в одном мире с полем */
+.big img{filter:saturate(.82)}
 .big picture{height:100%}
 .rents{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px}
 .flow .rent p{margin-top:8px}
 .flow .rent .sum{margin-top:0;font-size:clamp(40px,5vw,72px);line-height:1.1;font-weight:600}
 .phone{display:block;margin-top:48px;font-size:min(8.6vw,120px);line-height:1;font-weight:600;white-space:nowrap}
 .map{text-decoration:underline;text-underline-offset:4px;white-space:nowrap}
-.map:hover{color:var(--coral-d)}
+.map:hover{text-decoration-thickness:2px}
 .nb{white-space:nowrap}
-
-/* Сцена с воротами: рисунок цветом текста прямо на поле страницы, заголовок и строка фактов над ним. Полосы съезжаются в здание, пока сцена въезжает на экран,
-   потом она ненадолго встаёт (запас 0,2 её высоты) и ворота цвета кнопок откатываются. Весь блок около полутора экранов */
-.scene-top{padding-bottom:48px}
-.scene-room{--h:100vh;--h:100svh;height:calc(var(--h)*1.2)}
-.scene{--w:max(100vw,calc(var(--h)*4/3));position:sticky;top:0;height:var(--h);overflow:hidden;overflow:clip}
-.set{position:absolute;left:calc((100vw - var(--w))*.52);top:calc((var(--h) - var(--w)*.75)*.62);width:var(--w);height:calc(var(--w)*.75);transform-origin:52% 62%}
-.set img{position:absolute;inset:0;width:100%;height:100%}
-.cut .whole{visibility:hidden}
-.cut b{position:absolute;top:0;height:100%;background:url(img/scene-print.webp) no-repeat;will-change:transform}
-.gt{will-change:transform}
-.sun{position:absolute;left:50%;top:24%;width:22%;aspect-ratio:1;border-radius:50%;background:var(--coral);will-change:transform}
 
 @media (max-width:899px){
   .logo{top:14px;font-size:min(22px,5.6vw)}
@@ -129,11 +122,6 @@ figcaption{padding:16px var(--m);font-weight:600}
   .flow .acts{margin-top:32px}
   .flow .btn{flex:1 1 100%}
   .big{margin-top:40px}
-  .scene-room{--h:72vh;--h:72svh}
-  .scene{top:14vh;top:14svh}
-  .deco{float:none;margin:0 0 40px auto}
-  .deco-mic{width:30%}
-  .deco-phone{width:55%}
   .rents{grid-template-columns:1fr;gap:24px;margin-top:40px}
   .flow .rent .sum{font-size:min(48px,12.8vw)}
   .phone{margin-top:32px;font-size:calc((100vw - 2*var(--m))/6.9)}
@@ -170,12 +158,8 @@ figcaption{padding:16px var(--m);font-weight:600}
   .plan-head h2{font-size:32px}
   .plan-head p{margin-top:12px;font-size:16px;line-height:24px}
   .near{transform-origin:50% 45%}
-  .plan-stage{-webkit-mask-image:linear-gradient(transparent,#000 28px);mask-image:linear-gradient(transparent,#000 28px)}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .scene-room{height:auto}
-  .scene{position:relative;top:0}
-  .gt{display:none}
   *,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation-duration:.01s!important}
 }
