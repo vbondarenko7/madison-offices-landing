@@ -47,7 +47,8 @@ details.menu summary::-webkit-details-marker{display:none}
 .drop{position:absolute;right:0;top:100%;width:280px;background:var(--cream);padding:12px 24px;display:grid;font-weight:600;letter-spacing:0}
 .drop a{padding:12px 0;border-top:1px solid rgba(69,28,37,.2)}
 .drop a:first-child{border-top:0}
-.drop a:hover{color:var(--coral-d)}
+.drop a:hover,.drop [aria-current=true]{color:var(--coral-d)}
+.langs .drop{width:200px}
 
 /* Кнопки. Первый экран с названием лежит отдельно, в site/screens/ */
 .btn{display:inline-flex;align-items:center;height:64px;padding:0 40px;background:var(--coral);color:var(--claret);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s;cursor:pointer}

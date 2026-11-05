@@ -17,7 +17,7 @@ document.addEventListener('click', (e) => {
   if (a) goal(a.href.startsWith('tel:') ? 'call' : 'whatsapp');
 });
 $$('#lead input').forEach((i) => i.classList.add('ym-disable-keys'));
-// --- Язык: русский текст в разметке, английский в data-en ------------------------------------
+// --- Язык: русский текст в разметке, английский в data-en, испанский в data-es -------------------
 const TEXT = {
   ru: { position: (n, total) => `Комната ${n} из ${total}`,
     office: { caption: 'Один из офисов в этом здании. Снимка именно этой комнаты пока нет.', title: 'Цену, размер и что свободно, можно узнать по телефону или в WhatsApp.' },
@@ -25,15 +25,23 @@ const TEXT = {
     any: 'Офис в этом здании', known: 'Что свободно, можно узнать по телефону или в WhatsApp.',
     alt: { 'office-window': 'Пустой офис с большим окном', 'office-corner': 'Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр', 'office-blinds': 'Пустой угловой офис с жалюзи на окнах', 'office-narrow': 'Пустой офис с жёлтой и коричневой стенами и жалюзи', 'office-glass': 'Пустой офис за стеклянной стеной, за окном деревья', 'meeting-room': 'Переговорная с длинным столом и креслами' },
     message: 'Здравствуйте! Интересует офис на 5345 Madison Ave. Подскажите цену, размер и что сейчас свободно?',
-    title: 'Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center', other: 'English', sw: 'EN' },
+    title: 'Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center', description: 'Сдаём офисы на 5345 Madison Ave в Сакраменто. Самый маленький стоит $500 в месяц, договор от года. Здание за забором с воротами, доступ круглосуточный. Звоните: 916-914-4407.' },
   en: { position: (n, total) => `Room ${n} of ${total}`,
     office: { caption: "One of the offices in this building. We don't have a photo of this exact room yet.", title: 'Call or message us for the price, size and availability.' },
     meeting: { caption: 'The conference room in this building. We can show you where it is on the model.', title: 'Any tenant can use it', note: 'Call or message us for office prices, sizes and availability.' },
     any: 'An office in this building', known: "Call or message us to find out what's available.",
     alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with yellow and brown walls and blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside', 'meeting-room': 'Conference room with a long table and chairs' },
     message: "Hi! I'm interested in an office at 5345 Madison Ave. Can you tell me the price, the size and what's available now?",
-    title: 'Offices for rent in Sacramento from $500 a month | Madison Business Center', other: 'Русский', sw: 'RU' },
+    title: 'Offices for rent in Sacramento from $500 a month | Madison Business Center', description: 'Offices for rent at 5345 Madison Ave in Sacramento. The smallest one is $500 a month, with a one-year lease. The building is gated, with 24/7 access. Call 916-914-4407.' },
+  es: { position: (n, total) => `Oficina ${n} de ${total}`,
+    office: { caption: 'Una de las oficinas de este edificio. Todavía no tenemos foto de esta oficina en particular.', title: 'Pregunte por teléfono o WhatsApp el precio, el tamaño y si está disponible.' },
+    meeting: { caption: 'La sala de juntas de este edificio. Por teléfono le decimos dónde está en la maqueta.', title: 'La pueden usar todos los inquilinos', note: 'El precio de las oficinas, el tamaño y qué hay libre se lo decimos por teléfono o WhatsApp.' },
+    any: 'Una oficina en este edificio', known: 'Pregunte por teléfono o WhatsApp qué está disponible.',
+    alt: { 'office-window': 'Oficina vacía con una ventana grande', 'office-corner': 'Oficina vacía en esquina, con ventanas en dos paredes, esmeriladas abajo y transparentes arriba, y alfombra oscura', 'office-blinds': 'Oficina vacía en esquina con persianas en las ventanas', 'office-narrow': 'Oficina vacía con una pared amarilla y otra café, y persianas', 'office-glass': 'Oficina vacía detrás de una pared de vidrio, con árboles afuera', 'meeting-room': 'Sala de juntas con una mesa larga y sillas' },
+    message: '¡Hola! Me interesa una oficina en 5345 Madison Ave. ¿Me puede decir el precio, el tamaño y qué hay disponible ahora?',
+    title: 'Oficinas en renta en Sacramento desde $500 al mes | Madison Business Center', description: 'Rentamos oficinas en 5345 Madison Ave, Sacramento. La más pequeña cuesta $500 al mes, con contrato de un año. El edificio está cercado y tiene acceso 24/7. Llame al 916-914-4407.' },
 };
+const LANGS = Object.keys(TEXT);
 const waLink = (text) => `https://wa.me/19169144407?text=${encodeURIComponent(text)}`;
 const t = () => TEXT[root.lang];
 $$('[data-en]').forEach((e) => { e.dataset.ru = e.innerHTML; });
@@ -42,19 +50,20 @@ $$('[data-en-alt]').forEach((e) => { e.dataset.ruAlt = e.alt; });
 
 function setLang(l) {
   root.lang = l;
-  $$('[data-en]').forEach((e) => { e.innerHTML = l === 'en' ? e.dataset.en : e.dataset.ru; });
-  $$('[data-en-label]').forEach((e) => e.setAttribute('aria-label', l === 'en' ? e.dataset.enLabel : e.dataset.ruLabel));
-  $$('[data-en-alt]').forEach((e) => { e.alt = l === 'en' ? e.dataset.enAlt : e.dataset.ruAlt; });
-  $('#lang').textContent = t().sw;
-  $('#lang').setAttribute('aria-label', t().other);
+  $$('[data-en]').forEach((e) => { e.innerHTML = e.dataset[l]; });
+  $$('[data-en-label]').forEach((e) => e.setAttribute('aria-label', e.dataset[`${l}Label`]));
+  $$('[data-en-alt]').forEach((e) => { e.alt = e.dataset[`${l}Alt`]; });
+  $('#lang').textContent = l.toUpperCase();
+  $$('[data-lang]').forEach((a) => a.setAttribute('aria-current', a.dataset.lang === l));
   document.title = t().title;
+  $('meta[name=description]').content = t().description;
+  $$('a[href^="privacy.html"]').forEach((a) => { a.href = l === 'ru' ? 'privacy.html' : `privacy.html#${l}`; });
   $$('.wa').forEach((a) => { a.href = waLink(a.getAttribute(`data-wa-${l}`) || t().message); });
   try { localStorage.setItem('lang', l); } catch (e) {}
   if (shown) fillSheet(shown);
   place();
 }
-$('#lang').addEventListener('click', () => setLang(root.lang === 'en' ? 'ru' : 'en'));
-
+$$('[data-lang]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); setLang(a.dataset.lang); }));
 // --- Макет на экране: по центру под заголовком, на PLACE.wide ширины экрана, но не шире max точек (дальше кадр мылится); телефон на всю ширину.
 // Блок выше экрана: комнаты крупные, их видно (V 05.11: «очень маленький… не разглядеть») ---
 const PLACE = { wide: .88, max: 1400 };
@@ -727,9 +736,9 @@ if (!still) {
   }, { threshold: .4 }).observe(planStage);
 }
 // --- Мелочи: меню закрывается, рамка остаётся только для клавиатуры ------------------------------
-$$('.drop a').forEach((a) => a.addEventListener('click', () => { $('#menu').open = false; }));
+$$('.drop a').forEach((a) => a.addEventListener('click', () => { a.closest('details').open = false; }));
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('#menu')) $('#menu').open = false;
+  $$('details.menu').forEach((d) => { if (!d.contains(e.target)) d.open = false; });
   // После tel: окно получает фокус обратно, и браузер рисует рамку; при нажатии мышью или пальцем фокус снимаем
   if (e.detail > 0) { const f = e.target.closest('a,button,summary'); if (f) f.blur(); }
 });
@@ -737,8 +746,9 @@ document.addEventListener('click', (e) => {
 // --- Старт ---------------------------------------------------------------------------------
 const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
 const asked = new URLSearchParams(location.search).get('lang');
-const ru = /^(ru|uk|be)/i.test((navigator.languages || [navigator.language])[0]);
-setLang(asked === 'en' || asked === 'ru' ? asked : saved || (ru ? 'ru' : 'en'));
+// Без выбора посетителя язык по первому языку браузера: русский (и украинский, белорусский), испанский, иначе английский
+const first = String((navigator.languages || [navigator.language])[0]).toLowerCase();
+setLang([asked, saved].find((l) => LANGS.includes(l)) || (/^(ru|uk|be)/.test(first) ? 'ru' : first.startsWith('es') ? 'es' : 'en'));
 if (document.fonts) document.fonts.ready.then(place);
 // Тяжёлый свет грузится после первого экрана
 addEventListener('load', () => setTimeout(() => { lit.src = 'img/maket-svet.webp'; }, 300));
