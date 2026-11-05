@@ -57,16 +57,16 @@ details.menu summary::-webkit-details-marker{display:none}
 .btn+.btn:hover{background:var(--coral);color:var(--claret);box-shadow:none}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
 
-/* Второй экран: макет лежит на общем поле, как большой снимок. Фона у него нет, край кадра сверху и снизу растворяется в поле маской, поэтому шва с соседями нет */
-.plan{position:relative;height:100vh;height:100svh;overflow:hidden;overflow:clip}
-.plan-head{position:absolute;z-index:3;left:var(--m);top:24px;width:280px}
+/* Второй блок (V 05.11): сверху по центру заголовок и строка подсказки, под ними макет целиком по центру, с воздухом.
+   Кадр макета прозрачный, поэтому он лежит прямо на общем поле: ни фона, ни рамки, ни обрезанных краёв. Размер задаёт site/code/placement.js */
+.plan{position:relative;padding:clamp(56px,9vh,88px) var(--m) 0;text-align:center;overflow:clip}
 .plan-head h2{font-size:var(--h2);line-height:1.1;font-weight:600}
-.plan-head p{margin-top:12px}
-.plan-stage{position:absolute;inset:0;overflow:hidden;overflow:clip;-webkit-mask-image:linear-gradient(transparent,#000 18%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 80%,transparent)}
-.near{position:absolute;inset:0;transform-origin:68% 50%}
-.rig{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;will-change:transform;transition:transform .5s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.plan-head p{margin-top:12px;font-size:18px;line-height:28px}
+.plan-stage{position:relative;margin-top:clamp(20px,3.5vh,36px)}
+.near{position:absolute;inset:0;transform-origin:50% 50%}
+.rig{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;transition:transform .5s var(--ease);touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .rig.over{cursor:pointer}
-.rig img{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
+.rig img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .rig canvas{position:absolute;pointer-events:none}
 .rig:focus-visible{outline:none}
 .said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
@@ -83,8 +83,6 @@ details.menu summary::-webkit-details-marker{display:none}
 .close{position:absolute;right:0;top:0;width:64px;height:64px;background:var(--cream);color:var(--claret);display:grid;place-items:center}
 .close:hover{background:#e7e1d4}
 
-/* Почти квадратное окно: макету нужна ширина, заголовок уже */
-@media (min-width:900px) and (max-aspect-ratio:7/5){.plan-head{width:200px}.plan-head h2{font-size:32px}}
 
 /* Страница ниже плана: одно поле, один цвет текста, один акцент на кнопках, один столбец. На блоке заголовок, снимок и пара строк */
 .flow{display:flow-root;width:min(73.3vw,1017px);margin:auto;padding:128px 0}
@@ -144,9 +142,7 @@ figcaption{padding:16px var(--m);font-weight:600}
 
 @media (max-width:899px){
   .btn{height:56px;padding:0 24px;justify-content:center;letter-spacing:1.2px;flex:1 1 100%}
-  .plan-head{top:12px;width:180px}
-  .plan-head h2{font-size:24px}
-  .plan-head p{margin-top:6px;font-size:13px;line-height:18px}
+  .plan-head p{font-size:16px;line-height:24px}
   .flow{width:auto;margin:0;padding:80px var(--m)}
   .flow p{margin-top:24px;font-size:18px;line-height:27px}
   .flow .acts{margin-top:32px}
@@ -192,12 +188,6 @@ figcaption{padding:16px var(--m);font-weight:600}
   .sheet{width:min(56vw,480px)}
   .sheet-text{padding:8px var(--m)}
   .sheet h2{font-size:18px;line-height:22px;margin-bottom:8px}
-}
-@media (max-width:899px) and (orientation:portrait){
-  .plan-head{position:relative;left:0;top:0;width:auto;padding:72px var(--m) 12px}
-  .plan-head h2{font-size:32px}
-  .plan-head p{margin-top:12px;font-size:16px;line-height:24px}
-  .near{transform-origin:50% 45%}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}

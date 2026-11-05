@@ -16,19 +16,15 @@
 <link rel="preload" href="site.js" as="script">
 <link rel="stylesheet" href="styles.css">
 <style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
-   Фото фасада на весь экран, затемнение только слева под словами и мягко внизу, плашек нет.
+   Фото фасада на весь экран, затемнение только слева под словами, плашек нет.
    Текст белый с мягкой тенью у букв, чтобы читался с одного взгляда (V 04.11: «текст сливается с изображением»). Шапка: название, что здесь и адрес.
    Заголовок с ценой, строка «кому», три выгоды (жирный заголовок и строка пояснения), под ними объёмная кнопка, рядом с ней раскрываются
    имя и телефон (V 04.11: «форма внизу растянута… красивую кнопку, выпуклую»). Бонус — коралловая печать на фото, как круг у Žít Braník.
-   Картинка сгенерирована Codex по снимкам cl-10 и cl-06 (content/facts.md), низ уходит в винное поле, стыка с макетом нет */
+   Картинка фасада Nano Banana Pro по снимку cl-10 (content/facts.md). Внизу фото кончается ровной линией, ниже винное поле, как у Žít Braník (V 05.11) */
 .hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip}
 .hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
 .hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
-.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),linear-gradient(0deg,var(--claret) 0%,rgba(69,28,37,.35) 7%,rgba(69,28,37,0) 18%)}
-/* Полосы: копии одной картинки, каждая обрезана в свою полосу и движется сама (site/code/hero.js) */
-.hero .bands{position:absolute;inset:0}
-.hero .bands i{position:absolute;inset:0;will-change:transform}
-.hero.cut .photo>picture{visibility:hidden}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%)}
 
 /* Шапка: название, что здесь и адрес мелко, как у ConvertMonster. Звонок, WhatsApp, язык и меню справа в углу (site/page.html) */
 .bar{display:flex;align-items:center;gap:16px;height:var(--bar)}
@@ -171,12 +167,12 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
 <section class="plan" id="building" data-tone="claret">
   <div class="plan-head">
     <h2 data-en="Floor plan">План здания</h2>
-    <p data-en="Pick a room to see a photo of an office. Prices and open rooms aren't marked on the plan.">Нажмите на комнату, откроется снимок офиса. Цены и свободные комнаты на плане не отмечены.</p>
+    <p data-en="Pick a room to see a photo of an office.">Нажмите на комнату, откроется снимок офиса.</p>
   </div>
   <div class="plan-stage" id="plan-stage">
     <div class="near" id="near">
       <div class="rig" id="rig" tabindex="0" role="group" aria-label="Макет здания со снятой крышей. Стрелки выбирают комнату, Enter открывает её." data-en-label="Model of the building with the roof off. Arrow keys pick a room, Enter opens it.">
-        <img src="img/maket.webp" width="1920" height="1080" alt="">
+        <img src="img/maket.webp" alt="">
         <canvas id="glow"></canvas>
       </div>
     </div>

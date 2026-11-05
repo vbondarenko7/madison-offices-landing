@@ -55,23 +55,19 @@ function setLang(l) {
 }
 $('#lang').addEventListener('click', () => setLang(root.lang === 'en' ? 'ru' : 'en'));
 
-// --- Камера над кадром: какая часть кадра на экране и насколько крупно --------------------------
-const BOX = [775, 205, 1515, 1040];
+// --- Макет на экране: целиком по центру, под заголовком. Не шире PLACE.wide экрана (телефон на всю ширину), и вместе с заголовком помещается в экран, снизу air точек воздуха ---
+const PLACE = { wide: .75, air: 40 };
 const view = { k: 1, x: 0, y: 0 };
 const apply = () => { rig.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.k})`; };
-// Телефон стоймя: заголовок сверху, макет крупнее ширины экрана, его можно двигать пальцем вбок
+// Телефон стоймя: лист комнаты закрывает низ экрана, макет под ним приподнимается (sheet.js)
 const tall = () => matchMedia('(max-width:899px) and (orientation:portrait)').matches;
+Object.assign(rig.style, { width: FRAME[0] + 'px', height: FRAME[1] + 'px' });
 
 function place() {
-  const w = plan.clientWidth, h = plan.clientHeight, [x0, y0, x1, y1] = BOX, bw = x1 - x0, bh = y1 - y0;
-  const head = tall() ? $('.plan-head').offsetHeight : 0, room = h - head;
-  planStage.style.top = head + 'px';
-  // Сбоку от макета остаётся место для заголовка: левый край стола на его высоте примерно на 480 в кадре
-  const free = $('.plan-head').offsetLeft + $('.plan-head').offsetWidth + 16;
-  // Кадр всегда выше экрана: его верх и низ обрезаны ровной линией и показаться не должны
-  const k = tall() ? Math.min((room - 12) / bh, w * 1.38 / bw) : Math.max(h / 1080, Math.min((h - 32) / bh, 1.3, (w - free) / (x1 - 480)));
-  const cx = tall() ? w / 2 : Math.min(w - bw * k / 2 - 8, Math.max(w * .68, free + (x0 + bw / 2 - 480) * k));
-  Object.assign(view, { k, x: cx - (x0 + bw / 2) * k, y: Math.max(Math.max(tall() ? 4 : 16, (room - bh * k) / 2) - y0 * k, room - 1080 * k) });
+  const [x0, y0, x1, y1] = MODEL, w = planStage.clientWidth;
+  const k = Math.min((innerWidth < 900 ? w : Math.min(w, innerWidth * PLACE.wide)) / (x1 - x0), Math.max(160, innerHeight - planStage.offsetTop - PLACE.air) / (y1 - y0));
+  planStage.style.height = (y1 - y0) * k + 'px';
+  Object.assign(view, { k, x: (w - (x0 + x1) * k) / 2, y: -y0 * k });
   lifted = 0;
   rig.style.transition = 'none'; // на свои места сразу, плавно едет только подъём под лист
   if (shown) lift(shown); else apply();
@@ -82,7 +78,6 @@ function place() {
 // Страницу двинули дальше: лист уходит сразу, чтобы прокрутка не казалась зависшей
 addEventListener('scroll', () => { if (Math.abs(scrollY - sheetAt) > 40) closeSheet(true); }, { passive: true });
 addEventListener('resize', place);
-
 // --- Комнаты: контуры лежат в странице, отклик есть с первого касания ---------------------------
 const SCALE = 1.5;
 const [CX, CY, CW, CH] = CROP;
@@ -181,35 +176,22 @@ function setHot(r) {
   wake();
 }
 
-// --- Палец и мышь. Вниз страницу прокручивает сам браузер, вбок палец идёт по комнатам ------------
+// --- Палец и мышь. Страницу прокручивает сам браузер, нажатие открывает комнату ------------
 function point(e) {
-  const b = rig.getBoundingClientRect(), k = b.width / 1920;
+  const b = rig.getBoundingClientRect(), k = b.width / FRAME[0];
   return roomAt((e.clientX - b.left) / k, (e.clientY - b.top) / k, k);
 }
-// Палец двигает крупный макет вбок, короткое нажатие открывает комнату
-let dragX = null, dragged = false;
 rig.addEventListener('pointerdown', (e) => {
-  dragged = false;
   if (e.pointerType === 'mouse') return;
   setHot(point(e));
   if (hot) hot.a = 1; // палец: комната горит сразу, без нарастания
-  dragX = tall() ? e.clientX : null;
-  rig.style.transition = 'none';
 });
 rig.addEventListener('pointermove', (e) => {
   setHot(point(e));
   if (e.pointerType === 'mouse') rig.classList.toggle('over', !!hot); // рука только над комнатой
-  if (dragX === null) return;
-  const by = e.clientX - dragX;
-  if (Math.abs(by) < 4 && !dragged) return;
-  dragged = true;
-  dragX = e.clientX;
-  view.x = Math.min(8 - BOX[0] * view.k, Math.max(plan.clientWidth - 8 - BOX[2] * view.k, view.x + by));
-  apply();
 });
-['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, () => { setHot(null); dragX = null; rig.style.transition = ''; }));
+['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => rig.addEventListener(n, () => setHot(null)));
 rig.addEventListener('click', (e) => {
-  if (dragged) return;
   const r = point(e);
   if (r) openSheet(r);
 });
@@ -321,48 +303,6 @@ lead.addEventListener('submit', (e) => {
   leadOff.scrollIntoView({ block: 'nearest' });
 });
 
-// --- Первый экран: картинка здания разрезана на полосы, как вырезанные люди у Žít Braník. В покое она целая (rest, доля высоты, 0),
-// при загрузке полосы съезжаются с разной высоты, при прокрутке вниз расходятся, каждая со своей скоростью. Без движения остаётся целая картинка ---
-const STRIPS = { desk: 14, phone: 7, drift: .32, rest: 0 }; // drift: насколько сильнее страницы уезжает самая быстрая полоса
-const heroBox = $('.hero'), heroPhoto = $('.hero .photo');
-addEventListener('resize', () => heroFrame());
-let heroStrips = [];
-function cutHero() {
-  const img = heroPhoto.querySelector('img'), n = innerWidth < 900 ? STRIPS.phone : STRIPS.desk;
-  const band = document.createElement('div');
-  band.className = 'bands';
-  heroStrips = [...Array(n)].map((_, i) => {
-    const s = document.createElement('i'), copy = document.createElement('img');
-    copy.src = img.currentSrc || img.src;
-    copy.alt = '';
-    s.style.clipPath = `inset(0 ${(100 - (i + 1) * 100 / n - .05).toFixed(3)}% 0 ${(i * 100 / n).toFixed(3)}%)`;
-    s.speed = ((i * .618) % 1) * STRIPS.drift;
-    s.rest = (i % 2 ? 1 : -1) * (.3 + .7 * ((i * .382) % 1)) * STRIPS.rest;
-    s.append(copy);
-    // Сборка: полоса приходит сверху или снизу на долю своей высоты, по очереди от середины к краям
-    copy.animate([{ transform: `translateY(${((i % 2 ? 1 : -1) * (6 + 10 * ((i * .382) % 1))).toFixed(1)}%)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
-      { duration: 1400, delay: 60 * Math.abs(i - (n - 1) / 2), easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
-    band.append(s);
-    return s;
-  });
-  heroPhoto.append(band);
-  heroBox.classList.add('cut');
-}
-function heroFrame() {
-  const y = Math.min(scrollY, heroBox.offsetHeight), h = heroPhoto.offsetHeight;
-  heroStrips.forEach((s) => { s.style.transform = `translate3d(0,${(s.rest * h - y * s.speed).toFixed(1)}px,0)`; });
-}
-if (!still) {
-  const img = heroPhoto.querySelector('img');
-  const go = () => { cutHero(); heroFrame(); };
-  if (img.complete && img.naturalWidth) go(); else img.addEventListener('load', go, { once: true });
-  let heroQueued = false;
-  addEventListener('scroll', () => {
-    if (heroQueued || scrollY > innerHeight * 1.5) return;
-    heroQueued = true;
-    requestAnimationFrame(() => { heroQueued = false; heroFrame(); });
-  }, { passive: true });
-}
 // --- Цвет страницы перетекает вместе с прокруткой, как у Žít Braník: пока следующая секция поднимается от низа экрана до TONE.end его высоты,
 // поле постепенно переходит в её цвет. Текст берёт её цвет на середине пути (CSS доводит его за .5 с), иначе на миг поле и текст совпали бы.
 // Пары цветов у секций в site/design/settings.css (data-tone), здесь только смешивание ---
@@ -518,7 +458,7 @@ if (!still && 'IntersectionObserver' in window) {
   }), { rootMargin: '0px 0px -10% 0px' });
   $$('.rise').forEach((e) => { e.classList.add('wait'); rising.observe(e); });
 }
-// --- Стык первого экрана и макета: макет чуть вырастает и в комнатах постепенно загорается свет. Края кадра растворяет маска в styles.css. Всё считается только от прокрутки, сама она ничем не задерживается ---
+// --- Макет подъезжает: чуть вырастает, и в комнатах постепенно загорается свет. Всё считается только от прокрутки, сама она ничем не задерживается ---
 // from размер макета в начале
 const ARRIVE = { from: .9 };
 const nearBox = $('#near');
@@ -564,7 +504,7 @@ const LIVE_FRAGMENT = `#ifdef GL_FRAGMENT_PRECISION_HIGH
   }
   void main() {
     vec2 f = box.xy + vec2(v.x, 1. - v.y) * box.zw;
-    vec2 q = f / vec2(1920., 1080.);
+    vec2 q = f / vec2(${FRAME[0]}., ${FRAME[1]}.);
     // Луч идёт сверху вниз, пока не встретит крону: высокие части сдвигаются больше низких, край кроны не рвётся. Вся работа только рядом с деревьями
     if (texture2D(map, q).g + texture2D(map, q - shift).g > .02) {
       float h = 1., gap = 1. - crown(q - shift), low = 0., under = 0.;
@@ -647,12 +587,11 @@ function makeLive(depth) {
   rig.insertBefore(canvas, glow);
   return { canvas, gl, uBox: u('box'), uShift: u('shift'), uBeat: u('beat'), uOn: u('on') };
 }
-// Холст только на ту часть кадра, что видна на этом экране, с запасом. Точек столько, сколько даёт сам кадр, остальное дорисует браузер
+// Холст только на сам макет с запасом, без пустых краёв кадра. Точек столько, сколько даёт сам кадр, остальное дорисует браузер
 function fitLive() {
   if (!live) return;
-  const { k, x, y } = view, m = 60;
-  const x0 = Math.max(0, Math.floor(tall() ? BOX[0] - m : -x / k - m)), x1 = Math.min(1920, Math.ceil(tall() ? BOX[2] + m : (plan.clientWidth - x) / k + m));
-  const y0 = Math.max(0, Math.floor(-y / k - m)), w = x1 - x0, h = 1080 - y0, sharp = Math.min(1, k * devicePixelRatio);
+  const m = 60, x0 = Math.max(0, MODEL[0] - m), y0 = Math.max(0, MODEL[1] - m);
+  const w = Math.min(FRAME[0], MODEL[2] + m) - x0, h = Math.min(FRAME[1], MODEL[3] + m) - y0, sharp = Math.min(1, view.k * devicePixelRatio);
   Object.assign(live.canvas.style, { left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px' });
   live.canvas.width = Math.round(w * sharp);
   live.canvas.height = Math.round(h * sharp);
@@ -668,7 +607,7 @@ function liveFrame(now) {
   const treesAim = Math.max(-1, Math.min(1, plan.getBoundingClientRect().top / innerHeight)) * TREES.px;
   treesNow = treesNow === null ? treesAim : treesNow + (treesAim - treesNow) * (1 - .925 ** (Math.min(now - liveBefore, 50) / 16.7));
   liveBefore = now;
-  live.gl.uniform2f(live.uShift, TREES.sideways * treesNow / 1920, treesNow / 1080);
+  live.gl.uniform2f(live.uShift, TREES.sideways * treesNow / FRAME[0], treesNow / FRAME[1]);
   live.gl.uniform1f(live.uBeat, (now / 1000 / BREATH.seconds) % 1);
   live.gl.uniform1f(live.uOn, lightsOn);
   live.gl.drawArrays(live.gl.TRIANGLES, 0, 3);
@@ -695,7 +634,7 @@ let nudge = null, nudgesLeft = NUDGE.total, nudgeTimer = 0, nudgeBag = [];
 const nudgeSeen = () => plan.getBoundingClientRect().top < innerHeight * .35 && plan.getBoundingClientRect().bottom > innerHeight * .65;
 // Комнаты вперемешку: каждая покажется только после всех остальных, с листа и в углах не показываем
 function nextNudge() {
-  const b = rig.getBoundingClientRect(), k = b.width / 1920, head = $('.plan-head').getBoundingClientRect();
+  const b = rig.getBoundingClientRect(), k = b.width / FRAME[0], head = $('.plan-head').getBoundingClientRect();
   if (!nudgeBag.length) {
     nudgeBag = [...rooms];
     for (let i = nudgeBag.length - 1; i > 0; i--) {
@@ -776,8 +715,8 @@ function drawNudge(now) {
   }
   return true;
 }
-// Человек сам взялся за макет: мышь над ним, нажатие, стрелки или палец вбок. Прокрутка не считается
-rig.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || dragged) hushNudge(); });
+// Человек сам взялся за макет: мышь над ним, нажатие или стрелки. Прокрутка не считается
+rig.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') hushNudge(); });
 rig.addEventListener('click', hushNudge);
 rig.addEventListener('keydown', hushNudge);
 if (!still) {
