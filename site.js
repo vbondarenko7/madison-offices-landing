@@ -55,8 +55,9 @@ function setLang(l) {
 }
 $('#lang').addEventListener('click', () => setLang(root.lang === 'en' ? 'ru' : 'en'));
 
-// --- Макет на экране: целиком по центру, под заголовком. Не шире PLACE.wide экрана (телефон на всю ширину), и вместе с заголовком помещается в экран, снизу air точек воздуха ---
-const PLACE = { wide: .75, air: 40 };
+// --- Макет на экране: по центру под заголовком, на PLACE.wide ширины экрана, но не шире max точек (дальше кадр мылится); телефон на всю ширину.
+// Блок выше экрана: комнаты крупные, их видно (V 05.11: «очень маленький… не разглядеть») ---
+const PLACE = { wide: .88, max: 1400 };
 const view = { k: 1, x: 0, y: 0 };
 const apply = () => { rig.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.k})`; };
 // Телефон стоймя: лист комнаты закрывает низ экрана, макет под ним приподнимается (sheet.js)
@@ -65,7 +66,7 @@ Object.assign(rig.style, { width: FRAME[0] + 'px', height: FRAME[1] + 'px' });
 
 function place() {
   const [x0, y0, x1, y1] = MODEL, w = planStage.clientWidth;
-  const k = Math.min((innerWidth < 900 ? w : Math.min(w, innerWidth * PLACE.wide)) / (x1 - x0), Math.max(160, innerHeight - planStage.offsetTop - PLACE.air) / (y1 - y0));
+  const k = (innerWidth < 900 ? w : Math.min(w, innerWidth * PLACE.wide, PLACE.max)) / (x1 - x0);
   planStage.style.height = (y1 - y0) * k + 'px';
   Object.assign(view, { k, x: (w - (x0 + x1) * k) / 2, y: -y0 * k });
   lifted = 0;
