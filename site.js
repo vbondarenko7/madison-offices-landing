@@ -4,13 +4,13 @@ const body = document.body, plan = $('#building'), planStage = $('#plan-stage'),
 const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // --- Цели счётчиков, одинаковые во всех трёх: звонок, WhatsApp, заявка. Сами счётчики подключает сборка (site/counters.html).
-// Личных данных не передаём: только название цели. Поля заявки закрыты от записи Вебвизора
+// Личных данных не передаём: только название цели и вариант первого экрана (hero_variant, A/B-тест). Поля заявки закрыты от записи Вебвизора
 const GOALS = { call: ['Contact', 'call'], whatsapp: ['Contact', 'whatsapp'], lead: ['Lead', 'generate_lead'] };   // Метрика: Meta, GA4
 const goal = (name) => {
   const [meta, ga] = GOALS[name];
-  if (window.ym) ym(+'114074741', 'reachGoal', name);
-  if (window.fbq) fbq('track', meta, { content_name: name });
-  if (window.gtag) gtag('event', ga, { method: name });
+  if (window.ym) ym(+'114074741', 'reachGoal', name, { hero_variant: hero });
+  if (window.fbq) fbq('track', meta, { content_name: name, hero_variant: hero });
+  if (window.gtag) gtag('event', ga, { method: name, hero_variant: hero });
 };
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="tel:"], a[href*="wa.me/"]');
@@ -280,15 +280,26 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Заявка на первом экране: подпись поднимается над полем, телефон проверяется. Куда отправлять, задаётся в content/texts.toml, раздел [form] -----
-const lead = $('#lead'), leadPhone = $('#lead-phone'), leadBad = $('#lead-bad'), leadOff = $('#lead-off');
-const phoneOk = () => { const n = leadPhone.value.replace(/\D/g, '').length; return n >= 10 && n <= 15; };
-leadPhone.addEventListener('input', () => {
-  const box = leadPhone.parentElement;
-  box.classList.toggle('good', phoneOk());
-  if (phoneOk()) { box.classList.remove('bad'); leadBad.hidden = true; leadPhone.removeAttribute('aria-invalid'); }
-});
-// Кнопка «Записаться на просмотр» сначала раскрывает рядом имя и телефон и становится «Отправить»
+// --- Заявка на первом экране: подпись поднимается над полем, телефон и почта проверяются -----------------------
+// Поля задаёт вариант первого экрана (site/screens/). Телефон и почта (name="phone", name="email") проверяются: с required
+// поле обязательно, без него проверяется, только если заполнено. Сообщение об ошибке — элемент из aria-describedby поля
+const lead = $('#lead'), leadOff = $('#lead-off');
+const FIELD_OK = {
+  phone: (v) => { const n = v.replace(/\D/g, '').length; return n >= 10 && n <= 15; },
+  email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+};
+const checked = $$('#lead input').filter((i) => FIELD_OK[i.name]);
+const fieldOk = (i) => FIELD_OK[i.name](i.value) || (!i.required && !i.value.trim());
+const sayBad = (i, bad) => {
+  i.parentElement.classList.toggle('bad', bad);
+  document.getElementById(i.getAttribute('aria-describedby')).hidden = !bad;
+  if (bad) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid');
+};
+checked.forEach((i) => i.addEventListener('input', () => {
+  i.parentElement.classList.toggle('good', FIELD_OK[i.name](i.value));
+  if (fieldOk(i)) sayBad(i, false);
+}));
+// Кнопка «Записаться на просмотр» сначала раскрывает рядом поля и становится «Отправить»
 const leadFields = $('#lead-fields'), book = $('#book');
 lead.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -300,19 +311,16 @@ lead.addEventListener('submit', (e) => {
     return;
   }
   leadOff.hidden = true;
-  if (!phoneOk()) {
-    leadPhone.parentElement.classList.add('bad');
-    leadBad.hidden = false;
-    leadPhone.setAttribute('aria-invalid', 'true');
-    leadPhone.focus();
-    return;
-  }
+  const wrong = checked.filter((i) => !fieldOk(i));
+  checked.forEach((i) => sayBad(i, wrong.includes(i)));
+  if (wrong.length) { wrong[0].focus(); return; }
   goal('lead');   // цель считаем уже сейчас, хотя отправки ещё нет
-  // ponytail: отправки ещё нет, почта не выбрана (PROJECT_STATE.md). Поэтому заявка не считается принятой: человек видит, что надо позвонить
+  // ОТПРАВКА ЗАЯВКИ подключается здесь: в data имя, телефон, почта (если есть в варианте) и вариант первого экрана.
+  // ponytail: отправки ещё нет, сервис выбирают отдельно. Пока заявка не считается принятой: человек видит, что надо позвонить
+  const data = { ...Object.fromEntries(new FormData(lead)), hero };
   leadOff.hidden = false;
   leadOff.scrollIntoView({ block: 'nearest' });
 });
-
 // --- Цвет страницы перетекает вместе с прокруткой, как у Žít Braník: пока следующая секция поднимается от низа экрана до TONE.end его высоты,
 // поле постепенно переходит в её цвет. Текст берёт её цвет на середине пути (CSS доводит его за .5 с), иначе на миг поле и текст совпали бы.
 // Пары цветов у секций в site/design/settings.css (data-tone), здесь только смешивание ---
