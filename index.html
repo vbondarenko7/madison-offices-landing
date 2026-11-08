@@ -164,11 +164,15 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   h1{margin-top:clamp(24px,8vh,88px);width:auto;font-size:clamp(44px,min(4.6vw,8vh),76px);line-height:1.04}
   h1 br{display:none}   /* в тексте перед <br> пробел, строка «Небольшие офисы в Сакраменто» целиком */
   .sub{margin-top:16px;font-size:clamp(22px,1.8vw,28px);line-height:1.3}
-  .lead{width:min(100%,760px);margin-top:clamp(32px,6vh,56px)}
+  /* Форма одним блоком (V 08.11: «форму выдели»): тёмная полупрозрачная подложка ровно по форме, тонкая светлая кромка, коралловая черта сверху.
+     Не панель на пол-экрана и не размытие (V 04.11 отверг то и другое) */
+  .lead{position:relative;width:min(100%,720px);margin-top:clamp(24px,4.5vh,44px);padding:clamp(24px,3.6vh,36px) 48px clamp(22px,3vh,30px);border-radius:24px;background:rgba(20,8,11,.62);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 24px 60px -24px rgba(20,8,11,.8)}
+  .lead::before{content:"";position:absolute;top:0;left:50%;width:56px;height:3px;border-radius:0 0 3px 3px;background:var(--coral);transform:translateX(-50%)}
   .ask{font:600 clamp(20px,1.6vw,24px)/1.3 var(--head);margin-bottom:8px}
-  .fields{flex-direction:column;align-items:center;gap:28px}   /* V 08.11: почта, под ней кнопка, под ней галочка — столбиком */
-  .fields .fld{flex:none;width:min(100%,460px);text-align:left}
-  .agree{margin-top:20px}
+  .fields{flex-direction:column;align-items:center;gap:24px}   /* V 08.11: почта, под ней кнопка, под ней галочка — столбиком */
+  .fields .fld{flex:none;width:min(100%,480px);text-align:left}
+  .agree{margin-top:18px}
+  .fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px #2b1218}
   .agree,.also{justify-content:center}
   .agree{display:inline-flex}
   .also{font-size:13px}
@@ -205,8 +209,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
     <p class="also" data-en="Want to see an office right away? <a href=tel:+19169144407>Call</a> or message us on <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>" data-es="¿Quiere ver una oficina ya? <a href=tel:+19169144407>Llame</a> o escríbanos por <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>">Хотите сразу посмотреть офис? <a href=tel:+19169144407>Позвоните</a> или напишите в&nbsp;<a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a></p>
     <p class="form-bad" id="lead-off" role="status" data-en="Your request didn't go through. Please call <a class=map href=tel:+19169144407>916-914-4407</a> or message us on <a class=map href=https://wa.me/19169144407>WhatsApp</a>." data-es="Su solicitud no se envió. Por favor, llame al <a class=map href=tel:+19169144407>916-914-4407</a> o escríbanos por <a class=map href=https://wa.me/19169144407>WhatsApp</a>." hidden>Заявка не отправилась. Позвоните, пожалуйста, <a class=map href=tel:+19169144407>916-914-4407</a> или напишите в <a class=map href=https://wa.me/19169144407>WhatsApp</a>.</p>
     <div class="thanks" id="lead-sent" role="status" tabindex="-1" hidden>
-      <p class="done" data-en="Done, the checklist is yours" data-es="Listo, la lista es suya">Готово, чек-лист ваш</p>
-      <p data-en="<a class=pdf href=checklist/sacramento-business-checklist-en.pdf target=_blank rel=noopener>Open the checklist, PDF</a>" data-es="<a class=pdf href=checklist/sacramento-business-checklist-es.pdf target=_blank rel=noopener>Abrir la lista, PDF</a>"><a class=pdf href=checklist/sacramento-business-checklist-ru.pdf target=_blank rel=noopener>Открыть чек-лист, PDF</a></p>
+      <p class="done" data-en="Almost done, check your email" data-es="Casi listo, revise su correo">Почти готово, проверьте почту</p>
+      <p data-en="We've sent you an email with a&nbsp;link. Click “Confirm my email” in&nbsp;it, and the checklist will come in the next email. Can't find it? Check Spam or Promotions." data-es="Le enviamos un correo con un&nbsp;enlace. Haga clic en «Confirmar mi correo» y&nbsp;la lista le llegará en el siguiente correo. ¿No lo ve? Revise Spam o Promociones.">Мы отправили письмо со&nbsp;ссылкой. Нажмите в&nbsp;нём «Подтвердить почту», и&nbsp;следующим письмом придёт чек-лист. Нет письма&nbsp;— загляните в&nbsp;«Спам» или «Промоакции».</p>
       <p data-en="If you'd like to see an office, call <a href=tel:+19169144407>916-914-4407</a> or message us on <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>." data-es="Si quiere ver una oficina, llame al <a href=tel:+19169144407>916-914-4407</a> o escríbanos por <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>.">Захотите посмотреть офис — позвоните <a href=tel:+19169144407>916-914-4407</a> или напишите в&nbsp;<a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>.</p>
     </div>
   </form>

@@ -314,15 +314,27 @@ lead.addEventListener('submit', (e) => {
   const wrong = checked.filter((i) => !fieldOk(i));
   checked.forEach((i) => sayBad(i, wrong.includes(i)));
   if (wrong.length) { wrong[0].focus(); return; }
-  // Лид-магнит (вариант checklist, <form data-send="brevo">): ОТПРАВКА В BREVO подключается здесь — email, consent ('on' — согласие
-  // на письма), hero, lang. Сервис броней ниже его не примет: там телефон обязателен.
-  // ponytail: Brevo ещё не подключён, почта никуда не уходит; чек-лист человек берёт по ссылке на «спасибо». Поэтому вариант только по ?hero=checklist
+  // Лид-магнит (вариант checklist, <form data-send="brevo">): почта уходит в форму Brevo своего языка (content/texts.toml, [form] brevo).
+  // Brevo шлёт письмо подтверждения, после него кладёт почту в список «Madison — чек-лист» и шлёт письмо с чек-листом.
+  // Сервис броней ниже такую заявку не примет: там телефон обязателен
   if (lead.dataset.send === 'brevo') {
-    goal('lead');
-    lead.classList.add('done');   // форма прячется, на её месте #lead-sent
-    leadSent.hidden = false;
-    leadSent.focus({ preventScroll: true });
-    leadSent.scrollIntoView({ block: 'nearest' });
+    const f = new FormData();
+    f.append('EMAIL', lead.email.value.trim());
+    if (lead.consent.checked) f.append('OPT_IN', '1');   // галочка «присылайте письма»; без неё придут только подтверждение и чек-лист
+    f.append('LANG', root.lang);
+    f.append('HERO_VARIANT', hero);
+    f.append('email_address_check', lead.website.value);   // ловушка для ботов: Brevo выбрасывает заявку, если она заполнена
+    f.append('locale', root.lang);
+    book.disabled = true;
+    fetch(({ ru: 'https://9c25def2.sibforms.com/serve/MUIFAEbyTVt7ywNddCrs_UCoRupHbwjE6yWvZfHa7S8n8auxfFWsfacfJ20WXTSTvMqsPxrKY2Rbq7CJu6cdiD2zppluwlhlio56rT6ZcoMOq7cwE5E-d9t-KfcfVURsPKnjth5h8Ku0IuVqKqy4yF5_e7FgFp5nIDhqlpEc8FCu35TZRaDWts1jU0xcOYvFOyfj67P7SKhyWhyjDw==', en: '', es: '' })[root.lang] + '?isAjax=1', { method: 'POST', body: f })
+      .then((r) => r.json()).then((r) => {
+        if (!r.success) throw r;
+        goal('lead');
+        lead.classList.add('done');   // форма прячется, на её месте #lead-sent
+        leadSent.hidden = false;
+        leadSent.focus({ preventScroll: true });
+        leadSent.scrollIntoView({ block: 'nearest' });
+      }).catch(() => { leadOff.hidden = false; book.disabled = false; leadOff.scrollIntoView({ block: 'nearest' }); });
     return;
   }
   // Заявка уходит в сервис броней Exit 168, он пересылает её в Telegram (адрес — content/texts.toml, [form] send_to).
