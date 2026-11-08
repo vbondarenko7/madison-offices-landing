@@ -314,6 +314,17 @@ lead.addEventListener('submit', (e) => {
   const wrong = checked.filter((i) => !fieldOk(i));
   checked.forEach((i) => sayBad(i, wrong.includes(i)));
   if (wrong.length) { wrong[0].focus(); return; }
+  // Лид-магнит (вариант checklist, <form data-send="brevo">): ОТПРАВКА В BREVO подключается здесь — email, consent ('on' — согласие
+  // на письма), hero, lang. Сервис броней ниже его не примет: там телефон обязателен.
+  // ponytail: Brevo ещё не подключён, почта никуда не уходит; чек-лист человек берёт по ссылке на «спасибо». Поэтому вариант только по ?hero=checklist
+  if (lead.dataset.send === 'brevo') {
+    goal('lead');
+    lead.classList.add('done');   // форма прячется, на её месте #lead-sent
+    leadSent.hidden = false;
+    leadSent.focus({ preventScroll: true });
+    leadSent.scrollIntoView({ block: 'nearest' });
+    return;
+  }
   // Заявка уходит в сервис броней Exit 168, он пересылает её в Telegram (адрес — content/texts.toml, [form] send_to).
   // Цель generate_lead — только когда сервис ответил «принято»; иначе человек видит просьбу позвонить или написать в WhatsApp
   book.disabled = true;

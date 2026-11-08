@@ -24,16 +24,17 @@
 <script>
 // A/B-тест первого экрана: при первом заходе случайный вариант из site/screens/, дальше тот же (память браузера).
 // ?hero=имя показывает нужный вариант и не запоминается. Название уходит в счётчики: site/counters.html, site/code/track.js
-var hero = (function (all) {
+// Варианты из LINK_ONLY (tools/build.py) в случайную раздачу не входят, только по ?hero=имя
+var hero = (function (all, linkOnly) {
   var asked = new URLSearchParams(location.search).get('hero'), kept = null;
-  if (all.includes(asked)) return asked;
+  if (all.includes(asked) || linkOnly.includes(asked)) return asked;
   try { kept = localStorage.getItem('hero'); } catch (e) {}
   if (!all.includes(kept)) {
     kept = all[Math.floor(Math.random() * all.length)];
     try { localStorage.setItem('hero', kept); } catch (e) {}
   }
   return kept;
-})(["now"]);
+})(["now"], ["checklist"]);
 </script>
 <script>
 // С часовым поясом ЕС, Великобритании, Швейцарии, Норвегии и Исландии счётчики не включаются: там по правилам Google нужен баннер согласия (V 04.11).
@@ -80,6 +81,117 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
   </details>
 </div>
 
+<template id="hero-checklist"><style>/* Вариант первого экрана с лид-магнитом (V 08.11): чек-лист «Открыть бизнес в Сакраменто» за почту. Вид тот же, что у now
+   (фото фасада на весь экран, затемнение слева, белый текст с тенью, коралловая кнопка), меняются оффер и форма.
+   Форма: почта и кнопка строкой, под ними галочка согласия на письма со ссылкой на страницу о данных и тихая строка про просмотр.
+   После кнопки форма прячется, на её месте «спасибо» со ссылкой на PDF, звонком и WhatsApp (site/code/lead.js, класс done, #lead-sent).
+   Пока не подключён Brevo, вариант открывается только по ?hero=checklist (LINK_ONLY в tools/build.py) */
+.hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip;--step:clamp(28px,4.4vh,40px)}
+.hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
+.hero .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.hero::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%)}
+.hero ::selection{background:var(--coral);color:var(--claret);text-shadow:none}
+
+.bar{display:flex;align-items:center;gap:16px;height:var(--bar)}
+.logo{font-size:26px;line-height:28px;font-weight:600}
+.tag{padding-left:16px;border-left:1px solid color-mix(in srgb,currentColor 40%,transparent);font:700 11px/14px var(--text);letter-spacing:.16em;text-transform:uppercase}
+
+h1{margin-top:clamp(32px,14vh,140px);width:max-content;max-width:100%;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
+h1 em{display:block;font-style:normal;color:var(--coral)}
+.sub{margin-top:12px;max-width:640px;font-size:21px;line-height:30px;font-weight:600;text-wrap:pretty;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+
+/* Что внутри чек-листа — три пункта плотным блоком, как выгоды у now. Без <b>: в .cut его забирают полосы ворот (styles.css) */
+.perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+.perks li::before{content:"";display:block;width:28px;height:3px;margin-bottom:14px;background:var(--coral);box-shadow:0 1px 3px rgba(20,8,11,.35)}
+.perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
+.perks span{display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
+
+/* Почта и кнопка одной строкой, поле занимает остаток */
+.lead{width:min(100%,720px);margin-top:var(--step);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
+.fields{display:flex;align-items:flex-end;gap:28px}
+.fields .fld{flex:1 1 auto;min-width:0}
+.book{flex:none;display:inline-flex;align-items:center;gap:24px;height:64px;padding:0 10px 0 32px;border-radius:999px;background:linear-gradient(180deg,#f58b72,var(--coral) 52%,#e2654b);color:var(--claret);font:700 15px/20px var(--text);letter-spacing:1.4px;text-transform:uppercase;text-shadow:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(110,30,20,.2),0 1px 2px rgba(20,8,11,.35),0 12px 28px -10px rgba(20,8,11,.8);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.book:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(110,30,20,.2),0 2px 4px rgba(20,8,11,.3),0 18px 36px -12px rgba(20,8,11,.85)}
+.book:active{transform:translateY(1px);box-shadow:inset 0 2px 6px rgba(110,30,20,.35),0 1px 2px rgba(20,8,11,.35)}
+.book:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.book i{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--claret);color:var(--coral);box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
+.book:hover i{transform:translateY(2px)}
+
+.fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 60%,transparent)}
+.fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
+.fld:focus-within::after{transform:scaleX(1)}
+.fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
+.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:#fff}
+.fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.85;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
+.fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.75);opacity:1}
+.tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
+.good .tick{opacity:1;transform:none}
+.bad{box-shadow:inset 0 -2px var(--coral)}
+.form-bad{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
+
+/* Галочка согласия: по умолчанию не отмечена, квадрат в цвет текста, отмеченная — коралловая с винной чертой */
+.agree{display:flex;gap:12px;align-items:flex-start;margin-top:20px;font-size:14px;line-height:20px;font-weight:500;cursor:pointer}
+.agree input{flex:none;appearance:none;display:grid;place-items:center;width:20px;height:20px;margin:0;border:1.5px solid rgba(255,255,255,.85);border-radius:4px;background:rgba(20,8,11,.25);cursor:pointer;transition:background .2s,border-color .2s}
+.agree input::after{content:"";width:10px;height:5px;margin-top:-3px;border:solid var(--claret);border-width:0 0 2px 2px;transform:rotate(-45deg) scale(0);transition:transform .2s var(--ease)}
+.agree input:checked{border-color:var(--coral);background:var(--coral)}
+.agree input:checked::after{transform:rotate(-45deg) scale(1)}
+.agree input:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.agree span{opacity:.88}
+.hero .agree a,.hero .also a,.thanks a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.also{margin-top:10px;font-size:14px;line-height:20px;font-weight:500;opacity:.72}
+.also a:hover,.agree a:hover{opacity:1;color:var(--coral)}
+
+/* «Спасибо» на месте формы */
+.lead.done>:not(.thanks){display:none}
+.thanks{max-width:560px;font-size:17px;line-height:26px;font-weight:500}
+.thanks:focus{outline:0}
+.thanks p+p{margin-top:8px}
+.thanks .done{margin-bottom:6px;font:600 clamp(24px,2vw,30px)/1.2 var(--head);color:var(--coral)}
+.thanks a{font-weight:700}
+.thanks .pdf{display:inline-flex;align-items:center;gap:10px;margin-top:4px;padding:12px 22px;border-radius:999px;background:var(--coral);color:var(--claret);text-decoration:none;text-shadow:none;font:700 14px/20px var(--text);letter-spacing:1px;text-transform:uppercase;box-shadow:0 12px 28px -12px rgba(20,8,11,.8)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+@keyframes settle{from{transform:scale(1.04)}}
+
+@media (max-width:899px){
+  .logo{font-size:min(22px,5.6vw)}
+  .tag{display:none}
+  h1{margin-top:16px;font-size:min(40px,9vw)}
+  .sub{font-size:16px;line-height:24px}
+  .perks{grid-template-columns:1fr;gap:16px}
+  .perks li::before{margin-bottom:8px}
+  .perks strong{font-size:22px;line-height:26px}
+  .lead{width:100%;margin-top:28px}
+  .fields{flex-direction:column;align-items:stretch;gap:20px}
+  .book{justify-content:space-between;padding-left:24px;font-size:14px;letter-spacing:1px}
+}
+@media (max-width:419px){.logo{font-size:18px}}</style>
+<header class="hero" id="top" data-tone="claret">
+  <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front" data-es-alt="La larga fachada del edificio de ladrillo de un piso, con ventanas oscuras y un seto al frente"></picture></div>
+  <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento" data-es="Oficinas en&nbsp;renta<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
+  <h1 data-en="Start a business<br>in&nbsp;Sacramento <em>step by step</em>" data-es="Abrir un negocio<br>en&nbsp;Sacramento <em>paso a paso, en&nbsp;español</em>">Открыть бизнес<br>в&nbsp;Сакраменто <em>по шагам, на&nbsp;русском</em></h1>
+  <p class="sub" data-en="A two-page checklist: registration, tax ID, county license and state tax. What comes first, what it costs and where to&nbsp;file." data-es="Una lista de dos páginas: registro, número fiscal, licencia del condado e impuesto estatal. Qué va primero, cuánto cuesta y&nbsp;dónde se&nbsp;tramita.">Чек-лист на&nbsp;две страницы: регистрация, налоговый номер, лицензия округа и&nbsp;налог штата. Что за&nbsp;чем, сколько стоит и&nbsp;куда подавать.</p>
+  <ul class="perks">
+    <li><strong data-en="8 steps" data-es="8 pasos">8 шагов</strong><span data-en="From registration to your first hire" data-es="Del registro a&nbsp;su primer empleado">От&nbsp;регистрации до&nbsp;первого работника</span></li>
+    <li><strong data-en="Fees" data-es="Costos">Пошлины</strong><span data-en="What the state and county charge, and when" data-es="Cuánto cobran el estado y&nbsp;el condado, y&nbsp;cuándo">Сколько платить штату и&nbsp;округу и&nbsp;когда</span></li>
+    <li><strong data-en="Links" data-es="Enlaces">Ссылки</strong><span data-en="Official sites only, checked November 2026" data-es="Solo sitios oficiales, revisado en noviembre de&nbsp;2026">Только официальные сайты, проверено в&nbsp;ноябре 2026</span></li>
+  </ul>
+  <!-- Лид-магнит: почта за чек-лист. Отправка в site/code/lead.js («ОТПРАВКА В BREVO»), после неё на месте формы #lead-sent — «спасибо» -->
+  <form class="lead" id="lead" data-send="brevo" novalidate>
+    <div class="fields" id="lead-fields">
+      <label class="fld"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder=" " aria-describedby="lead-bad-email" required><span data-en="Email" data-es="Correo electrónico">Электронная почта</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+      <button class="book" type="submit" id="book"><span data-en="Send me the checklist" data-es="Enviarme la lista">Получить чек-лист на&nbsp;почту</span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
+    </div>
+    <p class="form-bad" id="lead-bad-email" data-en="Check the email address, like name@gmail.com." data-es="Revise el correo electrónico, por ejemplo name@gmail.com." hidden>Проверьте адрес почты, например name@gmail.com.</p>
+    <label class="agree"><input type="checkbox" name="consent"><span data-en="Send me emails from Madison Business Center. You can unsubscribe in any email. <a href=privacy.html#en target=_blank>How we handle your data</a>" data-es="Envíenme correos de Madison Business Center. Puede darse de baja en cualquier correo. <a href=privacy.html#es target=_blank>Cómo tratamos sus datos</a>">Присылайте мне письма от&nbsp;Madison Business Center. Отписаться можно в&nbsp;любом письме. <a href=privacy.html target=_blank>Как мы обращаемся с&nbsp;данными</a></span></label>
+    <p class="also" data-en="Want to see an office right away? <a href=tel:+19169144407>Call</a> or message us on <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>" data-es="¿Quiere ver una oficina ya? <a href=tel:+19169144407>Llame</a> o escríbanos por <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>">Хотите сразу посмотреть офис? <a href=tel:+19169144407>Позвоните</a> или напишите в&nbsp;<a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a></p>
+    <p class="form-bad" id="lead-off" role="status" data-en="Your request didn't go through. Please call <a class=map href=tel:+19169144407>916-914-4407</a> or message us on <a class=map href=https://wa.me/19169144407>WhatsApp</a>." data-es="Su solicitud no se envió. Por favor, llame al <a class=map href=tel:+19169144407>916-914-4407</a> o escríbanos por <a class=map href=https://wa.me/19169144407>WhatsApp</a>." hidden>Заявка не отправилась. Позвоните, пожалуйста, <a class=map href=tel:+19169144407>916-914-4407</a> или напишите в <a class=map href=https://wa.me/19169144407>WhatsApp</a>.</p>
+    <div class="thanks" id="lead-sent" role="status" tabindex="-1" hidden>
+      <p class="done" data-en="Done, the checklist is yours" data-es="Listo, la lista es suya">Готово, чек-лист ваш</p>
+      <p data-en="<a class=pdf href=checklist/sacramento-business-checklist-en.pdf target=_blank rel=noopener>Open the checklist, PDF</a>" data-es="<a class=pdf href=checklist/sacramento-business-checklist-es.pdf target=_blank rel=noopener>Abrir la lista, PDF</a>"><a class=pdf href=checklist/sacramento-business-checklist-ru.pdf target=_blank rel=noopener>Открыть чек-лист, PDF</a></p>
+      <p data-en="If you'd like to see an office, call <a href=tel:+19169144407>916-914-4407</a> or message us on <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>." data-es="Si quiere ver una oficina, llame al <a href=tel:+19169144407>916-914-4407</a> o escríbanos por <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>.">Захотите посмотреть офис — позвоните <a href=tel:+19169144407>916-914-4407</a> или напишите в&nbsp;<a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>.</p>
+    </div>
+  </form>
+</header></template>
 <template id="hero-now"><style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
    Фото фасада на весь экран, затемнение только слева под словами, плашек нет.
    Текст белый с мягкой тенью у букв, чтобы читался с одного взгляда (V 04.11: «текст сливается с изображением»). Шапка: название, что здесь и адрес.
