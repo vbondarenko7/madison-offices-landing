@@ -81,8 +81,8 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
   </details>
 </div>
 
-<template id="hero-checklist"><style>/* Вариант первого экрана с лид-магнитом (V 08.11): чек-лист «Открыть бизнес в Сакраменто» за почту. Вид тот же, что у now
-   (фото фасада на весь экран, затемнение слева, белый текст с тенью, коралловая кнопка), меняются оффер и форма.
+<template id="hero-checklist"><style>/* Вариант первого экрана с лид-магнитом (V 08.11): тот же экран про аренду, что у now (шапка, заголовок с ценой, «кому», выгоды),
+   меняется только форма — чек-лист «Открыть бизнес в Сакраменто» за почту. Оффер формы не меняет смысл экрана (V 08.11).
    Форма: почта и кнопка строкой, под ними галочка согласия на письма со ссылкой на страницу о данных и тихая строка про просмотр.
    После кнопки форма прячется, на её месте «спасибо» со ссылкой на PDF, звонком и WhatsApp (site/code/lead.js, класс done, #lead-sent).
    Пока не подключён Brevo, вариант открывается только по ?hero=checklist (LINK_ONLY в tools/build.py) */
@@ -100,13 +100,14 @@ h1{margin-top:clamp(32px,14vh,140px);width:max-content;max-width:100%;font-size:
 h1 em{display:block;font-style:normal;color:var(--coral)}
 .sub{margin-top:12px;max-width:640px;font-size:21px;line-height:30px;font-weight:600;text-wrap:pretty;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
-/* Что внутри чек-листа — три пункта плотным блоком, как выгоды у now. Без <b>: в .cut его забирают полосы ворот (styles.css) */
+/* Три выгоды плотным блоком, как у now. Без <b>: в .cut его забирают полосы ворот (styles.css) */
 .perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
 .perks li::before{content:"";display:block;width:28px;height:3px;margin-bottom:14px;background:var(--coral);box-shadow:0 1px 3px rgba(20,8,11,.35)}
 .perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
 .perks span{display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
 
-/* Почта и кнопка одной строкой, поле занимает остаток */
+/* Повод над формой: что человек получит за почту. Почта и кнопка одной строкой, поле занимает остаток */
+.ask{max-width:560px;margin-bottom:6px;font-size:17px;line-height:24px;font-weight:600;text-wrap:pretty}
 .lead{width:min(100%,720px);margin-top:var(--step);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
 .fields{display:flex;align-items:flex-end;gap:28px}
 .fields .fld{flex:1 1 auto;min-width:0}
@@ -168,15 +169,16 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 <header class="hero" id="top" data-tone="claret">
   <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front" data-es-alt="La larga fachada del edificio de ladrillo de un piso, con ventanas oscuras y un seto al frente"></picture></div>
   <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento" data-es="Oficinas en&nbsp;renta<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
-  <h1 data-en="Start a business<br>in&nbsp;Sacramento <em>step by step</em>" data-es="Abrir un negocio<br>en&nbsp;Sacramento <em>paso a paso, en&nbsp;español</em>">Открыть бизнес<br>в&nbsp;Сакраменто <em>по шагам, на&nbsp;русском</em></h1>
-  <p class="sub" data-en="A two-page checklist: registration, tax ID, county license and state tax. What comes first, what it costs and where to&nbsp;file." data-es="Una lista de dos páginas: registro, número fiscal, licencia del condado e impuesto estatal. Qué va primero, cuánto cuesta y&nbsp;dónde se&nbsp;tramita.">Чек-лист на&nbsp;две страницы: регистрация, налоговый номер, лицензия округа и&nbsp;налог штата. Что за&nbsp;чем, сколько стоит и&nbsp;куда подавать.</p>
+  <h1 data-en="Small offices<br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>" data-es="Oficinas pequeñas<br>en&nbsp;Sacramento <em>desde&nbsp;$500 al&nbsp;mes</em>">Небольшие офисы<br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
+  <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses" data-es="Para médicos, abogados, agentes de bienes raíces, estilistas y&nbsp;pequeños negocios">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
   <ul class="perks">
-    <li><strong data-en="8 steps" data-es="8 pasos">8 шагов</strong><span data-en="From registration to your first hire" data-es="Del registro a&nbsp;su primer empleado">От&nbsp;регистрации до&nbsp;первого работника</span></li>
-    <li><strong data-en="Fees" data-es="Costos">Пошлины</strong><span data-en="What the state and county charge, and when" data-es="Cuánto cobran el estado y&nbsp;el condado, y&nbsp;cuándo">Сколько платить штату и&nbsp;округу и&nbsp;когда</span></li>
-    <li><strong data-en="Links" data-es="Enlaces">Ссылки</strong><span data-en="Official sites only, checked November 2026" data-es="Solo sitios oficiales, revisado en noviembre de&nbsp;2026">Только официальные сайты, проверено в&nbsp;ноябре 2026</span></li>
+    <li><strong data-en="Quiet" data-es="Silencio">Тишина</strong><span data-en="Soundproofed: radio stations worked here" data-es="Aislamiento de sonido: aquí trabajaban estaciones de radio">Шумоизоляция: здесь работали радиостанции</span></li>
+    <li><strong data-en="24/7" data-es="24/7">24/7</strong><span data-en="Round-the-clock access and parking inside the&nbsp;gated lot" data-es="Acceso a cualquier hora y&nbsp;estacionamiento dentro del terreno cercado">Круглосуточный доступ и&nbsp;парковка на&nbsp;закрытой территории</span></li>
+    <li><strong data-en="Meeting room" data-es="Sala de juntas">Переговорная</strong><span data-en="A place to meet your clients" data-es="Un lugar para recibir a&nbsp;sus clientes">Есть где принять клиента</span></li>
   </ul>
-  <!-- Лид-магнит: почта за чек-лист. Отправка в site/code/lead.js («ОТПРАВКА В BREVO»), после неё на месте формы #lead-sent — «спасибо» -->
+  <!-- Первый экран про аренду, как у now (V 08.11: оффер формы не меняет смысл экрана). Про чек-лист только форма: почта за чек-лист. Отправка в site/code/lead.js («ОТПРАВКА В BREVO»), после неё на месте формы #lead-sent — «спасибо» -->
   <form class="lead" id="lead" data-send="brevo" novalidate>
+    <p class="ask" data-en="Starting a business? We'll email you a step-by-step checklist for opening it in&nbsp;Sacramento. Free." data-es="¿Va a abrir un negocio? Le enviamos una lista paso a paso para abrirlo en&nbsp;Sacramento. Gratis.">Открываете бизнес? Пришлём на&nbsp;почту чек-лист, как открыть его в&nbsp;Сакраменто по&nbsp;шагам. Бесплатно.</p>
     <div class="fields" id="lead-fields">
       <label class="fld"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder=" " aria-describedby="lead-bad-email" required><span data-en="Email" data-es="Correo electrónico">Электронная почта</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
       <button class="book" type="submit" id="book"><span data-en="Send me the checklist" data-es="Enviarme la lista">Получить чек-лист на&nbsp;почту</span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
