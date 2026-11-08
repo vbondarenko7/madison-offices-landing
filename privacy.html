@@ -19,16 +19,15 @@ ul{padding-left:1.2em}
 main a{text-decoration:underline;text-underline-offset:3px}
 a[href^="tel:"]{white-space:nowrap}
 .back{display:inline-block;margin-bottom:40px;font-weight:600}
-#en,#es{margin-top:96px}
 </style>
 </head>
 <body data-tone="sage">
 <main>
 <a class="back" href="./">← Madison Business Center</a>
 
-<section>
+<section id="ru">
 <h1>Конфиденциальность</h1>
-<p>Обновлено 8 ноября 2026 года. <a href="#en">English version below</a>. <a href="#es" lang="es">Versión en español más abajo</a>.</p>
+<p>Обновлено 8 ноября 2026 года. <a href="#en" lang="en">English</a> · <a href="#es" lang="es">Español</a></p>
 
 <h2>Кто мы</h2>
 <p>Madison Business Center, 5345 Madison Ave, Sacramento, CA 95841. Телефон <a href="tel:+19169144407">916-914-4407</a>.</p>
@@ -64,7 +63,7 @@ a[href^="tel:"]{white-space:nowrap}
 
 <section id="en" lang="en">
 <h1>Privacy</h1>
-<p>Updated November 8, 2026.</p>
+<p>Updated November 8, 2026. <a href="#ru" lang="ru">Русский</a> · <a href="#es" lang="es">Español</a></p>
 
 <h2>Who we are</h2>
 <p>Madison Business Center, 5345 Madison Ave, Sacramento, CA 95841. Phone <a href="tel:+19169144407">916-914-4407</a>.</p>
@@ -100,7 +99,7 @@ a[href^="tel:"]{white-space:nowrap}
 
 <section id="es" lang="es">
 <h1>Privacidad</h1>
-<p>Actualizado el 8 de noviembre de 2026.</p>
+<p>Actualizado el 8 de noviembre de 2026. <a href="#ru" lang="ru">Русский</a> · <a href="#en" lang="en">English</a></p>
 
 <h2>Quiénes somos</h2>
 <p>Madison Business Center, 5345 Madison Ave, Sacramento, CA 95841. Teléfono <a href="tel:+19169144407">916-914-4407</a>.</p>
@@ -134,5 +133,19 @@ a[href^="tel:"]{white-space:nowrap}
 <p>Si algo cambia, actualizaremos esta página y la fecha de arriba.</p>
 </section>
 </main>
+<script>
+// Один язык на экране: из адреса (#en), иначе выбранный на сайте, иначе по браузеру — как в site/code/start.js
+function show() {
+  let l = location.hash.slice(1);
+  if (!document.getElementById(l)) { try { l = localStorage.getItem('lang'); } catch (e) {} }
+  if (!document.getElementById(l)) { const b = String((navigator.languages || [navigator.language])[0]).toLowerCase(); l = /^(ru|uk|be)/.test(b) ? 'ru' : b.startsWith('es') ? 'es' : 'en'; }
+  document.querySelectorAll('main > section').forEach((s) => { s.hidden = s.id !== l; });
+  document.documentElement.lang = l;
+  document.title = document.querySelector(`#${l} h1`).textContent + ' | Madison Business Center';
+  scrollTo(0, 0);
+}
+show();
+addEventListener('hashchange', show);
+</script>
 </body>
 </html>
