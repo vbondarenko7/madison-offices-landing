@@ -283,7 +283,7 @@ addEventListener('keydown', (e) => {
 // --- Заявка на первом экране: подпись поднимается над полем, телефон и почта проверяются -----------------------
 // Поля задаёт вариант первого экрана (site/screens/). Телефон и почта (name="phone", name="email") проверяются: с required
 // поле обязательно, без него проверяется, только если заполнено. Сообщение об ошибке — элемент из aria-describedby поля
-const lead = $('#lead'), leadOff = $('#lead-off');
+const lead = $('#lead'), leadOff = $('#lead-off'), leadSent = $('#lead-sent');   // «Спасибо» есть не у каждого варианта
 const FIELD_OK = {
   phone: (v) => { const n = v.replace(/\D/g, '').length; return n >= 10 && n <= 15; },
   email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
@@ -314,13 +314,23 @@ lead.addEventListener('submit', (e) => {
   const wrong = checked.filter((i) => !fieldOk(i));
   checked.forEach((i) => sayBad(i, wrong.includes(i)));
   if (wrong.length) { wrong[0].focus(); return; }
-  goal('lead');   // цель считаем уже сейчас, хотя отправки ещё нет
-  // ОТПРАВКА ЗАЯВКИ подключается здесь: в data имя, телефон, почта (если есть в варианте) и вариант первого экрана.
-  // ponytail: отправки ещё нет, сервис выбирают отдельно. Пока заявка не считается принятой: человек видит, что надо позвонить
-  const data = { ...Object.fromEntries(new FormData(lead)), hero };
-  leadOff.hidden = false;
-  leadOff.scrollIntoView({ block: 'nearest' });
+  // Заявка уходит в сервис броней Exit 168, он пересылает её в Telegram (адрес — content/texts.toml, [form] send_to).
+  // Цель generate_lead — только когда сервис ответил «принято»; иначе человек видит просьбу позвонить или написать в WhatsApp
+  book.disabled = true;
+  fetch('https://exit168-booking.exit168.workers.dev/madison-lead', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...Object.fromEntries(new FormData(lead)), hero, lang: root.lang }),
+  }).then((r) => r.json()).then((r) => {
+    if (!r.ok) throw r;
+    goal('lead');
+    lead.reset();
+    checked.forEach((i) => i.parentElement.classList.remove('good'));
+    if (leadSent) leadSent.hidden = false;
+  }).catch(() => { leadOff.hidden = false; book.disabled = false; })
+    .finally(() => (leadSent && !leadSent.hidden ? leadSent : leadOff).scrollIntoView({ block: 'nearest' }));
 });
+// Поле-ловушка для ботов: человек его не видит и не заполняет, сервис молча выбрасывает заявку с ним
+lead.insertAdjacentHTML('beforeend', '<input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">');
 // --- Цвет страницы перетекает вместе с прокруткой, как у Žít Braník: пока следующая секция поднимается от низа экрана до TONE.end его высоты,
 // поле постепенно переходит в её цвет. Текст берёт её цвет на середине пути (CSS доводит его за .5 с), иначе на миг поле и текст совпали бы.
 // Пары цветов у секций в site/design/settings.css (data-tone), здесь только смешивание ---
