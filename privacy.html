@@ -25,7 +25,7 @@ a[href^="tel:"]{white-space:nowrap}
 <main>
 <a class="back" href="./">← Madison Business Center</a>
 
-<section id="ru">
+<section data-lang="ru">
 <h1>Конфиденциальность</h1>
 <p>Обновлено 8 ноября 2026 года. <a href="#en" lang="en">English</a> · <a href="#es" lang="es">Español</a></p>
 
@@ -61,7 +61,7 @@ a[href^="tel:"]{white-space:nowrap}
 <p>Если что-то поменяется, мы обновим эту страницу и дату вверху.</p>
 </section>
 
-<section id="en" lang="en">
+<section data-lang="en" lang="en">
 <h1>Privacy</h1>
 <p>Updated November 8, 2026. <a href="#ru" lang="ru">Русский</a> · <a href="#es" lang="es">Español</a></p>
 
@@ -97,7 +97,7 @@ a[href^="tel:"]{white-space:nowrap}
 <p>If anything changes, we'll update this page and the date at the top.</p>
 </section>
 
-<section id="es" lang="es">
+<section data-lang="es" lang="es">
 <h1>Privacidad</h1>
 <p>Actualizado el 8 de noviembre de 2026. <a href="#ru" lang="ru">Русский</a> · <a href="#en" lang="en">English</a></p>
 
@@ -137,12 +137,13 @@ a[href^="tel:"]{white-space:nowrap}
 // Один язык на экране: из адреса (#en), иначе выбранный на сайте, иначе по браузеру — как в site/code/start.js
 function show() {
   let l = location.hash.slice(1);
-  if (!document.getElementById(l)) { try { l = localStorage.getItem('lang'); } catch (e) {} }
-  if (!document.getElementById(l)) { const b = String((navigator.languages || [navigator.language])[0]).toLowerCase(); l = /^(ru|uk|be)/.test(b) ? 'ru' : b.startsWith('es') ? 'es' : 'en'; }
-  document.querySelectorAll('main > section').forEach((s) => { s.hidden = s.id !== l; });
+  const has = (x) => document.querySelector(`[data-lang="${x}"]`);
+  if (!has(l)) { try { l = localStorage.getItem('lang'); } catch (e) {} }
+  if (!has(l)) { const b = String((navigator.languages || [navigator.language])[0]).toLowerCase(); l = /^(ru|uk|be)/.test(b) ? 'ru' : b.startsWith('es') ? 'es' : 'en'; }
+  document.querySelectorAll('main > section').forEach((s) => { s.hidden = s.dataset.lang !== l; });
   document.documentElement.lang = l;
-  document.title = document.querySelector(`#${l} h1`).textContent + ' | Madison Business Center';
-  setTimeout(() => scrollTo(0, 0));   // после прыжка браузера к #en, чтобы сверху была ссылка назад
+  document.title = has(l).querySelector('h1').textContent + ' | Madison Business Center';
+  scrollTo(0, 0);
 }
 show();
 addEventListener('hashchange', show);
