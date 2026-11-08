@@ -83,6 +83,7 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
 
 <template id="hero-checklist"><style>/* Вариант первого экрана с лид-магнитом (V 08.11): тот же экран про аренду, что у now (шапка, заголовок с ценой, «кому», выгоды),
    меняется только форма — чек-лист «Открыть бизнес в Сакраменто» за почту. Оффер формы не меняет смысл экрана (V 08.11).
+   На компьютере слова слева, форма справа внизу (V 08.11: «всё в одну кучу в левой части»), под формой мягкая тень по фото, без плашки.
    Форма: почта и кнопка строкой, под ними галочка согласия на письма со ссылкой на страницу о данных и тихая строка про просмотр.
    После кнопки форма прячется, на её месте «спасибо» со ссылкой на PDF, звонком и WhatsApp (site/code/lead.js, класс done, #lead-sent).
    Пока не подключён Brevo, вариант открывается только по ?hero=checklist (LINK_ONLY в tools/build.py) */
@@ -98,7 +99,7 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
 
 h1{margin-top:clamp(32px,14vh,140px);width:max-content;max-width:100%;font-size:clamp(40px,min(4.4vw,7.2vh),64px);line-height:1.04;font-weight:600;letter-spacing:-.015em;animation:rise 1s .15s cubic-bezier(.16,1,.3,1) both}
 h1 em{display:block;font-style:normal;color:var(--coral)}
-.sub{margin-top:12px;max-width:640px;font-size:21px;line-height:30px;font-weight:600;text-wrap:pretty;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
+.sub{margin-top:12px;font-size:21px;line-height:30px;font-weight:600;text-wrap:pretty;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
 /* Три выгоды плотным блоком, как у now. Без <b>: в .cut его забирают полосы ворот (styles.css) */
 .perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
@@ -106,8 +107,8 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 .perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
 .perks span{display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
 
-/* Повод над формой: что человек получит за почту. Почта и кнопка одной строкой, поле занимает остаток */
-.ask{max-width:560px;margin-bottom:6px;font-size:17px;line-height:24px;font-weight:600;text-wrap:pretty}
+/* Повод над формой одной строкой: что человек получит за почту */
+.ask{margin-bottom:4px;font:600 clamp(20px,1.6vw,24px)/1.2 var(--head);letter-spacing:-.01em;text-wrap:balance}
 .lead{width:min(100%,720px);margin-top:var(--step);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
 .fields{display:flex;align-items:flex-end;gap:28px}
 .fields .fld{flex:1 1 auto;min-width:0}
@@ -131,7 +132,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 .form-bad{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
 
 /* Галочка согласия: по умолчанию не отмечена, квадрат в цвет текста, отмеченная — коралловая с винной чертой */
-.agree{display:flex;gap:12px;align-items:flex-start;margin-top:20px;font-size:14px;line-height:20px;font-weight:500;cursor:pointer}
+.agree{display:flex;gap:10px;align-items:center;margin-top:18px;font-size:14px;line-height:20px;font-weight:500;cursor:pointer}
 .agree input{flex:none;appearance:none;display:grid;place-items:center;width:20px;height:20px;margin:0;border:1.5px solid rgba(255,255,255,.85);border-radius:4px;background:rgba(20,8,11,.25);cursor:pointer;transition:background .2s,border-color .2s}
 .agree input::after{content:"";width:10px;height:5px;margin-top:-3px;border:solid var(--claret);border-width:0 0 2px 2px;transform:rotate(-45deg) scale(0);transition:transform .2s var(--ease)}
 .agree input:checked{border-color:var(--coral);background:var(--coral)}
@@ -153,6 +154,17 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 @keyframes settle{from{transform:scale(1.04)}}
 
+/* Компьютер: две колонки. Слева шапка-заголовок-«кому»-выгоды, справа форма, низ формы по низу экрана */
+@media (min-width:900px){
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,460px);grid-template-rows:var(--bar) auto auto 1fr;column-gap:clamp(40px,6vw,120px);align-items:start}
+  .hero::after{background:linear-gradient(100deg,rgba(20,8,11,.86) 0%,rgba(20,8,11,.66) 36%,rgba(20,8,11,.3) 58%,rgba(20,8,11,0) 76%),radial-gradient(ellipse 50% 66% at 86% 84%,rgba(20,8,11,.82),rgba(20,8,11,.5) 45%,rgba(20,8,11,0) 76%)}
+  .bar,.perks{grid-column:1/-1}
+  .perks{grid-column:1}
+  .lead{grid-column:2;grid-row:2/5;align-self:end;width:100%;margin-top:0}
+  .fields{flex-direction:column;align-items:stretch;gap:22px}
+  .book{justify-content:space-between}
+  .also{font-size:13px;white-space:nowrap}
+}
 @media (max-width:899px){
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
@@ -178,13 +190,13 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   </ul>
   <!-- Первый экран про аренду, как у now (V 08.11: оффер формы не меняет смысл экрана). Про чек-лист только форма: почта за чек-лист. Отправка в site/code/lead.js («ОТПРАВКА В BREVO»), после неё на месте формы #lead-sent — «спасибо» -->
   <form class="lead" id="lead" data-send="brevo" novalidate>
-    <p class="ask" data-en="Starting a business? We'll email you a step-by-step checklist for opening it in&nbsp;Sacramento. Free." data-es="¿Va a abrir un negocio? Le enviamos una lista paso a paso para abrirlo en&nbsp;Sacramento. Gratis.">Открываете бизнес? Пришлём на&nbsp;почту чек-лист, как открыть его в&nbsp;Сакраменто по&nbsp;шагам. Бесплатно.</p>
+    <p class="ask" data-en="Free checklist:<br>how to start a business in&nbsp;Sacramento" data-es="Lista gratis:<br>cómo abrir un negocio en&nbsp;Sacramento">Бесплатный чек‑лист:<br>как открыть бизнес в&nbsp;Сакраменто</p>
     <div class="fields" id="lead-fields">
       <label class="fld"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder=" " aria-describedby="lead-bad-email" required><span data-en="Email" data-es="Correo electrónico">Электронная почта</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
-      <button class="book" type="submit" id="book"><span data-en="Send me the checklist" data-es="Enviarme la lista">Получить чек-лист на&nbsp;почту</span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
+      <button class="book" type="submit" id="book"><span data-en="Get the checklist" data-es="Recibir la lista">Получить чек‑лист</span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
     </div>
     <p class="form-bad" id="lead-bad-email" data-en="Check the email address, like name@gmail.com." data-es="Revise el correo electrónico, por ejemplo name@gmail.com." hidden>Проверьте адрес почты, например name@gmail.com.</p>
-    <label class="agree"><input type="checkbox" name="consent"><span data-en="Send me emails from Madison Business Center. You can unsubscribe in any email. <a href=privacy.html#en target=_blank>How we handle your data</a>" data-es="Envíenme correos de Madison Business Center. Puede darse de baja en cualquier correo. <a href=privacy.html#es target=_blank>Cómo tratamos sus datos</a>">Присылайте мне письма от&nbsp;Madison Business Center. Отписаться можно в&nbsp;любом письме. <a href=privacy.html target=_blank>Как мы обращаемся с&nbsp;данными</a></span></label>
+    <label class="agree"><input type="checkbox" name="consent"><span data-en="You can email me from Madison. <a href=privacy.html#en target=_blank>Privacy</a>" data-es="Pueden enviarme correos de Madison. <a href=privacy.html#es target=_blank>Privacidad</a>">Можно присылать мне письма от&nbsp;Madison. <a href=privacy.html target=_blank>О&nbsp;данных</a></span></label>
     <p class="also" data-en="Want to see an office right away? <a href=tel:+19169144407>Call</a> or message us on <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>" data-es="¿Quiere ver una oficina ya? <a href=tel:+19169144407>Llame</a> o escríbanos por <a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a>">Хотите сразу посмотреть офис? <a href=tel:+19169144407>Позвоните</a> или напишите в&nbsp;<a href=https://wa.me/19169144407 target=_blank rel=noopener>WhatsApp</a></p>
     <p class="form-bad" id="lead-off" role="status" data-en="Your request didn't go through. Please call <a class=map href=tel:+19169144407>916-914-4407</a> or message us on <a class=map href=https://wa.me/19169144407>WhatsApp</a>." data-es="Su solicitud no se envió. Por favor, llame al <a class=map href=tel:+19169144407>916-914-4407</a> o escríbanos por <a class=map href=https://wa.me/19169144407>WhatsApp</a>." hidden>Заявка не отправилась. Позвоните, пожалуйста, <a class=map href=tel:+19169144407>916-914-4407</a> или напишите в <a class=map href=https://wa.me/19169144407>WhatsApp</a>.</p>
     <div class="thanks" id="lead-sent" role="status" tabindex="-1" hidden>
