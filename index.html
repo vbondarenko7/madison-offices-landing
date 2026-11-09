@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="site.js?v=02241a8d" as="script">
+<link rel="preload" href="site.js?v=f6bfa3b4" as="script">
 <link rel="stylesheet" href="styles.css?v=b076b61e">
 <script>
 // A/B-тест первого экрана: при первом заходе случайный вариант из site/screens/, дальше тот же (память браузера).
@@ -58,7 +58,7 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
 <body data-tone="claret">
 <div class="corner">
   <a class="cta" href="tel:+19169144407" aria-label="Позвонить 916-914-4407" data-en-label="Call 916-914-4407" data-es-label="Llamar 916-914-4407"><span class="roll"><i><span class="wide" data-en="Call " data-es="Llamar ">Позвонить </span>916-914-4407</i><i><span class="wide" data-en="Call " data-es="Llamar ">Позвонить </span>916-914-4407</i></span></a>
-  <a class="sq wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" aria-label="WhatsApp" data-en-label="WhatsApp" data-es-label="WhatsApp"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+  <a class="sq wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" aria-label="WhatsApp" data-en-label="WhatsApp" data-es-label="WhatsApp"><svg width="22" height="22" aria-hidden="true"><use href="#i-wa"/></svg></a>
   <details class="menu sq langs">
     <summary id="lang" aria-label="Язык" data-en-label="Language" data-es-label="Idioma">RU</summary>
     <nav class="drop">
@@ -81,12 +81,16 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
   </details>
 </div>
 
-<!-- Значки выгод первого экрана, общие для всех вариантов (site/screens/): <svg class="ico"><use href="#i-quiet"/></svg>.
+<!-- Значки первого экрана, общие для всех вариантов (site/screens/): <svg class="ico"><use href="#i-quiet"/></svg>.
      Вид значка — .ico в site/design/styles.css -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-safe" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></symbol>
   <symbol id="i-quiet" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6m0-6-5 6"/></symbol>
   <symbol id="i-hours" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-  <symbol id="i-meet" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.6c2.6.2 4.5 2 4.5 4.9"/></symbol>
+  <!-- Кнопки заявки: WhatsApp — залитый знак (Simple Icons, CC0), SMS и звонок — линией, как значки выгод -->
+  <symbol id="i-wa" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></symbol>
+  <symbol id="i-sms" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5.5a2 2 0 0 1 2-2Z"/></symbol>
 </svg>
 <template id="hero-checklist"><style>/* Вариант первого экрана с лид-магнитом (V 08.11): тот же экран про аренду, что у now (шапка, заголовок с ценой, «кому», выгоды),
    меняется только форма — чек-лист «Открыть бизнес в Сакраменто» за почту. Оффер формы не меняет смысл экрана (V 08.11).
@@ -109,10 +113,10 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 .sub{margin-top:12px;font-size:21px;line-height:30px;font-weight:600;text-wrap:pretty;animation:rise 1s .25s cubic-bezier(.16,1,.3,1) both}
 
 /* Три выгоды плотным блоком, как у now, но вместо коралловой черты линейный значок слева от заголовка (V 08.11). Без <b>: в .cut его забирают полосы ворот (styles.css) */
-.perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px;width:min(100%,680px,62vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+.perks{display:grid;grid-template-columns:repeat(3,max-content);gap:20px 56px;margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
 .perks li{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;align-content:start}
 .perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
-.perks span{grid-column:2;display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
+.perks span{grid-column:2;display:block;max-width:15.5em;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
 
 /* Повод над формой одной строкой: что человек получит за почту */
 .ask{margin-bottom:4px;font:600 clamp(20px,1.6vw,24px)/1.2 var(--head);letter-spacing:-.01em;text-wrap:balance}
@@ -206,7 +210,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 <header class="hero" id="top" data-tone="claret">
   <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front" data-es-alt="La larga fachada del edificio de ladrillo de un piso, con ventanas oscuras y un seto al frente"></picture></div>
   <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento" data-es="Oficinas en&nbsp;renta<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
-  <h1 data-en="Small offices <br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>" data-es="Oficinas pequeñas <br>en&nbsp;Sacramento <em>desde&nbsp;$500 al&nbsp;mes</em>">Небольшие офисы <br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
+  <h1 data-en="Secure offices <br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>" data-es="Oficinas seguras <br>en&nbsp;Sacramento <em>desde&nbsp;$500 al&nbsp;mes</em>">Безопасные офисы <br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1>
   <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses" data-es="Para médicos, abogados, agentes de bienes raíces, estilistas y&nbsp;pequeños negocios">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
   <!-- Первый экран про аренду, как у now (V 08.11: оффер формы не меняет смысл экрана). Про чек-лист только форма: почта за чек-лист. Отправка в site/code/lead.js («ОТПРАВКА В BREVO»), после неё на месте формы #lead-sent — «спасибо» -->
   <form class="lead" id="lead" data-send="brevo" novalidate>
@@ -226,16 +230,16 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
     </div>
   </form>
   <ul class="perks">
+    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-safe"/></svg><strong data-en="Security" data-es="Seguridad">Безопасность</strong><span data-en="Fenced all around, gated entry, cameras" data-es="Cerca en&nbsp;todo el perímetro, entrada con portón, cámaras">Забор по&nbsp;всему периметру, въезд через ворота, камеры</span></li>
+    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-hours"/></svg><strong data-en="24/7" data-es="24/7">24/7</strong><span data-en="Round-the-clock access and parking for&nbsp;tenants" data-es="Acceso a cualquier hora y&nbsp;estacionamiento para inquilinos">Круглосуточный доступ и&nbsp;своя парковка для&nbsp;арендаторов</span></li>
     <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-quiet"/></svg><strong data-en="Quiet" data-es="Silencio">Тишина</strong><span data-en="Soundproofed: radio stations worked here" data-es="Aislamiento de sonido: aquí trabajaban estaciones de radio">Шумоизоляция: здесь работали радиостанции</span></li>
-    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-hours"/></svg><strong data-en="24/7" data-es="24/7">24/7</strong><span data-en="Round-the-clock access and parking inside the&nbsp;gated lot" data-es="Acceso a cualquier hora y&nbsp;estacionamiento dentro del terreno cercado">Круглосуточный доступ и&nbsp;парковка на&nbsp;закрытой территории</span></li>
-    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-meet"/></svg><strong data-en="Meeting room" data-es="Sala de juntas">Переговорная</strong><span data-en="A place to meet your clients" data-es="Un lugar para recibir a&nbsp;sus clientes">Есть где принять клиента</span></li>
   </ul>
 </header></template>
 <template id="hero-now"><style>/* Первый экран как у Lucid (выбор V 04.11 из трёх вариантов), содержание по схеме лендингов ConvertMonster (research/дизайн/первый-экран-как-делают/).
    Фото фасада на весь экран, затемнение только слева под словами, плашек нет.
    Текст белый с мягкой тенью у букв, чтобы читался с одного взгляда (V 04.11: «текст сливается с изображением»). Шапка: название, что здесь и адрес.
    Заголовок с ценой, строка «кому», три выгоды (жирный заголовок и строка пояснения), под ними объёмная кнопка, рядом с ней раскрываются
-   имя и телефон (V 04.11: «форма внизу растянута… красивую кнопку, выпуклую»). Бонус — коралловая печать на фото, как круг у Žít Braník.
+   кнопки заявки (V 04.11: «красивую кнопку, выпуклую»; 09.11 — WhatsApp, SMS и звонок вместо имени и телефона). Бонус — коралловая печать на фото, как круг у Žít Braník.
    Картинка фасада Nano Banana Pro по снимку cl-10 (content/facts.md). Внизу фото кончается ровной линией, ниже винное поле, как у Žít Braník (V 05.11) */
 .hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;min-height:100vh;min-height:100svh;padding:0 var(--m) clamp(28px,5vh,48px);color:#fff;text-shadow:0 1px 2px rgba(20,8,11,.35),0 2px 20px rgba(20,8,11,.4);overflow:hidden;overflow:clip}
 .hero .photo{position:absolute;z-index:-2;inset:0;animation:settle 2.4s cubic-bezier(.16,1,.3,1) both}
@@ -255,32 +259,41 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
    Три выгоды плотным блоком: коралловый линейный значок (общий набор в site/page.html), крупный заголовок, бледное пояснение.
    Без <b>: в .cut его забирают полосы ворот (styles.css) */
 .hero{--step:clamp(28px,4.4vh,40px)}
-.perks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 36px;width:min(100%,760px,66vw);margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
-/* Значок слева от заголовка вместо коралловой черты, как у checklist (V 08.11), пояснение под заголовком */
+.perks{display:grid;grid-template-columns:repeat(3,max-content);gap:20px 56px;margin-top:var(--step);padding:0;list-style:none;animation:rise 1s .35s cubic-bezier(.16,1,.3,1) both}
+/* Значок слева от заголовка вместо коралловой черты, как у checklist (V 08.11), пояснение под заголовком.
+   Колонки по ширине содержимого, промежуток между ними одинаковый (V 09.11: равные колонки с длинной «Безопасностью» смотрелись криво) */
 .perks li{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;align-content:start}
 .perks strong{display:block;font:600 clamp(22px,1.8vw,26px)/1.15 var(--head);letter-spacing:-.01em}
-.perks span{grid-column:2;display:block;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
+.perks span{grid-column:2;display:block;max-width:15.5em;margin-top:6px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
 
-/* Заявка под выгодами: одна объёмная кнопка. Первое нажатие раскрывает слева от неё имя и телефон, кнопка становится «Отправить»
-   (site/code/lead.js). На телефоне поля раскрываются над кнопкой. Отправки нет, после кнопки видно form.off */
-.lead{display:grid;grid-template-columns:0fr auto;justify-content:start;align-items:end;width:min(100%,800px);margin-top:var(--step);transition:grid-template-columns .7s var(--ease),grid-template-rows .7s var(--ease);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
-.lead.open{grid-template-columns:1fr auto}
-.lead>p{grid-column:1/-1}
-.fields{display:flex;gap:24px;min-width:0;min-height:0;overflow:hidden;opacity:0;transition:opacity .35s,padding .7s var(--ease)}
-.lead.open .fields{padding-right:28px;opacity:1;transition-delay:.3s,0s}
-.fields .fld{flex:1 1 0;min-width:130px}
+/* Заявка под выгодами (V и Рома 09.11, как на Exit 168): необязательное «когда удобно», под ним три кнопки, все видны сразу.
+   Главная — объёмная коралловая «Написать в WhatsApp», рядом SMS и звонок контуром. Логика — site/code/lead.js */
+.lead{width:min(100%,860px);margin-top:var(--step);animation:rise 1s .45s cubic-bezier(.16,1,.3,1) both}
+.when{width:min(100%,420px);margin-bottom:22px}
+.ways{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
 /* Кнопка выпуклая, но спокойная: мягкий свет сверху, тень под ней, при наведении приподнимается, при нажатии вдавливается */
-.book{display:inline-flex;align-items:center;gap:24px;height:64px;padding:0 10px 0 32px;border-radius:999px;background:linear-gradient(180deg,#f58b72,var(--coral) 52%,#e2654b);color:var(--claret);font:700 15px/20px var(--text);letter-spacing:1.4px;text-transform:uppercase;text-shadow:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(110,30,20,.2),0 1px 2px rgba(20,8,11,.35),0 12px 28px -10px rgba(20,8,11,.8);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.book{display:inline-flex;align-items:center;gap:20px;height:64px;padding:0 10px 0 30px;border-radius:999px;background:linear-gradient(180deg,#f58b72,var(--coral) 52%,#e2654b);color:var(--claret);font:700 15px/20px var(--text);letter-spacing:1.4px;text-transform:uppercase;text-shadow:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(110,30,20,.2),0 1px 2px rgba(20,8,11,.35),0 12px 28px -10px rgba(20,8,11,.8);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
 .book:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(110,30,20,.2),0 2px 4px rgba(20,8,11,.3),0 18px 36px -12px rgba(20,8,11,.85)}
 .book:active{transform:translateY(1px);box-shadow:inset 0 2px 6px rgba(110,30,20,.35),0 1px 2px rgba(20,8,11,.35)}
-.book:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.says{display:grid;justify-items:center}
-.says>span{grid-area:1/1;transition:opacity .3s,transform .45s var(--ease)}
-.says>span+span,.open .says>span:first-child{opacity:0;transform:translateY(-10px)}
-.says>span+span{transform:translateY(10px)}
-.open .says>span+span{opacity:1;transform:none}
 .book i{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--claret);color:var(--coral);box-shadow:inset 0 1px 3px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
-.book:hover i{transform:translateX(3px)}
+.book:hover i{transform:rotate(-8deg) scale(1.06)}
+/* SMS и звонок: тот же размер шрифта, контур вместо заливки, значок коралловой линией (.ico в styles.css) */
+.way{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 22px 0 18px;border:1px solid rgba(255,255,255,.55);border-radius:999px;background:rgba(20,8,11,.18);color:#fff;font:700 14px/20px var(--text);letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;transition:background .25s,border-color .25s}
+.way:hover{background:rgba(20,8,11,.4);border-color:#fff}
+.way .ico{width:22px;height:22px}
+.num{letter-spacing:.04em;white-space:nowrap}
+.book:focus-visible,.way:focus-visible{outline:2px solid #fff;outline-offset:3px}
+/* Компьютер (мышь): с него не позвонить и не отправить SMS — эти кнопки прячем, звонок и так в шапке */
+@media (hover:hover) and (pointer:fine){.ways>.way{display:none}}
+.note{margin-top:14px;font-size:14px;line-height:20px;font-weight:500;opacity:.78}
+/* Компьютер: панель вместо перехода — QR-код на белом (иначе камера не прочтёт), рядом что с ним делать */
+.desk{display:flex;gap:28px;align-items:center;margin-top:24px;animation:rise .6s cubic-bezier(.16,1,.3,1) both}
+.desk[hidden]{display:none}
+.qr{flex:none;width:176px;padding:10px;border-radius:6px;background:#fff;box-shadow:0 12px 28px -12px rgba(20,8,11,.8)}
+.qr svg{display:block;width:100%;height:auto}
+.desk-text{display:grid;justify-items:start;gap:12px;max-width:44ch;font-size:15px;line-height:22px;font-weight:600}
+.desk-text .way{height:48px;padding:0 20px}
+.desk .also{font-weight:500;opacity:.78}
 
 /* Печать с бонусом на конце строки с ценой, как наклейка на ценник: строки заголовка заданы переносами, рамка заголовка по самой длинной,
    печать чуть заходит на её конец. По кругу медленно вращается текст, в середине кого подключим */
@@ -293,19 +306,14 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 @keyframes spin{to{transform:rotate(1turn)}}
 @keyframes stamp{from{opacity:0;transform:rotate(-40deg) scale(.6)}}
 @media (prefers-reduced-motion:reduce){.seal .ring{animation:none}}
-/* По-испански последняя строка заголовка самая длинная, печать отходит вправо, чтобы не закрывать «mes» */
-@media (min-width:900px){:lang(es) .seal{right:calc(var(--s)*-1.02)}}
-.form-bad,.form-off{margin-top:12px;font-size:15px;line-height:22px;font-weight:700}
+/* По-английски и по-испански последняя строка заголовка самая длинная, печать отходит вправо, чтобы не закрывать «month» и «mes» */
+@media (min-width:900px){:lang(en) .seal,:lang(es) .seal{right:calc(var(--s)*-1.02)}}
 .fld{position:relative;display:block;padding-top:22px;cursor:text;box-shadow:inset 0 -1px color-mix(in srgb,currentColor 60%,transparent)}
 .fld::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%;transition:transform .45s var(--ease)}
 .fld:focus-within::after{transform:scaleX(1)}
-.fld input{display:block;width:100%;padding:6px 32px 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
-.fld input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 64px var(--claret);-webkit-text-fill-color:#fff}
+.fld input{display:block;width:100%;padding:6px 0 12px 0;border:0;border-radius:0;outline:0;background:none;color:inherit;caret-color:var(--coral);font:500 18px/28px var(--text)}
 .fld span{position:absolute;left:0;top:28px;font-size:18px;line-height:28px;opacity:.85;transform-origin:0 0;pointer-events:none;transition:transform .25s var(--ease),opacity .25s}
 .fld input:focus+span,.fld input:not(:placeholder-shown)+span{transform:translateY(-26px) scale(.75);opacity:1}
-.tick{position:absolute;right:0;bottom:12px;opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s var(--ease)}
-.good .tick{opacity:1;transform:none}
-.bad{box-shadow:inset 0 -2px var(--coral)}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 @keyframes settle{from{transform:scale(1.04)}}
 
@@ -316,12 +324,12 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   .sub{font-size:16px;line-height:24px}
   .perks{grid-template-columns:1fr;gap:16px}
   .perks strong{font-size:22px;line-height:26px}
-  .lead{width:100%;grid-template-columns:1fr;grid-template-rows:0fr auto;margin-top:28px}
-  .lead.open{grid-template-columns:1fr;grid-template-rows:1fr auto}
-  .fields{flex-wrap:wrap}
-  .lead.open .fields{padding:0 0 20px}
-  .fields .fld{min-width:120px}
+  .lead{margin-top:28px}
+  .when{width:100%}
+  .when span{font-size:min(15px,4vw);white-space:nowrap}   /* подпись в одну строку, иначе наезжает на черту */
+  .ways{flex-direction:column;align-items:stretch;gap:10px}
   .book{justify-content:space-between;padding-left:24px;font-size:14px;letter-spacing:1px}
+  .way{justify-content:center}
   .head{display:contents}
   .seal{--s:112px;position:relative;right:auto;bottom:auto;order:1;align-self:flex-end;margin-top:24px}
 }
@@ -330,22 +338,33 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 <header class="hero" id="top" data-tone="claret">
   <div class="photo"><picture><source media="(min-width:900px)" srcset="img/building.webp"><img src="img/building-900.webp" width="1448" height="1086" fetchpriority="high" alt="Длинный фасад одноэтажного кирпичного здания с тёмными окнами, перед ним живая изгородь" data-en-alt="The long front of the one-storey brick building with dark windows and a hedge in front" data-es-alt="La larga fachada del edificio de ladrillo de un piso, con ventanas oscuras y un seto al frente"></picture></div>
   <div class="bar"><a class="logo" href="#top">Madison</a><span class="tag" data-en="Offices for&nbsp;rent<br>Sacramento" data-es="Oficinas en&nbsp;renta<br>Sacramento">Офисы в&nbsp;аренду<br>Сакраменто</span><span class="tag">5345 Madison Ave</span></div>
-  <div class="head"><h1 data-en="Small offices <br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>" data-es="Oficinas pequeñas <br>en&nbsp;Sacramento <em>desde&nbsp;$500 al&nbsp;mes</em>">Небольшие офисы <br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1><p class="seal"><svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/><text textLength="500" lengthAdjust="spacing"><textPath href="#seal-path" data-en="Bonus for new tenants · we'll help set up ·" data-es="Bono a nuevos inquilinos · le ayudamos a activar ·">Бонус новым арендаторам · поможем подключить ·</textPath></text></svg><span data-en="a voice assistant" data-es="un asistente de voz">голосового помощника</span></p></div>
+  <div class="head"><h1 data-en="Secure offices <br>in&nbsp;Sacramento <em>from&nbsp;$500 a&nbsp;month</em>" data-es="Oficinas seguras <br>en&nbsp;Sacramento <em>desde&nbsp;$500 al&nbsp;mes</em>">Безопасные офисы <br>в&nbsp;Сакраменто <em>от&nbsp;$500 в&nbsp;месяц</em></h1><p class="seal"><svg class="ring" viewBox="0 0 200 200" aria-hidden="true"><path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/><text textLength="500" lengthAdjust="spacing"><textPath href="#seal-path" data-en="Bonus for new tenants · we'll help set up ·" data-es="Bono a nuevos inquilinos · le ayudamos a activar ·">Бонус новым арендаторам · поможем подключить ·</textPath></text></svg><span data-en="a voice assistant" data-es="un asistente de voz">голосового помощника</span></p></div>
   <p class="sub" data-en="For doctors, lawyers, realtors, beauty pros and small businesses" data-es="Para médicos, abogados, agentes de bienes raíces, estilistas y&nbsp;pequeños negocios">Для врачей, юристов, риелторов, мастеров и&nbsp;небольшого бизнеса</p>
   <ul class="perks">
+    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-safe"/></svg><strong data-en="Security" data-es="Seguridad">Безопасность</strong><span data-en="Fenced all around, gated entry, cameras" data-es="Cerca en&nbsp;todo el perímetro, entrada con portón, cámaras">Забор по&nbsp;всему периметру, въезд через ворота, камеры</span></li>
+    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-hours"/></svg><strong data-en="24/7" data-es="24/7">24/7</strong><span data-en="Round-the-clock access and parking for&nbsp;tenants" data-es="Acceso a cualquier hora y&nbsp;estacionamiento para inquilinos">Круглосуточный доступ и&nbsp;своя парковка для&nbsp;арендаторов</span></li>
     <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-quiet"/></svg><strong data-en="Quiet" data-es="Silencio">Тишина</strong><span data-en="Soundproofed: radio stations worked here" data-es="Aislamiento de sonido: aquí trabajaban estaciones de radio">Шумоизоляция: здесь работали радиостанции</span></li>
-    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-hours"/></svg><strong data-en="24/7" data-es="24/7">24/7</strong><span data-en="Round-the-clock access and parking inside the&nbsp;gated lot" data-es="Acceso a cualquier hora y&nbsp;estacionamiento dentro del terreno cercado">Круглосуточный доступ и&nbsp;парковка на&nbsp;закрытой территории</span></li>
-    <li><svg class="ico" width="28" height="28" aria-hidden="true"><use href="#i-meet"/></svg><strong data-en="Meeting room" data-es="Sala de juntas">Переговорная</strong><span data-en="A place to meet your clients" data-es="Un lugar para recibir a&nbsp;sus clientes">Есть где принять клиента</span></li>
   </ul>
+  <!-- Заявка (V и Рома 09.11, как на Exit 168): человек пишет или звонит сам, готовый текст на языке сайта. Логика — site/code/lead.js.
+       На компьютере SMS и звонка нет (V 09.11: с компьютера не позвонить), звонок и так в шапке;
+       WhatsApp там открывает панель #lead-desk: QR-код для телефона, скопировать, WhatsApp здесь, номер -->
   <form class="lead" id="lead" novalidate>
-    <div class="fields" id="lead-fields" inert>
-      <label class="fld"><input name="name" autocomplete="name" placeholder=" "><span data-en="Your name" data-es="Su nombre">Как вас зовут</span></label>
-      <label class="fld"><input name="phone" id="lead-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " aria-describedby="lead-bad" required><span data-en="Phone" data-es="Teléfono">Телефон</span><svg class="tick" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 13l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></label>
+    <label class="fld when"><input name="when" maxlength="120" autocomplete="off" placeholder=" "><span data-en="When would you like to visit (optional)" data-es="Cuándo le gustaría visitar (opcional)">Когда удобно посмотреть (необязательно)</span></label>
+    <div class="ways">
+      <a class="book" data-via="whatsapp" href="https://wa.me/19169144407" target="_blank" rel="noopener"><span data-en="Message on WhatsApp" data-es="Escribir por WhatsApp">Написать в WhatsApp</span><i aria-hidden="true"><svg width="22" height="22"><use href="#i-wa"/></svg></i></a>
+      <a class="way" data-via="sms" href="sms:+19169144407"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-sms"/></svg><span data-en="Send a text" data-es="Enviar SMS">Написать SMS</span></a>
+      <a class="way" data-via="call" href="tel:+19169144407"><svg class="ico" width="22" height="22" aria-hidden="true"><use href="#i-call"/></svg><span><span data-en="Call" data-es="Llamar">Позвонить</span> <span class="num">916-914-4407</span></span></a>
     </div>
-    <button class="book" type="submit" id="book" aria-controls="lead-fields" aria-expanded="false"><span class="says"><span data-en="Book a viewing" data-es="Agendar una visita">Записаться на просмотр</span><span data-en="Send" data-es="Enviar">Отправить</span></span><i aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></i></button>
-    <p class="form-bad" id="lead-bad" data-en="Enter a phone number, like 916-914-4407." data-es="Escriba un número de teléfono, por ejemplo 916-914-4407." hidden>Введите номер телефона, например 916-914-4407.</p>
-    <p class="form-off" id="lead-off" role="status" data-en="Your request didn't go through. Please call <a class=map href=tel:+19169144407>916-914-4407</a> or message us on <a class=map href=https://wa.me/19169144407>WhatsApp</a>." data-es="Su solicitud no se envió. Por favor, llame al <a class=map href=tel:+19169144407>916-914-4407</a> o escríbanos por <a class=map href=https://wa.me/19169144407>WhatsApp</a>." hidden>Заявка не отправилась. Позвоните, пожалуйста, <a class=map href=tel:+19169144407>916-914-4407</a> или напишите в <a class=map href=https://wa.me/19169144407>WhatsApp</a>.</p>
-    <p class="form-off" id="lead-sent" role="status" data-en="Thank you, your request was sent. We'll get in touch to set up a viewing." data-es="Gracias, su solicitud fue enviada. Nos pondremos en contacto para acordar la visita." hidden>Спасибо, заявка отправлена. Мы свяжемся с вами, чтобы договориться о просмотре.</p>
+    <p class="note" data-en="The message is already written, you just press Send." data-es="El mensaje ya está escrito, solo falta pulsar Enviar.">Сообщение уже написано, останется нажать «Отправить».</p>
+    <div class="desk" id="lead-desk" hidden>
+      <div class="qr" id="lead-qr"></div>
+      <div class="desk-text">
+        <p data-en="Point your phone's camera at the code and WhatsApp opens with this message." data-es="Apunte la cámara del teléfono al código y se abrirá WhatsApp con este mensaje.">Наведите камеру телефона на код: откроется WhatsApp с этим сообщением.</p>
+        <button class="way" type="button" id="lead-copy"><span data-en="Copy the message" data-es="Copiar el mensaje">Скопировать заявку</span><span role="status"></span></button>
+        <a class="map" id="lead-here" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-en="Open WhatsApp on this computer" data-es="Abrir WhatsApp en esta computadora">Открыть WhatsApp на этом компьютере</a>
+        <p class="also" data-en="No WhatsApp? Call or text <span class=num>916-914-4407</span>, you can paste the message in." data-es="¿No tiene WhatsApp? Llame o envíe un SMS al <span class=num>916-914-4407</span>, puede pegar el mensaje.">Нет WhatsApp? Позвоните или напишите SMS на <span class=num>916-914-4407</span>, заявку можно вставить в сообщение.</p>
+      </div>
+    </div>
   </form>
 </header></template>
 <script>
@@ -447,6 +466,6 @@ document.querySelectorAll('template[id^="hero-"]').forEach(function (t) { t.remo
 </section>
 
 <script src="rooms.js?v=d2bbc0d0"></script>
-<script src="site.js?v=02241a8d"></script>
+<script src="site.js?v=f6bfa3b4"></script>
 </body>
 </html>

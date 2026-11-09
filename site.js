@@ -6,15 +6,15 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 // --- Цели счётчиков, одинаковые во всех трёх: звонок, WhatsApp, заявка. Сами счётчики подключает сборка (site/counters.html).
 // Личных данных не передаём: только название цели и вариант первого экрана (hero_variant, A/B-тест). Поля заявки закрыты от записи Вебвизора
 const GOALS = { call: ['Contact', 'call'], whatsapp: ['Contact', 'whatsapp'], lead: ['Lead', 'generate_lead'] };   // Метрика: Meta, GA4
-const goal = (name) => {
+const goal = (name, method = name) => {   // method — чем связались: whatsapp, sms, call
   const [meta, ga] = GOALS[name];
   if (window.ym) ym(+'114074741', 'reachGoal', name, { hero_variant: hero });
   if (window.fbq) fbq('track', meta, { content_name: name, hero_variant: hero });
-  if (window.gtag) gtag('event', ga, { method: name, hero_variant: hero });
+  if (window.gtag) gtag('event', ga, { method, hero_variant: hero });
 };
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="tel:"], a[href*="wa.me/"]');
-  if (a) goal(a.href.startsWith('tel:') ? 'call' : 'whatsapp');
+  if (a && !a.closest('#lead')) goal(a.href.startsWith('tel:') ? 'call' : 'whatsapp');
 });
 $$('#lead input').forEach((i) => i.classList.add('ym-disable-keys'));
 // --- Язык: русский текст в разметке, английский в data-en, испанский в data-es -------------------
@@ -280,50 +280,36 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeSheet(); $('#menu').open = false; }
 });
 
-// --- Заявка на первом экране: подпись поднимается над полем, телефон и почта проверяются -----------------------
-// Поля задаёт вариант первого экрана (site/screens/). Телефон и почта (name="phone", name="email") проверяются: с required
-// поле обязательно, без него проверяется, только если заполнено. Сообщение об ошибке — элемент из aria-describedby поля
-const lead = $('#lead'), leadOff = $('#lead-off'), leadSent = $('#lead-sent');   // «Спасибо» есть не у каждого варианта
-const FIELD_OK = {
-  phone: (v) => { const n = v.replace(/\D/g, '').length; return n >= 10 && n <= 15; },
-  email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
-};
-const checked = $$('#lead input').filter((i) => FIELD_OK[i.name]);
-const fieldOk = (i) => FIELD_OK[i.name](i.value) || (!i.required && !i.value.trim());
-const sayBad = (i, bad) => {
-  i.parentElement.classList.toggle('bad', bad);
-  document.getElementById(i.getAttribute('aria-describedby')).hidden = !bad;
-  if (bad) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid');
-};
-checked.forEach((i) => i.addEventListener('input', () => {
-  i.parentElement.classList.toggle('good', FIELD_OK[i.name](i.value));
-  if (fieldOk(i)) sayBad(i, false);
-}));
-// Кнопка «Записаться на просмотр» сначала раскрывает рядом поля и становится «Отправить»
-const leadFields = $('#lead-fields'), book = $('#book');
-lead.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (leadFields.inert) {
-    leadFields.inert = false;
-    lead.classList.add('open');
-    book.setAttribute('aria-expanded', 'true');
-    leadFields.querySelector('input').focus({ preventScroll: true });
-    return;
-  }
-  leadOff.hidden = true;
-  const wrong = checked.filter((i) => !fieldOk(i));
-  checked.forEach((i) => sayBad(i, wrong.includes(i)));
-  if (wrong.length) { wrong[0].focus(); return; }
-  // Лид-магнит (вариант checklist, <form data-send="brevo">): почта уходит в форму Brevo своего языка (content/texts.toml, [form] brevo).
+// --- Заявка на первом экране ------------------------------------------------------------------------------------
+// Вариант now (V и Рома 09.11, как на Exit 168): имя и телефон не спрашиваем — в США звонок с незнакомого номера считают
+// спамом, поэтому человек пишет или звонит сам. Три кнопки: WhatsApp и SMS с готовым текстом на языке сайта, звонок.
+// Вариант checklist (<form data-send="brevo">): почта за чек-лист уходит в Brevo
+const lead = $('#lead');
+// Ловушка для ботов: человек это поле не видит и не заполняет, Brevo и сервис броней молча выбрасывают заявку с ним
+lead.insertAdjacentHTML('beforeend', '<input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">');
+
+if (lead.dataset.send === 'brevo') {
+  const email = lead.email, bad = $('#lead-bad-email'), leadOff = $('#lead-off'), leadSent = $('#lead-sent'), book = $('#book');
+  const ok = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+  const sayBad = (b) => {
+    email.parentElement.classList.toggle('bad', b);
+    bad.hidden = !b;
+    if (b) email.setAttribute('aria-invalid', 'true'); else email.removeAttribute('aria-invalid');
+  };
+  email.addEventListener('input', () => { email.parentElement.classList.toggle('good', ok()); if (ok()) sayBad(false); });
   // Brevo шлёт письмо подтверждения, после него кладёт почту в список «Madison — чек-лист» и шлёт письмо с чек-листом.
-  // Сервис броней ниже такую заявку не примет: там телефон обязателен
-  if (lead.dataset.send === 'brevo') {
+  // Форма своего языка — content/texts.toml, [form] brevo
+  lead.addEventListener('submit', (e) => {
+    e.preventDefault();
+    leadOff.hidden = true;
+    sayBad(!ok());
+    if (!ok()) { email.focus(); return; }
     const f = new FormData();
-    f.append('EMAIL', lead.email.value.trim());
+    f.append('EMAIL', email.value.trim());
     if (lead.consent.checked) f.append('OPT_IN', '1');   // галочка «присылайте письма»; без неё придут только подтверждение и чек-лист
     f.append('LANG', root.lang);
     f.append('HERO_VARIANT', hero);
-    f.append('email_address_check', lead.website.value);   // ловушка для ботов: Brevo выбрасывает заявку, если она заполнена
+    f.append('email_address_check', lead.website.value);
     f.append('locale', root.lang);
     book.disabled = true;
     fetch(({ ru: 'https://9c25def2.sibforms.com/serve/MUIFAEbyTVt7ywNddCrs_UCoRupHbwjE6yWvZfHa7S8n8auxfFWsfacfJ20WXTSTvMqsPxrKY2Rbq7CJu6cdiD2zppluwlhlio56rT6ZcoMOq7cwE5E-d9t-KfcfVURsPKnjth5h8Ku0IuVqKqy4yF5_e7FgFp5nIDhqlpEc8FCu35TZRaDWts1jU0xcOYvFOyfj67P7SKhyWhyjDw==', en: '', es: '' })[root.lang] + '?isAjax=1', { method: 'POST', body: f })
@@ -335,25 +321,79 @@ lead.addEventListener('submit', (e) => {
         leadSent.focus({ preventScroll: true });
         leadSent.scrollIntoView({ block: 'nearest' });
       }).catch(() => { leadOff.hidden = false; book.disabled = false; leadOff.scrollIntoView({ block: 'nearest' }); });
-    return;
+  });
+} else {
+  const SAY = {
+    ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
+    en: { hi: "Hi! I'm interested in an office at 5345 Madison Ave and would like to see it.", when: 'Good time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code: WhatsApp with your message' },
+    es: { hi: '¡Hola! Me interesa una oficina en 5345 Madison Ave y me gustaría verla.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR: WhatsApp con su mensaje' },
+  };
+  // Готовое сообщение; «когда удобно» необязательно, пустое просто не попадает в текст
+  const message = () => {
+    const s = SAY[root.lang], when = lead.when.value.trim();
+    return when ? `${s.hi}\n${s.when}${when}` : s.hi;
+  };
+  const wa = () => waLink(message());
+  const sms = () => `sms:+19169144407?&body=${encodeURIComponent(message())}`;
+  // На компьютере wa.me лишь предлагает поставить приложение, а SMS с компьютера почти не уходит (Exit 168, 09.11).
+  // Поэтому там вместо перехода панель: QR-код для камеры телефона, «Скопировать заявку», WhatsApp на компьютере и номер
+  const desktop = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const panel = $('#lead-desk');
+  // Уведомление в Telegram через сервис броней ([form] send_to): какой кнопкой и когда удобно, без телефона клиента.
+  // keepalive и text/plain (без предварительного запроса CORS): на телефоне страница уходит в фон, пока открывается WhatsApp
+  // Локальная копия (http) ничего не шлёт: проба черновика не попадает в группу
+  const notify = (via) => location.protocol === 'https:' && fetch('https://exit168-booking.exit168.workers.dev/madison-lead', {
+    method: 'POST', keepalive: true, headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ via, when: lead.when.value.trim(), website: lead.website.value, hero, lang: root.lang }),
+  }).catch(() => {});
+  // Адрес ссылки ставится прямо в нажатии: браузер переходит по нему после обработчика, так WhatsApp открывается
+  // синхронно, без блокировки всплывающих окон (грабли Exit 168, 09.11)
+  $$('#lead [data-via]').forEach((a) => a.addEventListener('click', (e) => {
+    const via = a.dataset.via;
+    if (via === 'whatsapp') a.href = wa();
+    if (via === 'sms') a.href = sms();
+    goal('lead', via);
+    notify(via);
+    if (desktop && via !== 'call') { e.preventDefault(); showDesk(); }
+  }));
+
+  // QR-код: библиотека qrcode-generator 2.0.4 (MIT, site/qrcode.js) грузится только при первом открытии панели
+  let qrLoad = null;
+  const loadQr = () => qrLoad ||= new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = 'qrcode.js';
+    s.onload = ok;
+    s.onerror = () => { qrLoad = null; fail(); };
+    document.head.append(s);
+  });
+  function showDesk() {
+    $('#lead-here').href = wa();
+    loadQr().then(() => {
+      const qr = qrcode(0, 'L');
+      qr.addData(wa());
+      qr.make();
+      $('#lead-qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true, alt: SAY[root.lang].qr });
+    }, () => {}).finally(() => {
+      panel.hidden = false;
+      panel.scrollIntoView({ block: 'nearest', behavior: still ? 'auto' : 'smooth' });
+    });
   }
-  // Заявка уходит в сервис броней Exit 168, он пересылает её в Telegram (адрес — content/texts.toml, [form] send_to).
-  // Цель generate_lead — только когда сервис ответил «принято»; иначе человек видит просьбу позвонить или написать в WhatsApp
-  book.disabled = true;
-  fetch('https://exit168-booking.exit168.workers.dev/madison-lead', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...Object.fromEntries(new FormData(lead)), hero, lang: root.lang }),
-  }).then((r) => r.json()).then((r) => {
-    if (!r.ok) throw r;
-    goal('lead');
-    lead.reset();
-    checked.forEach((i) => i.parentElement.classList.remove('good'));
-    if (leadSent) leadSent.hidden = false;
-  }).catch(() => { leadOff.hidden = false; book.disabled = false; })
-    .finally(() => (leadSent && !leadSent.hidden ? leadSent : leadOff).scrollIntoView({ block: 'nearest' }));
-});
-// Поле-ловушка для ботов: человек его не видит и не заполняет, сервис молча выбрасывает заявку с ним
-lead.insertAdjacentHTML('beforeend', '<input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">');
+  // Текст в панели меняется вместе с полем «когда удобно»
+  lead.when.addEventListener('input', () => { if (!panel.hidden) showDesk(); });
+  // На кнопке «Скопировать заявку» на 2,5 с вместо подписи — «Скопировано» (подпись сама меняется с языком)
+  const copy = $('#lead-copy'), [copyLabel, copied] = copy.children;
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(message());
+      copied.textContent = SAY[root.lang].copied;
+    } catch {
+      copied.textContent = SAY[root.lang].failed;
+    }
+    copyLabel.hidden = true;
+    setTimeout(() => { copyLabel.hidden = false; copied.textContent = ''; }, 2500);
+  });
+  lead.addEventListener('submit', (e) => e.preventDefault());   // Enter в поле «когда удобно» страницу не перезагружает
+}
 // --- Цвет страницы перетекает вместе с прокруткой, как у Žít Braník: пока следующая секция поднимается от низа экрана до TONE.end его высоты,
 // поле постепенно переходит в её цвет. Текст берёт её цвет на середине пути (CSS доводит его за .5 с), иначе на миг поле и текст совпали бы.
 // Пары цветов у секций в site/design/settings.css (data-tone), здесь только смешивание ---
