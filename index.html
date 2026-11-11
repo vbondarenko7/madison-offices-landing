@@ -39,7 +39,9 @@ var hero = (function (all, linkOnly) {
 <script>
 // С часовым поясом ЕС, Великобритании, Швейцарии, Норвегии и Исландии счётчики не включаются: там по правилам Google нужен баннер согласия (V 04.11).
 // Европейские пояса России, Беларуси, Украины, Турции и Молдовы под это правило не попадают
-if (!/^(Europe\/(?!(Moscow|Istanbul|Kiev|Kyiv|Minsk|Kaliningrad|Samara|Volgograd|Saratov|Ulyanovsk|Astrakhan|Kirov|Simferopol|Chisinau|Tiraspol|Uzhgorod|Zaporozhye)$)|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)|Asia\/(Nicosia|Famagusta)|Arctic\/)/.test(Intl.DateTimeFormat().resolvedOptions().timeZone)) {
+// Свои (V, агенты) открывают сайт один раз с ?notrack — браузер запоминает и больше не считается; ?track снимает (V 11.11)
+var notrack; try { if (/[?&]notrack\b/.test(location.search)) localStorage.notrack = 1; if (/[?&]track\b/.test(location.search)) localStorage.removeItem('notrack'); notrack = localStorage.notrack } catch (e) {}
+if (!notrack && !/^(Europe\/(?!(Moscow|Istanbul|Kiev|Kyiv|Minsk|Kaliningrad|Samara|Volgograd|Saratov|Ulyanovsk|Astrakhan|Kirov|Simferopol|Chisinau|Tiraspol|Uzhgorod|Zaporozhye)$)|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)|Asia\/(Nicosia|Famagusta)|Arctic\/)/.test(Intl.DateTimeFormat().resolvedOptions().timeZone)) {
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=114074741','ym');
 ym(114074741,'init',{webvisor:true,clickmap:true,trackLinks:true,accurateTrackBounce:true,params:{hero_variant:hero}});
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
