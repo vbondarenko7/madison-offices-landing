@@ -20,7 +20,7 @@
 <link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="site.js?v=177935f6" as="script">
-<link rel="stylesheet" href="styles.css?v=b076b61e">
+<link rel="stylesheet" href="styles.css?v=46aa9b16">
 <script>
 // A/B-тест первого экрана: при первом заходе случайный вариант из site/screens/, дальше тот же (память браузера).
 // ?hero=имя показывает нужный вариант и не запоминается. Название уходит в счётчики: site/counters.html, site/code/track.js
@@ -74,8 +74,8 @@ window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(argu
     <nav class="drop">
       <a href="#building" data-en="Floor plan" data-es="Plano del edificio">План здания</a>
       <a href="#prices" data-en="Pricing" data-es="Precios">Цены</a>
-      <a href="#radio" data-en="Soundproofed offices" data-es="Oficinas aisladas del ruido">Радиостанции и тишина</a>
       <a href="#gates" data-en="Security and access" data-es="Seguridad y acceso">Ворота и доступ</a>
+      <a href="#radio" data-en="Soundproofed offices" data-es="Oficinas aisladas del ruido">Радиостанции и тишина</a>
       <a href="#fit" data-en="Who it's for" data-es="Para quién es">Для вашего дела</a>
       <a href="#voice" data-en="AI answering service" data-es="Bono: recepcionista virtual">Голосовой помощник</a>
       <a href="#contact" data-en="Schedule a tour" data-es="Agendar una visita">Приехать посмотреть</a>
@@ -423,13 +423,6 @@ document.querySelectorAll('template[id^="hero-"]').forEach(function (t) { t.remo
   </div>
 </section>
 
-<section class="flow pair" id="radio" data-tone="sky">
-  <h2 class="rise" data-en="This building used to be home to radio stations" data-es="En este edificio antes había estaciones de radio">Раньше в этом здании работали радиостанции</h2>
-  <p class="rise" data-en="They left behind soundproofed rooms. Today those rooms are offices where you can work and meet with clients in peace and quiet." data-es="De las estaciones quedaron cuartos aislados del ruido. Hoy son oficinas donde puede trabajar y atender a sus clientes con tranquilidad.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
-  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a hallway corner, each with a red-lettered IN USE sign above it" data-es-alt="Dos puertas oscuras en una esquina del pasillo, cada una con un letrero IN USE en letras rojas arriba"></picture></figure></div>
-  <p class="rise" data-en="There are still IN USE signs above some of the doors, like you'd see in a studio. Come take a tour and hear for yourself how quiet it is." data-es="Arriba de las puertas todavía están los letreros IN USE, como en un estudio. Venga y compruebe en persona qué tan silenciosas son las oficinas.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
-</section>
-
 <section id="gates" data-tone="blush">
   <div class="flow scene-top"><h2 class="rise" data-en="A gated property with 24/7 tenant access" data-es="Propiedad con portón y&nbsp;acceso 24/7 para inquilinos">Здание за воротами, у арендаторов доступ круглосуточно</h2><p class="rise" data-en="Gated tenant parking, security cameras, and a shared conference room, all in a single-story building." data-es="Estacionamiento para inquilinos detrás del portón, cámaras de seguridad y sala de juntas. El edificio es de un solo piso.">Парковка за воротами, камеры, переговорная для арендаторов, всё на одном этаже.</p></div>
   <div class="scene-room">
@@ -442,10 +435,17 @@ document.querySelectorAll('template[id^="hero-"]').forEach(function (t) { t.remo
   </div>
 </section>
 
-<section class="flow over" id="fit" data-tone="sage">
-  <h2 class="rise" data-en="A good fit for law and medical offices, real estate agents, salons, and music schools" data-es="Una buena opción para despachos, consultorios, bienes raíces, salones de belleza y escuelas de música">Подходит юристу, риелтору, салону, врачу, студии, музыкальной школе</h2>
-  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/office-corner.webp"><img src="img/office-corner-800.webp" width="1200" height="900" loading="lazy" alt="Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр" data-en-alt="Empty corner office with windows on two walls, frosted on the bottom and clear on top, and dark carpet" data-es-alt="Oficina vacía en esquina, con ventanas en dos paredes, opacas abajo y transparentes arriba, y alfombra oscura"></picture></figure></div>
-  <p class="rise" data-en="Need plumbing or ventilation for your business? Check with us first." data-es="Si su negocio necesita agua o ventilación, pregúntenos antes de venir.">Если нужны вода и вытяжка, спросите сразу.</p>
+<section class="flow pair" id="radio" data-tone="sky">
+  <h2 class="rise" data-en="This building used to be home to radio stations" data-es="En este edificio antes había estaciones de radio">Раньше в этом здании работали радиостанции</h2>
+  <p class="rise" data-en="They left behind soundproofed rooms. Today those rooms are offices where you can work and meet with clients in peace and quiet." data-es="De las estaciones quedaron cuartos aislados del ruido. Hoy son oficinas donde puede trabajar y atender a sus clientes con tranquilidad.">От них остались комнаты с шумоизоляцией: теперь это офисы, где можно спокойно работать и говорить с клиентом.</p>
+  <div class="big"><figure class="grow"><picture><source media="(min-width:900px)" srcset="img/doors-in-use.webp"><img src="img/doors-in-use-800.webp" width="1200" height="900" loading="lazy" alt="Две тёмные двери в углу коридора, над каждой табличка IN USE с красными буквами" data-en-alt="Two dark doors in a hallway corner, each with a red-lettered IN USE sign above it" data-es-alt="Dos puertas oscuras en una esquina del pasillo, cada una con un letrero IN USE en letras rojas arriba"></picture></figure></div>
+  <p class="rise" data-en="There are still IN USE signs above some of the doors, like you'd see in a studio. Come take a tour and hear for yourself how quiet it is." data-es="Arriba de las puertas todavía están los letreros IN USE, como en un estudio. Venga y compruebe en persona qué tan silenciosas son las oficinas.">Над дверями до сих пор висят таблички IN USE, как в студии. Насколько там тихо, можно проверить на просмотре.</p>
+</section>
+
+<section class="flow" id="fit" data-tone="sage">
+  <h2 class="rise" data-en="A good fit for law and medical offices, real estate agents, salons, and music schools" data-es="Una buena opción para despachos, consultorios, bienes raíces, salones de belleza y escuelas de música">Подходит юристу, врачу, риелтору, салону и&nbsp;музыкальной школе</h2>
+  <div class="whom"><div><h3 class="rise" data-en="Law and medical offices" data-es="Despachos y consultorios">Юристу и врачу</h3><p class="rise" data-en="The rooms are soundproofed, so you can talk with clients and patients in private." data-es="Las oficinas están aisladas del ruido: puede hablar en privado con sus clientes o pacientes.">В комнатах шумоизоляция: с клиентом можно говорить спокойно.</p></div><div><h3 class="rise" data-en="Real estate agents" data-es="Agentes de bienes raíces">Риелтору</h3><p class="rise" data-en="There's a conference room for client meetings." data-es="Hay una sala de juntas para recibir a sus clientes.">Для встреч с клиентами есть переговорная.</p></div><div><h3 class="rise" data-en="Salons and beauty pros" data-es="Salones de belleza y estilistas">Салону и мастеру</h3><p class="rise" data-en="One unit has its own entrance. Check with us first about plumbing and ventilation." data-es="Hay un local con entrada independiente. Pregunte antes de venir por el agua y la ventilación.">Есть помещение с отдельным входом. Про воду и вытяжку спросите сразу.</p></div><div><h3 class="rise" data-en="Music schools" data-es="Escuelas de música">Музыкальной школе</h3><p class="rise" data-en="The building used to house radio stations, so even drum practice is fine." data-es="Aquí había estaciones de radio, así que se puede ensayar hasta con batería.">Раньше здесь работали радиостанции: заниматься можно даже на барабанах.</p></div></div>
+  <div class="shots"><figure><img src="img/office-corner-800.webp" width="800" height="600" loading="lazy" alt="Пустой угловой офис: окна на две стены, низ матовый, верх прозрачный, тёмный ковёр" data-en-alt="Empty corner office with windows on two walls, frosted on the bottom and clear on top, and dark carpet" data-es-alt="Oficina vacía en esquina, con ventanas en dos paredes, opacas abajo y transparentes arriba, y alfombra oscura"></figure><figure><img src="img/office-glass-800.webp" width="800" height="600" loading="lazy" alt="Пустой офис за стеклянной стеной, за окном деревья" data-en-alt="Empty office behind a glass wall, with trees outside the window" data-es-alt="Oficina vacía detrás de una pared de vidrio, con árboles afuera"></figure><figure><img src="img/office-blinds-800.webp" width="800" height="600" loading="lazy" alt="Пустой угловой офис с жалюзи на окнах" data-en-alt="Empty corner office with blinds on the windows" data-es-alt="Oficina vacía en esquina con persianas en las ventanas"></figure><figure><img src="img/meeting-room-800.webp" width="800" height="600" loading="lazy" alt="Переговорная с длинным столом и креслами" data-en-alt="Conference room with a long table and chairs" data-es-alt="Sala de juntas con una mesa larga y sillas"></figure></div>
   <div class="acts rise"><a class="btn wa" href="https://wa.me/19169144407" target="_blank" rel="noopener" data-wa-ru="Здравствуйте! Интересует офис на 5345 Madison Ave для моего дела. Какого он размера, что входит в аренду, есть ли вода и вытяжка?" data-wa-en="Hi! I'm interested in an office at 5345 Madison Ave for my business. What's the square footage, what's included in the rent, and is there plumbing and ventilation in the unit?" data-wa-es="Hola, me interesa una oficina en 5345 Madison Ave para mi negocio. ¿Cuántos pies cuadrados tiene y qué incluye la renta? ¿Hay toma de agua y ventilación?" data-en="Ask us on WhatsApp" data-es="Preguntar por WhatsApp">Спросить в WhatsApp</a></div>
 </section>
 
