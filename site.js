@@ -27,19 +27,19 @@ const TEXT = {
     message: 'Здравствуйте! Интересует офис на 5345 Madison Ave. Подскажите цену, размер и что сейчас свободно?',
     title: 'Офисы в аренду в Сакраменто от $500 в месяц | Madison Business Center', description: 'Сдаём офисы на 5345 Madison Ave в Сакраменто. Самый маленький стоит $500 в месяц, договор от года. Здание за забором с воротами, доступ круглосуточный. Звоните: 916-914-4407.' },
   en: { position: (n, total) => `Room ${n} of ${total}`,
-    office: { caption: "One of the offices in this building. We don't have a photo of this exact room yet.", title: 'Call or message us for the price, size and availability.' },
-    meeting: { caption: 'The conference room in this building. We can show you where it is on the model.', title: 'Any tenant can use it', note: 'Call or message us for office prices, sizes and availability.' },
-    any: 'An office in this building', known: "Call or message us to find out what's available.",
-    alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with windows on two walls, frosted below and clear above, and a dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with yellow and brown walls and blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside', 'meeting-room': 'Conference room with a long table and chairs' },
-    message: "Hi! I'm interested in an office at 5345 Madison Ave. Can you tell me the price, the size and what's available now?",
-    title: 'Offices for rent in Sacramento from $500 a month | Madison Business Center', description: 'Offices for rent at 5345 Madison Ave in Sacramento. The smallest one is $500 a month, with a one-year lease. The building is gated, with 24/7 access. Call 916-914-4407.' },
+    office: { caption: "One of the offices in the building. We don't have a photo of this particular room yet.", title: 'Call or message us for pricing, size, and availability.' },
+    meeting: { caption: "The building's conference room. Call us and we'll point it out on the floor plan.", title: 'Available to all tenants', note: 'Call or message us for office pricing, sizes, and availability.' },
+    any: 'An office in the building', known: "Call or message us to find out what's available.",
+    alt: { 'office-window': 'Empty office with a large window', 'office-corner': 'Empty corner office with windows on two walls, frosted on the bottom and clear on top, and dark carpet', 'office-blinds': 'Empty corner office with blinds on the windows', 'office-narrow': 'Empty office with one yellow wall, one brown wall, and window blinds', 'office-glass': 'Empty office behind a glass wall, with trees outside the window', 'meeting-room': 'Conference room with a long table and chairs' },
+    message: "Hi! I'm interested in an office at 5345 Madison Ave. Could you tell me the price, the square footage, and what's available right now?",
+    title: 'Office Space for Rent in Sacramento from $500/mo | Madison Business Center', description: 'Private offices for rent at 5345 Madison Ave, Sacramento, near I-80. From $500/mo, one-year lease. Gated lot, cameras, 24/7 access. Call or text 916-914-4407.' },
   es: { position: (n, total) => `Oficina ${n} de ${total}`,
-    office: { caption: 'Una de las oficinas de este edificio. Todavía no tenemos foto de esta oficina en particular.', title: 'Pregunte por teléfono o WhatsApp el precio, el tamaño y si está disponible.' },
-    meeting: { caption: 'La sala de juntas de este edificio. Por teléfono le decimos dónde está en la maqueta.', title: 'La pueden usar todos los inquilinos', note: 'El precio de las oficinas, el tamaño y qué hay libre se lo decimos por teléfono o WhatsApp.' },
-    any: 'Una oficina en este edificio', known: 'Pregunte por teléfono o WhatsApp qué está disponible.',
-    alt: { 'office-window': 'Oficina vacía con una ventana grande', 'office-corner': 'Oficina vacía en esquina, con ventanas en dos paredes, esmeriladas abajo y transparentes arriba, y alfombra oscura', 'office-blinds': 'Oficina vacía en esquina con persianas en las ventanas', 'office-narrow': 'Oficina vacía con una pared amarilla y otra café, y persianas', 'office-glass': 'Oficina vacía detrás de una pared de vidrio, con árboles afuera', 'meeting-room': 'Sala de juntas con una mesa larga y sillas' },
-    message: '¡Hola! Me interesa una oficina en 5345 Madison Ave. ¿Me puede decir el precio, el tamaño y qué hay disponible ahora?',
-    title: 'Oficinas en renta en Sacramento desde $500 al mes | Madison Business Center', description: 'Rentamos oficinas en 5345 Madison Ave, Sacramento. La más pequeña cuesta $500 al mes, con contrato de un año. El edificio está cercado y tiene acceso 24/7. Llame al 916-914-4407.' },
+    office: { caption: 'Una de las oficinas del edificio. Todavía no tenemos foto de esta en particular.', title: 'Llame o escríbanos para saber el precio, el tamaño y si está disponible.' },
+    meeting: { caption: 'La sala de juntas del edificio. Llámenos y le decimos dónde está en el plano.', title: 'Para uso de todos los inquilinos', note: 'Llame o escríbanos para saber precios, tamaños y qué oficinas hay disponibles.' },
+    any: 'Una oficina del edificio', known: 'Llame o escríbanos para saber qué hay disponible.',
+    alt: { 'office-window': 'Oficina vacía con una ventana grande', 'office-corner': 'Oficina vacía en esquina, con ventanas en dos paredes, opacas abajo y transparentes arriba, y alfombra oscura', 'office-blinds': 'Oficina vacía en esquina con persianas en las ventanas', 'office-narrow': 'Oficina vacía con una pared amarilla, otra café y persianas', 'office-glass': 'Oficina vacía detrás de una pared de vidrio, con árboles afuera', 'meeting-room': 'Sala de juntas con una mesa larga y sillas' },
+    message: 'Hola, me interesa una oficina en 5345 Madison Ave. ¿Me puede decir el precio, cuántos pies cuadrados tiene y qué hay disponible ahora?',
+    title: 'Oficinas en renta en Sacramento desde $500 al mes | Madison Business Center', description: 'Oficinas privadas en renta en 5345 Madison Ave, Sacramento, cerca de la I-80. Desde $500 al mes con contrato mínimo de un año. Propiedad cercada con portón, cámaras de seguridad y acceso las 24 horas. Llame o mande un mensaje al 916-914-4407.' },
 };
 const LANGS = Object.keys(TEXT);
 const waLink = (text) => `https://wa.me/19169144407?text=${encodeURIComponent(text)}`;
@@ -325,8 +325,8 @@ if (lead.dataset.send === 'brevo') {
 } else {
   const SAY = {
     ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
-    en: { hi: "Hi! I'm interested in an office at 5345 Madison Ave and would like to see it.", when: 'Good time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code: WhatsApp with your message' },
-    es: { hi: '¡Hola! Me interesa una oficina en 5345 Madison Ave y me gustaría verla.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR: WhatsApp con su mensaje' },
+    en: { hi: "Hi! I'm interested in renting an office at 5345 Madison Ave and would like to schedule a tour.", when: 'Best time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code that opens WhatsApp with your message' },
+    es: { hi: 'Hola, me interesa rentar una oficina en 5345 Madison Ave y me gustaría ir a verla.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR que abre WhatsApp con su mensaje' },
   };
   // Готовое сообщение; «когда удобно» необязательно, пустое просто не попадает в текст
   const message = () => {
