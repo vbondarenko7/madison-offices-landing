@@ -324,13 +324,19 @@ if (lead.dataset.send === 'brevo') {
   });
 } else {
   const SAY = {
-    ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', hall: 'Здравствуйте! Интересует зал для церкви на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
-    en: { hi: "Hi! I'm interested in renting an office at 5345 Madison Ave and would like to schedule a tour.", hall: "Hi! I'm interested in the hall for a church at 5345 Madison Ave and would like to see it.", when: 'Best time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code that opens WhatsApp with your message' },
-    es: { hi: 'Hola, me interesa rentar una oficina en 5345 Madison Ave y me gustaría ir a verla.', hall: 'Hola, me interesa el salón para una iglesia en 5345 Madison Ave y me gustaría ir a verlo.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR que abre WhatsApp con su mensaje' },
+    ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
+    en: { hi: "Hi! I'm interested in renting an office at 5345 Madison Ave and would like to schedule a tour.", when: 'Best time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code that opens WhatsApp with your message' },
+    es: { hi: 'Hola, me interesa rentar una oficina en 5345 Madison Ave y me gustaría ir a verla.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR que abre WhatsApp con su mensaje' },
+  };
+  // Экраны по видам дела (?hero=church и др.): своё готовое сообщение, хозяин сразу видит, кто пишет
+  const OWN = {
+    ru: { church: 'Здравствуйте! Интересует зал для церкви на 5345 Madison Ave, хочу посмотреть.', lawyer: 'Здравствуйте! Ищу офис для юридической практики на 5345 Madison Ave, хочу посмотреть.', realtor: 'Здравствуйте! Ищу офис для брокерской или страхового агентства на 5345 Madison Ave, хочу посмотреть.', salon: 'Здравствуйте! Ищу кабинет под салон красоты на 5345 Madison Ave, хочу посмотреть.', therapy: 'Здравствуйте! Ищу кабинет для приёма клиентов на 5345 Madison Ave, хочу посмотреть.', studio: 'Здравствуйте! Ищу комнату под студию на 5345 Madison Ave, хочу посмотреть.', trucking: 'Здравствуйте! Ищу офис под диспетчерскую на 5345 Madison Ave, хочу посмотреть.' },
+    en: { church: "Hi, I'm interested in the church space at 5345 Madison Ave. When could I come take a look?", lawyer: "Hi, I'm an attorney looking for office space at 5345 Madison Ave. When could I come see it?", realtor: "Hi, I'm looking for office space for my agency at 5345 Madison Ave. When could I come see it?", salon: "Hi, I'm looking for a beauty suite at 5345 Madison Ave. When could I come see it?", therapy: "Hi, I'm looking for an office for my practice at 5345 Madison Ave. When could I come see it?", studio: "Hi, I'm looking for studio space at 5345 Madison Ave. When could I come see it?", trucking: "Hi, I'm looking for a dispatch office at 5345 Madison Ave. When could I come see it?" },
+    es: { church: 'Hola, me interesa el local para iglesia en 5345 Madison Ave. ¿Cuándo podría ir a verlo?', lawyer: 'Hola, busco una oficina para mi práctica legal en 5345 Madison Ave. ¿Cuándo podría ir a verla?', realtor: 'Hola, busco una oficina para mi agencia en 5345 Madison Ave. ¿Cuándo podría ir a verla?', salon: 'Hola, busco una suite para mi negocio de belleza en 5345 Madison Ave. ¿Cuándo podría ir a verla?', therapy: 'Hola, busco un consultorio para mi práctica en 5345 Madison Ave. ¿Cuándo podría ir a verlo?', studio: 'Hola, busco un espacio para estudio en 5345 Madison Ave. ¿Cuándo podría ir a verlo?', trucking: 'Hola, busco una oficina de despacho en 5345 Madison Ave. ¿Cuándo podría ir a verla?' },
   };
   // Готовое сообщение; «когда удобно» необязательно, пустое просто не попадает в текст
   const message = () => {
-    const s = SAY[root.lang], when = lead.when.value.trim(), hi = hero === 'church' ? s.hall : s.hi;   // church — про зал, не про офис
+    const s = SAY[root.lang], when = lead.when.value.trim(), hi = OWN[root.lang][hero] || s.hi;
     return when ? `${hi}\n${s.when}${when}` : hi;
   };
   const wa = () => waLink(message());
