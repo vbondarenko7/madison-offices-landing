@@ -324,14 +324,14 @@ if (lead.dataset.send === 'brevo') {
   });
 } else {
   const SAY = {
-    ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
-    en: { hi: "Hi! I'm interested in renting an office at 5345 Madison Ave and would like to schedule a tour.", when: 'Best time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code that opens WhatsApp with your message' },
-    es: { hi: 'Hola, me interesa rentar una oficina en 5345 Madison Ave y me gustaría ir a verla.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR que abre WhatsApp con su mensaje' },
+    ru: { hi: 'Здравствуйте! Интересует офис на 5345 Madison Ave, хочу посмотреть.', hall: 'Здравствуйте! Интересует зал для церкви на 5345 Madison Ave, хочу посмотреть.', when: 'Удобно посмотреть: ', copied: 'Скопировано', failed: 'Не получилось скопировать', qr: 'QR-код: WhatsApp с вашим сообщением' },
+    en: { hi: "Hi! I'm interested in renting an office at 5345 Madison Ave and would like to schedule a tour.", hall: "Hi! I'm interested in the hall for a church at 5345 Madison Ave and would like to see it.", when: 'Best time for me: ', copied: 'Copied', failed: "Couldn't copy", qr: 'QR code that opens WhatsApp with your message' },
+    es: { hi: 'Hola, me interesa rentar una oficina en 5345 Madison Ave y me gustaría ir a verla.', hall: 'Hola, me interesa el salón para una iglesia en 5345 Madison Ave y me gustaría ir a verlo.', when: 'Me queda bien: ', copied: 'Copiado', failed: 'No se pudo copiar', qr: 'Código QR que abre WhatsApp con su mensaje' },
   };
   // Готовое сообщение; «когда удобно» необязательно, пустое просто не попадает в текст
   const message = () => {
-    const s = SAY[root.lang], when = lead.when.value.trim();
-    return when ? `${s.hi}\n${s.when}${when}` : s.hi;
+    const s = SAY[root.lang], when = lead.when.value.trim(), hi = hero === 'church' ? s.hall : s.hi;   // church — про зал, не про офис
+    return when ? `${hi}\n${s.when}${when}` : hi;
   };
   const wa = () => waLink(message());
   const sms = () => `sms:+19169144407?&body=${encodeURIComponent(message())}`;
