@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="fonts/montserrat-alternates-cyrillic-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/montserrat-alternates-latin-600.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="site.js?v=f5f0115d" as="script">
+<link rel="preload" href="site.js?v=de1eef8e" as="script">
 <link rel="stylesheet" href="styles.css?v=46aa9b16">
 <script>
 // A/B-тест первого экрана: при первом заходе случайный вариант из site/screens/, дальше тот же (память браузера).
@@ -35,6 +35,14 @@ var hero = (function (all, linkOnly) {
   }
   return kept;
 })(["now"], ["checklist", "church", "lawyer", "realtor", "salon", "studio", "therapy", "trucking"]);
+var heroByLink = ["checklist", "church", "lawyer", "realtor", "salon", "studio", "therapy", "trucking"].includes(hero);   // экран под вид дела: вкладка называется его заголовком (site/code/lang.js)
+// Язык решается до первого экрана: ?lang=, прошлый выбор, иначе первый язык браузера (русский, украинский, белорусский → ru; испанский → es; остальное → en).
+// Первый экран переводится сразу при вставке (скрипт ниже), остальное — site/code/lang.js
+var startLang = (function () {
+  var asked = new URLSearchParams(location.search).get('lang'), saved = null, first = String((navigator.languages || [navigator.language])[0]).toLowerCase();
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  return [asked, saved].find(function (l) { return ['ru', 'en', 'es'].includes(l); }) || (/^(ru|uk|be)/.test(first) ? 'ru' : first.startsWith('es') ? 'es' : 'en');
+})();
 </script>
 <script>
 // С часовым поясом ЕС, Великобритании, Швейцарии, Норвегии и Исландии счётчики не включаются: там по правилам Google нужен баннер согласия (V 04.11).
@@ -204,6 +212,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
   .perks span{margin-top:4px}
 }
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -311,6 +320,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -433,6 +443,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -572,6 +583,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 @keyframes settle{from{transform:scale(1.04)}}
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -689,6 +701,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -810,6 +823,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -939,6 +953,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -1064,6 +1079,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -1196,6 +1212,7 @@ h1 em{display:block;font-style:normal;color:var(--coral)}
 
 
 @media (max-width:899px){
+  h1,.sub,.perks,.lead{animation:none}   /* на телефоне слова сразу на месте, без всплытия */
   .logo{font-size:min(22px,5.6vw)}
   .tag{display:none}
   h1{margin-top:16px;font-size:min(40px,9vw)}
@@ -1256,6 +1273,10 @@ var heroParts = document.getElementById('hero-' + hero).content;
 document.head.append(heroParts.querySelector('style'));   // вид варианта в <head>, как у остальной страницы
 document.currentScript.replaceWith(heroParts);
 document.querySelectorAll('template[id^="hero-"]').forEach(function (t) { t.remove(); });
+// Слова первого экрана и угла сразу на языке посетителя, вместе с фото — не ждут site.js (на медленной связи было фото без слов или по-русски)
+document.documentElement.lang = startLang;
+document.getElementById('lang').textContent = startLang.toUpperCase();
+if (startLang !== 'ru') document.querySelectorAll('[data-en]').forEach(function (e) { e.dataset.ru = e.innerHTML; e.innerHTML = e.dataset[startLang]; });
 </script>
 
 <section class="plan" id="building" data-tone="claret">
@@ -1350,6 +1371,6 @@ document.querySelectorAll('template[id^="hero-"]').forEach(function (t) { t.remo
 </section>
 
 <script src="rooms.js?v=d2bbc0d0"></script>
-<script src="site.js?v=f5f0115d"></script>
+<script src="site.js?v=de1eef8e"></script>
 </body>
 </html>

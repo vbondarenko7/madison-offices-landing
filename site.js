@@ -44,7 +44,7 @@ const TEXT = {
 const LANGS = Object.keys(TEXT);
 const waLink = (text) => `https://wa.me/19169144407?text=${encodeURIComponent(text)}`;
 const t = () => TEXT[root.lang];
-$$('[data-en]').forEach((e) => { e.dataset.ru = e.innerHTML; });
+$$('[data-en]').forEach((e) => { e.dataset.ru ??= e.innerHTML; });   // первый экран уже переведён в site/page.html и русский сохранил сам
 $$('[data-en-label]').forEach((e) => { e.dataset.ruLabel = e.getAttribute('aria-label'); });
 $$('[data-en-alt]').forEach((e) => { e.dataset.ruAlt = e.alt; });
 
@@ -55,7 +55,7 @@ function setLang(l) {
   $$('[data-en-alt]').forEach((e) => { e.alt = e.dataset[`${l}Alt`]; });
   $('#lang').textContent = l.toUpperCase();
   $$('[data-lang]').forEach((a) => a.setAttribute('aria-current', a.dataset.lang === l));
-  document.title = t().title;
+  document.title = heroByLink ? `${$('#top h1').textContent.replace(/\s+/g, ' ').trim()} | Madison Business Center` : t().title;
   $('meta[name=description]').content = t().description;
   $$('a[href^="privacy.html"]').forEach((a) => { a.href = l === 'ru' ? 'privacy.html' : `privacy.html#${l}`; });
   $$('.wa').forEach((a) => { a.href = waLink(a.getAttribute(`data-wa-${l}`) || t().message); });
@@ -831,11 +831,7 @@ document.addEventListener('click', (e) => {
 });
 
 // --- Старт ---------------------------------------------------------------------------------
-const saved = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
-const asked = new URLSearchParams(location.search).get('lang');
-// Без выбора посетителя язык по первому языку браузера: русский (и украинский, белорусский), испанский, иначе английский
-const first = String((navigator.languages || [navigator.language])[0]).toLowerCase();
-setLang([asked, saved].find((l) => LANGS.includes(l)) || (/^(ru|uk|be)/.test(first) ? 'ru' : first.startsWith('es') ? 'es' : 'en'));
+setLang(startLang);   // язык выбран в site/page.html, до первого экрана
 if (document.fonts) document.fonts.ready.then(place);
 // Тяжёлый свет грузится после первого экрана
 addEventListener('load', () => setTimeout(() => { lit.src = 'img/maket-svet.webp'; }, 300));
